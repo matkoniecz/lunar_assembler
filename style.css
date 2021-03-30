@@ -1,0 +1,614 @@
+/* this CSS file is based on compiled CC0 licensed sass theme from https://github.com/pages-themes/slate v0.1.1 (commit 875d0c0) */
+/* this CSS file is GPLv3 licensed, see https://opensource.org/licenses/gpl-3.0.html for a license text */
+/* style preview page: https://pages-themes.github.io/slate/ */
+/*
+overall main change was increasing minimum text size
+index of changes up to 2019-07-28:
+- max-width of content set in cm rather px (search ".inner" for comment why I consider it desirable)
+- increase text size to make it legible:
+   for big screens
+    - h2 size reduced from 32 to 28 px
+    - h5 size increased from 18 px to 20 px
+    - h6 size increased from 16 px to 19 px
+    - text size increased from 16 px to 18 px
+   for small screens
+    - h4 size increased from 18 px to 19 px
+    - h5 size increased from 14 px to 18 px
+    - h6 size increased from 12 px to 17 px
+    - text size increased from 14 px to 16 px
+    - code size increased from 11 px to 16 px
+   for very small screens
+    - h3 size increased from 18 px to 20 px
+    - h4 size increased from 16 px to 19 px
+    - h5 size increased from 14 px to 18 px
+    - h6 size increased from 12 px to 17 px
+    - text size increased from 14 px to 16 px
+    - code size increased from 11 px to 16 px
+ - aded main navigation styling, inspired by https://css-tricks.com/flexbox-bar-navigation/
+ - drop dead code unused on my page (like "fork me" banner styling)
+*/
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{
+    margin:0;
+    padding:0;
+    border:0;
+    font:inherit;
+    vertical-align:baseline
+}
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{
+    display:block
+}
+.outer{
+    width:100%
+}
+.inner{
+    padding:20px 10px;
+    position:relative;
+    margin:0 auto;
+    max-width:22cm; /* coupled with leaflet_interactive_map and img and indirectly with main-nav */
+    /*
+    usually desirable px was deliberately NOT used
+    yes, I know about https://www.w3.org/Style/Examples/007/units.en.html
+    in this case usual justification for not using cm as unit on webpage does not apply,
+    as I am not interested in precise measurement, +-20% is perfectly OK
+
+    I want to achieve not applying margins on small screens, small as defined by
+    physical size, not in logical, real, or magical CSS pixels
+
+    so em, ex is useless as it depends on font size
+    px is useless as magical CSS px unit is "usually not related to physical centimeters"
+    % is obviously useless to measure width of screen that is available
+
+    so only units that are usually not recommended remain
+    */
+}
+img {
+    max-width:21.7cm; /* to fit into a wrapper container */
+}
+.main-nav {
+    max-width:30cm;
+    margin: auto;
+}
+#main_content_wrap{
+    background:#f2f2f2;
+}
+#main_content{
+    padding-top:40px
+}
+#footer_wrap{
+    background:#212121
+}
+ol,ul{
+    list-style:none
+}
+table{
+    border-collapse:collapse;
+    border-spacing:0
+}
+body{
+    box-sizing:border-box;
+    background:#f2f2f2;
+    font-size:18px;
+    font-family:'Myriad Pro', Calibri, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing:antialiased
+}
+h1,h2,h3,h4,h5,h6{
+    margin:10px 0;
+    font-weight:700;
+    color:#222222;
+    font-family:'Lucida Grande', 'Calibri', Helvetica, Arial, sans-serif;
+    letter-spacing:-1px
+}
+h1{
+    font-size:36px;
+    font-weight:700
+}
+h2{
+    padding-bottom:10px;
+    font-size:28px;
+    background:url("css_images/bg_hr.png") repeat-x bottom
+}
+h3{
+    font-size:24px
+}
+h4{
+    font-size:21px
+}
+h5{
+    font-size:20px
+}
+h6{
+    font-size:19px
+}
+p{
+    /* font-size set in body */
+    margin:10px 0 15px 0
+}
+footer p{
+    color:#f2f2f2
+}
+p.small{
+    font-size: 14px
+}
+a{
+    text-decoration:none;
+    color:#0F79D0;
+    text-shadow:none;
+    transition:color 0.5s ease;
+    transition:text-shadow 0.5s ease;
+    -webkit-transition:color 0.5s ease;
+    -webkit-transition:text-shadow 0.5s ease;
+    -moz-transition:color 0.5s ease;
+    -moz-transition:text-shadow 0.5s ease;
+    -o-transition:color 0.5s ease;
+    -o-transition:text-shadow 0.5s ease;
+    -ms-transition:color 0.5s ease;
+    -ms-transition:text-shadow 0.5s ease
+}
+a:hover,a:focus{
+    text-decoration:underline
+}
+footer a{
+    color:#F2F2F2;
+    text-decoration:underline
+}
+em,cite{
+    font-style:italic
+}
+strong{
+    font-weight:bold
+}
+img{
+    position:relative;
+    margin:0 auto;
+ }
+img.wrapped_in_img_container {
+	margin: 0;
+	padding: 0;
+}
+img.image_with_frame, div.img_container{
+    border:1px solid #e0e0e0;
+    box-shadow:0 0 5px #e0e0e0;
+    -webkit-box-shadow:0 0 5px #e0e0e0;
+    -moz-box-shadow:0 0 5px #e0e0e0;
+    -o-box-shadow:0 0 5px #e0e0e0;
+    -ms-box-shadow:0 0 5px #e0e0e0;
+  padding: 5px 5px 5px 5px;
+}
+.img_container p {
+	font-size:16px;
+  margin: 0px 5px;
+}
+.img_container {
+	margin: 0;
+}
+pre,code{
+    color:#222;
+    background-color:#fff;
+    font-family:Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+    font-size:14px;
+    border-radius:2px;
+    -moz-border-radius:2px;
+    -webkit-border-radius:2px;
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+pre{
+    padding:10px;
+    overflow:auto
+}
+code{
+    padding:3px;
+    margin:0 3px;
+}
+pre code{
+    display:block;
+    box-shadow:none
+}
+blockquote{
+    color:#666;
+    margin-bottom:20px;
+    padding:0 0 0 20px;
+    border-left:3px solid #bbb
+}
+ul,ol,dl{
+    margin-bottom:15px
+}
+ul,ol{
+    list-style-position:inside;
+    padding-left:20px
+}
+ul{
+    list-style:disc;
+}
+ol{
+    list-style:decimal;
+}
+dl dt{
+    font-weight:bold
+}
+dl dd{
+    padding-left:20px;
+    font-style:italic
+}
+dl p{
+    padding-left:20px;
+    font-style:italic
+}
+hr{
+    height:1px;
+    margin-bottom:5px;
+    border:none;
+    background:url("css_images/bg_hr.png") repeat-x center
+}
+table{
+    border:1px solid #373737;
+    margin-bottom:20px;
+    text-align:left
+}
+th{
+    font-family:'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    padding:10px;
+    background:#373737;
+    color:#fff
+}
+td{
+    padding:10px;
+    border:1px solid #373737
+}
+form{
+    background:#f2f2f2;
+    padding:20px
+}
+@media screen and (max-width: 992px){
+    img{
+        max-width:100%
+    }
+}
+@media screen and (max-width: 480px){
+    body{
+        font-size:16px
+    }
+    .inner{
+        min-width:320px;
+        max-width:480px
+    }
+    #project_title{
+        font-size:32px
+    }
+    h1{
+        font-size:28px
+    }
+    h2{
+        font-size:24px
+    }
+    h3{
+        font-size:21px
+    }
+    h4{
+        font-size:19px
+    }
+    h5{
+        font-size:18px
+    }
+    h6{
+        font-size:17px
+    }
+    code,pre{
+        font-size:16px
+    }
+}
+@media screen and (max-width: 320px){
+    body{
+        font-size:16px
+    }
+    .inner{
+        min-width:240px;
+        max-width:320px
+    }
+    #project_title{
+        font-size:28px
+    }
+    h1{
+        font-size:24px
+    }
+    h2{
+        font-size:21px
+    }
+    h3{
+        font-size:20px
+    }
+    h4{
+        font-size:19px
+    }
+    h5{
+        font-size:18px
+    }
+    h6{
+        font-size:17px
+    }
+    code,pre{
+        min-width:240px;
+        max-width:320px;
+        font-size:16px
+    }
+}
+
+/* main navigation - see changelog at the top for source of the inspiration */
+.main-nav {
+  background: #eee;
+}
+.main-nav li {
+  flex: 1 1 120px;
+}
+.main-nav ul {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  list-style: none;
+}
+.main-nav a {
+  max-width: 500000px; /*TODO HACK without this NOP hover background styling breaks - and background area starts to mismatch the text area */
+  padding: 1.25rem 0.5rem;
+  font-size: 1.6rem;
+  font-weight: bold;
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  color: #333;
+}
+.main-nav a:hover, .main-nav a:focus {
+  background: #ccc;
+  color: black;
+}
+.main-nav a.active {
+  background: #aaa;
+}
+
+@media (min-width: 1000px) {
+  .main-nav a {
+    font-size: 2rem;
+  }
+}
+
+
+.leaflet_interactive_map {
+    max-width: 22cm;
+    width: 90vw;
+    height: 90vh;
+    margin: auto;
+}
+#leaflet_interactive_map_collapse_switch::after {
+  display: none;
+  content: 'true';
+}
+
+.leaflet_full_size_interactive_map {
+    max-width: 100%;
+    width: 100vw;
+    height: 100vh;
+    margin: auto;
+}
+
+@media (min-width: 600px) {
+  #leaflet_interactive_map_collapse_switch::after {
+    display: none;
+    content: 'false';
+  }
+}
+
+/* highlight rules require formatted HTML as generated by Jekyll
+see https://github.com/jekyll/jekyll/blob/035ea729ff5668dfc96e7f56a86d214e5a633291/lib/jekyll/tags/highlight.rb */
+.highlight table td{
+    padding:5px
+}
+.highlight table pre{
+    margin:0
+}
+.highlight .cm{
+    color:#777772;
+    font-style:italic
+}
+.highlight .cp{
+    color:#797676;
+    font-weight:bold
+}
+.highlight .c1{
+    color:#777772;
+    font-style:italic
+}
+.highlight .cs{
+    color:#797676;
+    font-weight:bold;
+    font-style:italic
+}
+.highlight .c,.highlight .cd{
+    color:#777772;
+    font-style:italic
+}
+.highlight .err{
+    color:#a61717;
+    background-color:#e3d2d2
+}
+.highlight .gd{
+    color:#000000;
+    background-color:#ffdddd
+}
+.highlight .ge{
+    color:#000000;
+    font-style:italic
+}
+.highlight .gr{
+    color:#aa0000
+}
+.highlight .gh{
+    color:#797676
+}
+.highlight .gi{
+    color:#000000;
+    background-color:#ddffdd
+}
+.highlight .go{
+    color:#888888
+}
+.highlight .gp{
+    color:#555555
+}
+.highlight .gs{
+    font-weight:bold
+}
+.highlight .gu{
+    color:#aaaaaa
+}
+.highlight .gt{
+    color:#aa0000
+}
+.highlight .kc{
+    color:#000000;
+    font-weight:bold
+}
+.highlight .kd{
+    color:#000000;
+    font-weight:bold
+}
+.highlight .kn{
+    color:#000000;
+    font-weight:bold
+}
+.highlight .kp{
+    color:#000000;
+    font-weight:bold
+}
+.highlight .kr{
+    color:#000000;
+    font-weight:bold
+}
+.highlight .kt{
+    color:#445588;
+    font-weight:bold
+}
+.highlight .k,.highlight .kv{
+    color:#000000;
+    font-weight:bold
+}
+.highlight .mf{
+    color:#009999
+}
+.highlight .mh{
+    color:#009999
+}
+.highlight .il{
+    color:#009999
+}
+.highlight .mi{
+    color:#009999
+}
+.highlight .mo{
+    color:#009999
+}
+.highlight .m,.highlight .mb,.highlight .mx{
+    color:#009999
+}
+.highlight .sb{
+    color:#d14
+}
+.highlight .sc{
+    color:#d14
+}
+.highlight .sd{
+    color:#d14
+}
+.highlight .s2{
+    color:#d14
+}
+.highlight .se{
+    color:#d14
+}
+.highlight .sh{
+    color:#d14
+}
+.highlight .si{
+    color:#d14
+}
+.highlight .sx{
+    color:#d14
+}
+.highlight .sr{
+    color:#009926
+}
+.highlight .s1{
+    color:#d14
+}
+.highlight .ss{
+    color:#990073
+}
+.highlight .s{
+    color:#d14
+}
+.highlight .na{
+    color:#008080
+}
+.highlight .bp{
+    color:#797676
+}
+.highlight .nb{
+    color:#0086B3
+}
+.highlight .nc{
+    color:#445588;
+    font-weight:bold
+}
+.highlight .no{
+    color:#008080
+}
+.highlight .nd{
+    color:#3c5d5d;
+    font-weight:bold
+}
+.highlight .ni{
+    color:#800080
+}
+.highlight .ne{
+    color:#990000;
+    font-weight:bold
+}
+.highlight .nf{
+    color:#990000;
+    font-weight:bold
+}
+.highlight .nl{
+    color:#990000;
+    font-weight:bold
+}
+.highlight .nn{
+    color:#555555
+}
+.highlight .nt{
+    color:#000080
+}
+.highlight .vc{
+    color:#008080
+}
+.highlight .vg{
+    color:#008080
+}
+.highlight .vi{
+    color:#008080
+}
+.highlight .nv{
+    color:#008080
+}
+.highlight .ow{
+    color:#000000;
+    font-weight:bold
+}
+.highlight .o{
+    color:#000000;
+    font-weight:bold
+}
+.highlight .w{
+    color:#bbbbbb
+}
+.highlight{
+    background-color:#f8f8f8
+}

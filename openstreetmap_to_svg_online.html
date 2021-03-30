@@ -1,0 +1,385 @@
+<!--
+    linar_assembler - tool for generating SVG files from OpenStreetMap data. Available as a website.
+    Copyright (C) 2021 Mateusz Konieczny
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, under version 3 of the
+    License only.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate SVG map from OpenStreetMap data</title>
+    <meta charset="utf-8" />
+    <link 
+        rel="stylesheet" 
+        href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css"
+    />
+    <link 
+        rel="stylesheet" 
+        href="leaflet.draw.css"
+    />
+</head>
+<body>
+    Generation of SVG files from OpenStreetMap data. Experimental proof of concept. Map style is very limited (support for areas such as buildings, water, parks, forests, area:highway).
+    <ul>
+    <li>Move map to a small area interesting for you (single park will work, generating map of Poland will fail).</li>
+    <li>Press "rectangle" button, select interesting area for you.</li>
+    <li>Wait - waiting several seconds is normal, currently no progress info is displayed.</li>
+    <li>Generated map should appear below map used for selecting, download should be also automatically triggered. There is also download button available.</li>
+    <li>Use this for something!</li>
+    </ul>
+    <p>If you used this for something - you are welcomed to share it <a href="https://github.com/matkoniecz/lunar_assembler/issues/new">publicly</a> or by sending my an <a href="mailto:matkoniecz@tutanota.com">email</a>.</p>
+
+    <p>Have fun with using OpenStreetMap data for interesting and/or useful purposes! Just remember that you must mention source of data in way visible to whoever will be using it. See <a href="https://www.openstreetmap.org/copyright">this page</a> for details, including cases where it is legally allowed to avoid giving a clear credit (but I encourage to do this in all cases).</p>
+
+    <p>As mentioned this is experimental tool, many obvious issues are known - but if something was missed or you want to help see <a href="https://github.com/matkoniecz/lunar_assembler/issues">list of known issues and TODOs</a></p>
+    
+    <p>If you want to help mapping and you are unsure how to start - you can try <a href="https://github.com/streetcomplete/StreetComplete#download">StreetComplete</a> (an Android app) allowing contributions, with sole requirements being (1) ability to read (2) ability to see things (3) ability to create an OpenStreetMap acount.</p>
+    
+    <p>If you want to map something (map missing objects, fix mistake) and you are unsure how to start - visit <a href="https://www.openstreetmap.org/">openstreetmap.org</a>, zoom in to interesting area and press "edit" button and follow instructions. You can contact OpenStreetMap community using one of global or local channels listed at <a href="https://community.osm.be/">community.osm.be</a>.</p>
+    
+    <!--
+    <script src="polygon-clipping.umd.js"></script>
+  
+    <script>
+      const poly1 = [[[10,0],[12,0],[10,2],[10,0]]]
+      const poly2 = [[[-1,0],[1,0],[0,1],[-1,0]]]
+
+      //alert(polygonClipping.union       (poly1, poly2 /* , poly3, ... */))
+      //alert(polygonClipping.intersection(poly1, poly2 /* , poly3, ... */))
+      //alert(polygonClipping.xor         (poly1, poly2 /* , poly3, ... */))
+      //alert(polygonClipping.difference  (poly1, poly2 /* , poly3, ... */))
+    </script>
+    -->
+
+    <div id="map" style="width: 600px; height: 400px"></div>
+
+    <!-- for GUI allowing rectangle selection--> 
+    <script src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
+    <script src="leaflet.draw.js"></script>
+
+    <!-- converting OSM data to geoJSON and then to d3 geoJSON-->
+    <script src='osmtogeojson.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@5/turf.min.js"></script>
+
+
+    <!-- for GUI allowing rectangle selection--> 
+    <script>
+        var map = L.map('map').setView([50.05514, 19.92824], 18);
+        mapLink = 
+            '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+        L.tileLayer(
+            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; ' + mapLink + ' Contributors',
+            maxZoom: 18,
+            }).addTo(map);
+
+        var drawnItems = new L.FeatureGroup();
+        map.addLayer(drawnItems);
+
+        var drawControl = new L.Control.Draw({
+            draw: {
+                polygon: false,
+                polyline: false,
+                marker: false,
+                circle: false
+            }
+        });
+        map.addControl(drawControl);
+
+        
+        map.on('draw:created', function (e) {
+            var type = e.layerType,
+                layer = e.layer;
+                corners = layer.getLatLngs();
+
+            drawnItems.addLayer(layer);
+
+            handleTriggerFromGUI(layer.getBounds());
+        });
+
+        async function handleTriggerFromGUI(bounds){
+            let osmJSON = await downloadOpenStreetMapData(bounds) // https://leafletjs.com/reference-1.6.0.html#latlngbounds-getcenter
+            //console.log(osmJSON);
+            //alert(JSON.stringify(responseData))
+            let geoJSON = toGeoJSON(osmJSON)
+            let dump = JSON.stringify(geoJSON, null, 2);
+            //console.log(dump);
+            //alert(dump)
+
+            const width=800;
+            const height=600;
+            const geoJSONRepresentingBoundaries = leafletBoundsToGeoJSONFeatureCollectionPolygon(bounds);
+            renderUsingD3(geoJSONRepresentingBoundaries, geoJSON, width, height, '#generated_svg_within g.generated_map');
+
+
+            // TODO:
+            // https://stackoverflow.com/questions/51972619/fetch-then-return-content-type-and-body
+            // https://stackoverflow.com/questions/28250680/how-do-i-access-previous-promise-results-in-a-then-chain
+
+        }
+
+        // TODO - there is a function to do this, right?
+        function leafletBoundsToGeoJSONFeatureCollectionPolygon(bounds) {
+          return {
+            "type": "FeatureCollection",
+            "features": [
+              {
+                "type": "Feature",
+                "properties": {},
+                "geometry": {
+                  "type": "Polygon",
+                  "coordinates": [
+                    [
+                      [
+                        bounds.getWest(),
+                        bounds.getSouth(),
+                      ],
+                      [
+                        bounds.getEast(),
+                        bounds.getSouth(),
+                      ],
+                      [
+                        bounds.getEast(),
+                        bounds.getNorth(),
+                      ],
+                      [
+                        bounds.getWest(),
+                        bounds.getNorth(),
+                      ],
+                      [
+                        bounds.getWest(),
+                        bounds.getSouth(),
+                      ]
+                    ]
+                  ]
+                }
+              }
+            ]
+          }
+        }
+
+        // downloading OSM data
+        async function downloadOpenStreetMapData(bounds){
+            // https://leafletjs.com/reference-1.6.0.html#latlngbounds-getcenter
+            query = "";
+            // note: extra filters will break data in case of some bad/poor/substandard tagging or where someone want this kind of data
+            // extra filters are useful to reduce data overload during debugging, often bug is reproducible in their presence
+            var extra_filters = "[type!=route][type!=parking_fee][type!=waterway][type!=boundary][boundary!=administrative][boundary!=religious_administration]"
+            query += "[out:json][timeout:25];nwr" + extra_filters + "(";
+            query += bounds.getSouth();
+            query += ","
+            query += bounds.getWest();
+            query += ","
+            query += bounds.getNorth();
+            query += ","
+            query += bounds.getEast();
+            query += ");";
+            query += "out body;>;out skel qt;";
+            console.log("overpass query: " + query);
+
+            const response = await fetch("https://overpass-api.de/api/interpreter", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                },
+                body: new URLSearchParams({'data': query})
+            })
+            if (response.ok) {
+              const responseData = response.json();
+              const osmJSON = responseData;
+              return osmJSON;
+            } else {
+              alert("Overpass Turbo refused to provide data, you likely exceed usage limit of that free service.")
+            }
+        } 
+        function toGeoJSON(osmJSON) {
+            let geoJSON = osmtogeojson(osmJSON);
+            return geoJSON;
+        }
+
+
+    </script>
+
+<div id="generated_svg_within">
+  <svg width="800px" height="600px">
+    <g class="generated_map" id="generated_map"></g>
+  </svg>
+</div>
+  
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.2/d3.min.js"></script>
+  
+    <script>
+
+
+
+
+    // TODO: what kind of geojson is accepted here? will it crash when I pass a point here?
+    function rewind(geojson_that_is_7946_compliant_with_right_hand_winding_order) {
+      // ARGHHHHHH ARGHHHHHH ARGHHHH
+      // https://gis.stackexchange.com/questions/392452/why-d3-js-works-only-with-geojson-violating-right-hand-rule
+      // I opened https://github.com/d3/d3-shape/issues/178
+      const d3_geojson = { ...geojson_that_is_7946_compliant_with_right_hand_winding_order };
+      d3_geojson.features = d3_geojson.features.map(f =>
+        turf.rewind(f, { reverse: true })
+      );
+      //alert(JSON.stringify(d3_geojson))
+      return d3_geojson;
+    }
+
+
+    function fillColoring(feature){
+    console.log(feature.properties);
+    if(feature.properties["building"] != null) {
+      return "black";
+    }
+    if(["motorway", "motorway_link", "trunk", "trunk_link", "primary", "primary_link",
+      "secondary", "secondary_link", "tertiary", "tertiary_link",
+      "unclassified", "residential",
+      "service", "track", "road"].includes(feature.properties["area:highway"])) {
+        console.log("area:highway recog");
+      return "#555555";
+    }
+    if(["footway", "pedestrian", "path"].includes(feature.properties["area:highway"]) || (feature.properties["highway"] == "pedestrian" && feature.properties["area"] === "yes")) {
+      console.log("area:highway recog");
+      return "#aaaaaa";
+    }
+    if(feature.properties["area:highway"] === "cycleway" ) {
+      console.log("area:highway recog");
+      return "#9595b4";
+    }
+    if(feature.properties["area:highway"] === "bicycle_crossing" ) {
+      console.log("area:highway recog");
+      return "#bea4c1";
+    }
+    if(feature.properties["area:highway"] === "crossing" ) {
+      console.log("area:highway recog");
+      return "#a06060";
+    }  
+    if(feature.properties["natural"] === "water" || feature.properties["waterway"] === "riverbank") {
+      return "blue";
+    }
+    if(feature.properties["natural"] === "wood" || feature.properties["landuse"] === "forest")  {
+      return "green";
+    }
+    if(feature.properties["leisure"] === "park") {
+      return "#c8facc";
+    }
+    if(feature.properties["landuse"] === "grass" || feature.properties["natural"] in ["grassland", "meadow"]) {
+      return "#a2ce8d";
+    }
+    if(feature.properties["man_made"] === "bridge") {
+      return "gray";
+    }
+    console.log("NONE NOTHING FOR YOU");
+    return "none";
+}
+
+function strokeColoring(feature){
+  return feature.properties.color
+}
+
+function strokeWidth(feature){
+  return 0
+}
+
+function deb(feature){
+  return feature.properties.name
+}
+
+function renderUsingD3(geoJSONRepresentingBoundaries, data_geojson, width, height, selector) {
+    // rewinding is sometimes needed, sometimes not
+    // rewinding is sometimes broken in my code (at least in oce case it was borked by my bug in futher processing!), sometimes not
+    // see https://gis.stackexchange.com/questions/392452/why-d3-js-works-only-with-geojson-violating-right-hand-rule
+    // not sure what is going on here
+    console.log("data_geojson: " + JSON.stringify(data_geojson))
+    var d3_data_geojson = rewind(data_geojson);
+    var d3_geoJSONRepresentingBoundaries = rewind(geoJSONRepresentingBoundaries);
+    console.log("d3_geojson: " + JSON.stringify(d3_data_geojson))
+
+    var projection = d3.geoMercator().fitSize([width, height], d3_geoJSONRepresentingBoundaries)
+
+
+    var geoGenerator = d3.geoPath()
+    .projection(projection);
+
+    document.getElementById('generated_map').innerHTML=""
+
+    var buildings = JSON.parse(JSON.stringify(d3_data_geojson));
+    var landuse = JSON.parse(JSON.stringify(d3_data_geojson));
+    var landcover = JSON.parse(JSON.stringify(d3_data_geojson));
+    var other = JSON.parse(JSON.stringify(d3_data_geojson));
+    buildings.features = [];
+    landuse.features = [];
+    landcover.features = [];
+    other.features = [];
+    d3_data_geojson.features.forEach(function(feature) {
+      if(feature.properties["building"] != null || feature.properties["man_made"] == "bridge" || feature.properties["area:higwhay"] != null) {
+        buildings.features.push(feature);
+      } else if(feature.properties["natural"] != null || feature.properties["landuse"] == "forest") {
+        landcover.features.push(feature);
+      } else if(feature.properties["leisure"] != null || feature.properties["landuse"] != null) {
+        landuse.features.push(feature);
+      } else {
+        other.features.push(feature);
+      }
+    });
+    console.log("AFTER ITERATION")
+    //console.log(buildings_d3_data_geojson)
+
+    d3_data_geojson.features = landuse.features.concat(landcover.features).concat(buildings.features).concat(other.features);
+    console.log(d3_data_geojson.features)
+    update3Map(geoGenerator, d3_data_geojson, selector);
+    download("generated.svg", document.getElementById('generated_svg_within').innerHTML)
+  }
+  
+  function update3Map(geoGenerator, used_data, selector) {
+    var u = d3.select(selector) // should use selector
+      .selectAll('path')
+      .data(used_data.features);
+  
+    u.enter()
+      .append('path')
+      .attr('d', geoGenerator)
+      .attr("stroke", strokeColoring)
+        .attr("stroke-width", strokeWidth)
+        .attr("fill", fillColoring)
+        .attr("name", deb)
+  }
+  
+  
+    function download(filename, text) {
+      var element = document.createElement('a');      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+      element.setAttribute('download', filename);
+    
+      element.style.display = 'none';
+      document.body.appendChild(element);
+    
+      element.click();
+    
+      document.body.removeChild(element);
+    }
+  
+ 
+    </script>
+  
+    <button id="download" href="#">Download SVG</button>
+    You can visit <a href="https://github.com/matkoniecz/lunar_assembler">matkoniecz/lunar_assembler</a> to see code, obtain code or contribute. This software as <a href="https://www.gnu.org/licenses/agpl-3.0.html">AGPLv3</a> licesed.
+    <script>
+      d3.select("#download").on("click", function(){
+          download("generated.svg", document.getElementById('generated_svg_within').innerHTML);
+      })
+  </script>
+</body>
+</html>

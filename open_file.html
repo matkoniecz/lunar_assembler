@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Mateusz Konieczny</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+
+    <!-- https://stackoverflow.com/questions/3582671/how-to-open-a-local-disk-file-with-javascript -->
+
+    <input type="file" id="file-input" />
+    <h3>Contents of the file:</h3>
+    <pre id="file-content"></pre>  
+
+    <script>
+
+function readSingleFile(e) {
+  var file = e.target.files[0];
+  if (!file) {
+    return;
+  }
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var contents = e.target.result;
+    displayContents(contents);
+  };
+  reader.readAsText(file);
+}
+
+function displayContents(contents) {
+  var element = document.getElementById('file-content');
+  element.textContent = contents;
+}
+
+document.getElementById('file-input')
+  .addEventListener('change', readSingleFile, false);
+    </script>
+
+
+<!-- https://ourcodeworld.com/articles/read/189/how-to-create-a-file-and-generate-a-download-with-javascript-in-the-browser-without-a-server -->
+
+<button id="download">ajajaj</button>
+
+<script>
+function download(filename, text) {
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('download', filename);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}
+
+function downloadTrigger(event) {
+  download("filename", "text");
+}
+
+document.getElementById('download')
+  .addEventListener('click', downloadTrigger, false);
+
+// Start file download.
+//download("hello.txt","This is the content of my file :)");
+</script>
+
+  </body>
+</html>
