@@ -18,6 +18,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="https://mapsaregreat.com/style.css">
     <title>Generate SVG map from OpenStreetMap data</title>
     <meta charset="utf-8" />
     <link 
@@ -30,6 +31,9 @@
     />
 </head>
 <body>
+
+  <div id="main_content_wrap" class="outer">
+    <section id="main_content" class="inner">
     Generation of SVG files from OpenStreetMap data. Experimental proof of concept. Map style is very limited (support for areas such as buildings, water, parks, forests, area:highway).
     <ul>
     <li>Move map to a small area interesting for you (single park will work, generating map of Poland will fail).</li>
@@ -43,10 +47,6 @@
     <p>Have fun with using OpenStreetMap data for interesting and/or useful purposes! Just remember that you must mention source of data in way visible to whoever will be using it. See <a href="https://www.openstreetmap.org/copyright">this page</a> for details, including cases where it is legally allowed to avoid giving a clear credit (but I encourage to do this in all cases).</p>
 
     <p>As mentioned this is experimental tool, many obvious issues are known - but if something was missed or you want to help see <a href="https://github.com/matkoniecz/lunar_assembler/issues">list of known issues and TODOs</a></p>
-    
-    <p>If you want to help mapping and you are unsure how to start - you can try <a href="https://github.com/streetcomplete/StreetComplete#download">StreetComplete</a> (an Android app) allowing contributions, with sole requirements being (1) ability to read (2) ability to see things (3) ability to create an OpenStreetMap acount.</p>
-    
-    <p>If you want to map something (map missing objects, fix mistake) and you are unsure how to start - visit <a href="https://www.openstreetmap.org/">openstreetmap.org</a>, zoom in to interesting area and press "edit" button and follow instructions. You can contact OpenStreetMap community using one of global or local channels listed at <a href="https://community.osm.be/">community.osm.be</a>.</p>
     
     <!--
     <script src="polygon-clipping.umd.js"></script>
@@ -375,11 +375,17 @@ function renderUsingD3(geoJSONRepresentingBoundaries, data_geojson, width, heigh
     </script>
   
     <button id="download" href="#">Download SVG</button>
+    <p>If you want to help mapping and you are unsure how to start - you can try <a href="https://github.com/streetcomplete/StreetComplete#download">StreetComplete</a> (an Android app) allowing contributions, with sole requirements being (1) ability to read (2) ability to see things (3) ability to create an OpenStreetMap acount.</p>
+    
+    <p>If you want to map something (map missing objects, fix mistake) and you are unsure how to start - visit <a href="https://www.openstreetmap.org/">openstreetmap.org</a>, zoom in to interesting area and press "edit" button and follow instructions. You can contact OpenStreetMap community using one of global or local channels listed at <a href="https://community.osm.be/">community.osm.be</a>.</p>
+    
     You can visit <a href="https://github.com/matkoniecz/lunar_assembler">matkoniecz/lunar_assembler</a> to see code, obtain code or contribute. This software as <a href="https://www.gnu.org/licenses/agpl-3.0.html">AGPLv3</a> licesed.
     <script>
       d3.select("#download").on("click", function(){
           download("generated.svg", document.getElementById('generated_svg_within').innerHTML);
       })
   </script>
+  </section>
+  </div>
 </body>
 </html>
