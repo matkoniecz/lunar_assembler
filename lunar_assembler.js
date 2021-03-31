@@ -1,4 +1,45 @@
-        // TODO - there is a function to do this, right?
+var map = L.map('map').setView([50.05514, 19.92824], 18);
+mapLink = 
+    '<a href="https://openstreetmap.org">OpenStreetMap</a>';
+L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; ' + mapLink + ' Contributors',
+    maxZoom: 18,
+    }).addTo(map);
+
+var drawnItems = new L.FeatureGroup();
+map.addLayer(drawnItems);
+
+var drawControl = new L.Control.Draw({
+    draw: {
+        polygon: false,
+        polyline: false,
+        marker: false,
+        circle: false
+    }
+});
+map.addControl(drawControl);
+
+map.on('draw:created', function (e) {
+    var type = e.layerType,
+        layer = e.layer;
+        corners = layer.getLatLngs();
+
+    drawnItems.addLayer(layer);
+
+    handleTriggerFromGUI(layer.getBounds());
+});
+
+async function handleTriggerFromGUI(bounds){
+    let osmJSON = await downloadOpenStreetMapData(bounds) // https://leafletjs.com/reference-1.6.0.html#latlngbounds-getcenter
+    let geoJSON = toGeoJSON(osmJSON)
+    const width=800;
+    const height=600;
+    const geoJSONRepresentingBoundaries = leafletBoundsToGeoJSONFeatureCollectionPolygon(bounds);
+    renderUsingD3(geoJSONRepresentingBoundaries, geoJSON, width, height, mapStyle); //mapStyle is defined in separate .js file, imported here
+}
+
+// TODO - there is a function to do this, right?
         function leafletBoundsToGeoJSONFeatureCollectionPolygon(bounds) {
             return {
               "type": "FeatureCollection",

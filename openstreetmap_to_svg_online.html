@@ -32,7 +32,6 @@
 </head>
 <body>
   <script src="high_zoom_map_style.js"></script>
-  <script src="lunar_assembler.js"></script>
 
   <div id="main_content_wrap" class="outer">
     <section id="main_content" class="inner">
@@ -48,21 +47,10 @@
 
     <p>(there is more text below map)
     
-    <!--
-    <script src="polygon-clipping.umd.js"></script>
-  
-    <script>
-      const poly1 = [[[10,0],[12,0],[10,2],[10,0]]]
-      const poly2 = [[[-1,0],[1,0],[0,1],[-1,0]]]
-
-      //alert(polygonClipping.union       (poly1, poly2 /* , poly3, ... */))
-      //alert(polygonClipping.intersection(poly1, poly2 /* , poly3, ... */))
-      //alert(polygonClipping.xor         (poly1, poly2 /* , poly3, ... */))
-      //alert(polygonClipping.difference  (poly1, poly2 /* , poly3, ... */))
-    </script>
+    <div id="map" style="width: 600px; height: 400px"></div><!-- 
+        note: right now id="map" is mandatory - without it everything will break.
+        Feel free to make PR if that is causing problems for you
     -->
-
-    <div id="map" style="width: 600px; height: 400px"></div>
 
     <!-- for GUI allowing rectangle selection--> 
     <script src="leaflet-version0.7.js"></script>
@@ -71,65 +59,7 @@
     <!-- converting OSM data to geoJSON and then to d3 geoJSON-->
     <script src='osmtogeojson.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/@turf/turf@5/turf.min.js"></script>
-
-
-    <!-- for GUI allowing rectangle selection--> 
-    <script>
-        var map = L.map('map').setView([50.05514, 19.92824], 18);
-        mapLink = 
-            '<a href="https://openstreetmap.org">OpenStreetMap</a>';
-        L.tileLayer(
-            'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; ' + mapLink + ' Contributors',
-            maxZoom: 18,
-            }).addTo(map);
-
-        var drawnItems = new L.FeatureGroup();
-        map.addLayer(drawnItems);
-
-        var drawControl = new L.Control.Draw({
-            draw: {
-                polygon: false,
-                polyline: false,
-                marker: false,
-                circle: false
-            }
-        });
-        map.addControl(drawControl);
-
-        
-        map.on('draw:created', function (e) {
-            var type = e.layerType,
-                layer = e.layer;
-                corners = layer.getLatLngs();
-
-            drawnItems.addLayer(layer);
-
-            handleTriggerFromGUI(layer.getBounds());
-        });
-
-        async function handleTriggerFromGUI(bounds){
-            let osmJSON = await downloadOpenStreetMapData(bounds) // https://leafletjs.com/reference-1.6.0.html#latlngbounds-getcenter
-            //console.log(osmJSON);
-            //alert(JSON.stringify(responseData))
-            let geoJSON = toGeoJSON(osmJSON)
-            let dump = JSON.stringify(geoJSON, null, 2);
-            //console.log(dump);
-            //alert(dump)
-
-            const width=800;
-            const height=600;
-            const geoJSONRepresentingBoundaries = leafletBoundsToGeoJSONFeatureCollectionPolygon(bounds);
-            renderUsingD3(geoJSONRepresentingBoundaries, geoJSON, width, height, mapStyle); //mapStyle is defined in separate .js file, imported here
-
-
-            // TODO:
-            // https://stackoverflow.com/questions/51972619/fetch-then-return-content-type-and-body
-            // https://stackoverflow.com/questions/28250680/how-do-i-access-previous-promise-results-in-a-then-chain
-
-        }
-
-    </script>
+    <script src="lunar_assembler.js"></script>
 
 <div id="generated_svg_within">
 </div>
