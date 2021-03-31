@@ -53,7 +53,7 @@ function fillColoring(feature){
     if(["industrial", "railway"].includes(feature.properties["landuse"])){
         return "#efdfef";
     }
-    if(["residential", "highway", "retail", "commercial", "garages"].includes(feature.properties["landuse"])){
+    if(["residential", "highway", "retail", "commercial", "garages"].includes(feature.properties["landuse"]) || ["school", "kidergarten", "university"].includes(feature.properties["amenity"])){
         return "#efefef";
     }
     if(["farmland", "vineyard"].includes(feature.properties["landuse"])){
