@@ -243,6 +243,12 @@
 
     function fillColoring(feature){
     console.log(feature);
+    if (["Point"].includes(feature.geometry.type)) {
+      //no rendering of points, for start size seems to randomly differ
+      // and leaves ugly circles - see building=* areas
+      return "none";        
+    }
+
     if(feature.properties["building"] != null) {
       return "black";
     }
