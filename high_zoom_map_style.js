@@ -16,6 +16,52 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 var mapStyle = {
+paintOrderCompareFunction(featureFirst, featureSecond) {
+    // < 0 - First element must be placed before second
+    // 0 - Both elements is equal, do not change order.
+    // > 0 - Second element must be placed before first.
+    // https://stackoverflow.com/a/41121134/4130619
+
+    // if featureFirst should be drawn over featureSecond
+    // on top of it, hding it
+    // return 1
+
+    return mapStyle.paintOrder(featureFirst) - mapStyle.paintOrder(featureSecond);
+    // TODO to halve calculations it would be possible to map features to values,
+    // and sort that values, right? Or maybe not...
+  },
+
+paintOrder(feature) {
+    // higher values: more on top
+
+    // TODO:
+    // it WILL fail for: buildings under bridges
+    // bridges over bridges
+    // water bridges over something
+    // undeground buildings and other features undegrounds and in tunnels
+    if(feature.properties["area:highway"] != null) {
+        return 1000;
+    }
+    if(feature.properties["building"] != null) {
+        return 900;
+    }
+    if(feature.properties["highway"] != null) {
+        return 800;
+    }
+    if(feature.properties["man_made"] === "bridge") {
+        return 700;
+    }
+    if(feature.properties["natural"] === "water" || feature.properties["waterway"] === "riverbank") {
+        // render natural=wood below natural=water
+        return 1;
+    }
+    if(feature.properties["leisure"] != null) {
+        // render leisure=park below natural=water or natural=wood
+        return -2;
+    }
+    return 0;
+},
+
 fillColoring(feature){
     console.log(feature);
     if (["Point"].includes(feature.geometry.type)) {
