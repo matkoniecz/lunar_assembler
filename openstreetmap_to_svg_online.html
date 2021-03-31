@@ -31,7 +31,18 @@
     />
 </head>
 <body>
+  <!-- dependencies of library-->
+  <script src="leaflet-version0.7.js"></script>
+  <script src="leaflet.draw.js"></script>
+  <script src='osmtogeojson.js'></script>
+  <script src="turf.min.js"></script>
+
+  <!-- library for drawing -->
+  <script src="lunar_assembler.js"></script>
+
+  <!-- actual code -->
   <script src="high_zoom_map_style.js"></script>
+
 
   <div id="main_content_wrap" class="outer">
     <section id="main_content" class="inner">
@@ -51,15 +62,6 @@
         note: right now id="map" is mandatory - without it everything will break.
         Feel free to make PR if that is causing problems for you
     -->
-
-    <!-- for GUI allowing rectangle selection--> 
-    <script src="leaflet-version0.7.js"></script>
-    <script src="leaflet.draw.js"></script>
-
-    <!-- converting OSM data to geoJSON and then to d3 geoJSON-->
-    <script src='osmtogeojson.js'></script>
-    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@5/turf.min.js"></script>
-    <script src="lunar_assembler.js"></script>
 
 <div id="generated_svg_within">
 </div>
