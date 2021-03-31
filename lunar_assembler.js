@@ -93,7 +93,7 @@
   
   
   
-  function renderUsingD3(geoJSONRepresentingBoundaries, data_geojson, width, height, selector) {
+  function renderUsingD3(geoJSONRepresentingBoundaries, data_geojson, width, height, selector, mapStyle) {
       // rewinding is sometimes needed, sometimes not
       // rewinding is sometimes broken in my code (at least in oce case it was borked by my bug in futher processing!), sometimes not
       // see https://gis.stackexchange.com/questions/392452/why-d3-js-works-only-with-geojson-violating-right-hand-rule
@@ -143,7 +143,7 @@
   
       d3_data_geojson.features = landuse.features.concat(landcover.features).concat(buildings.features).concat(other.features).concat(linear_roads.features).concat(area_highway.features);
       console.log(d3_data_geojson.features)
-      update3Map(geoGenerator, d3_data_geojson, selector);
+      update3Map(geoGenerator, d3_data_geojson, selector, mapStyle);
       download("generated.svg", document.getElementById('generated_svg_within').innerHTML)
     }
     
@@ -155,10 +155,10 @@
       u.enter()
         .append('path')
         .attr('d', geoGenerator)
-        .attr("stroke", strokeColoring)
-          .attr("stroke-width", strokeWidth)
-          .attr("fill", fillColoring)
-          .attr("name", deb)
+        .attr("stroke", mapStyle.strokeColoring)
+          .attr("stroke-width", mapStyle.strokeWidth)
+          .attr("fill", mapStyle.fillColoring)
+          .attr("name", mapStyle.name)
     }
     
     

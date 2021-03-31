@@ -15,7 +15,8 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-function fillColoring(feature){
+var mapStyle = {
+fillColoring(feature){
     console.log(feature);
     if (["Point"].includes(feature.geometry.type)) {
       //no rendering of points, for start size seems to randomly differ
@@ -69,10 +70,10 @@ function fillColoring(feature){
       return "gray";
     }
     return "none";
-}
+},
 
 
-function strokeColoring(feature){
+strokeColoring(feature){
     if(["fence", "wall"].includes(feature.properties["barrier"])) {
         return "black";
     }
@@ -97,9 +98,9 @@ function strokeColoring(feature){
         return "black";
       }
     return "none";
-  }
+  },
   
-  function strokeWidth(feature){
+strokeWidth(feature){
     if(["motorway", "motorway_link", "trunk", "trunk_link", "primary", "primary_link",
         "secondary", "secondary_link", "tertiary", "tertiary_link",
         "unclassified", "residential"].includes(feature.properties["highway"])) {
@@ -116,9 +117,9 @@ function strokeColoring(feature){
       }
   
     return 1
-  }
+  },
   
-  function deb(feature){
+name(feature){
     return feature.properties.name
   }
-  
+}
