@@ -295,11 +295,32 @@
 }
 
 function strokeColoring(feature){
-  return feature.properties.color
+  if(["fence", "wall"].includes(feature.properties["barrier"])) {
+      return "black";
+  }
+  if(["motorway", "motorway_link", "trunk", "trunk_link", "primary", "primary_link",
+      "secondary", "secondary_link", "tertiary", "tertiary_link",
+      "unclassified", "residential",
+      "service", "track", "road"].includes(feature.properties["highway"])) {
+      return "#555555";
+    }
+    if(["footway", "pedestrian", "path", "pedestrian"].includes(feature.properties["highway"])) {
+      return "#aaaaaa";
+    }
+    if(feature.properties["highway"] === "cycleway" ) {
+      return "#9595b4";
+    }
+
+  return "none";
 }
 
 function strokeWidth(feature){
-  return 0
+  if(["motorway", "motorway_link", "trunk", "trunk_link", "primary", "primary_link",
+      "secondary", "secondary_link", "tertiary", "tertiary_link",
+      "unclassified", "residential"].includes(feature.properties["highway"])) {
+      return 2;
+    }
+  return 1
 }
 
 function deb(feature){
