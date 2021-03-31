@@ -51,7 +51,10 @@ function fillColoring(feature){
       return "green";
     }
     if(["industrial", "railway"].includes(feature.properties["landuse"])){
-        return "efdfef";
+        return "#efdfef";
+    }
+    if(["residential", "highway", "retail", "commercial", "garages"].includes(feature.properties["landuse"])){
+        return "#efefef";
     }
     if(["farmland", "vineyard"].includes(feature.properties["landuse"])){
       return "#eef0d5";
