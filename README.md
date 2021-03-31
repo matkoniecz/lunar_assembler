@@ -1,8 +1,10 @@
-Generate SVG maps from OpenStreetMap data in browser.
+SVG maps from OpenStreetMap data in browser.
+
+Available at [mapsaregreat.com/osm_to_svg_in_browser/](https://mapsaregreat.com/osm_to_svg_in_browser/)
 
 Lunar assembler will be JS library allowing easy setup of static websites allowing this (thank to amazing Overpass API).
 
-Right now it is pile of JS code and proof-of-concept website - that works already :)
+Right now it is pile of JS code and proof-of-concept website.
 
 # Lunar assembler
 ##  In action
