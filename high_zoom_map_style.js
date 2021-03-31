@@ -58,9 +58,14 @@ paintOrder(feature) {
         return 700;
     }
     if(feature.properties["natural"] === "water" || feature.properties["waterway"] === "riverbank") {
-        // render natural=wood below natural=water
-        return 1;
-    }
+      // render natural=wood below natural=water
+      return 2;
+  }
+  if(feature.properties["natural"] === "bare_rock") {
+    // render natural=wood below natural=bare_rock
+    // render water rather than underwater rocks
+    return 2;
+  }
     if(feature.properties["leisure"] != null) {
         // render leisure=park below natural=water or natural=wood
         return -2;
@@ -120,6 +125,9 @@ fillColoring(feature){
     }
     if(feature.properties["man_made"] === "bridge") {
       return "gray";
+    }
+    if(feature.properties["natural"] === "bare_rock") {
+      return "#EEE5DC";
     }
     return "none";
 },
