@@ -242,7 +242,7 @@
 
 
     function fillColoring(feature){
-    console.log(feature.properties);
+    console.log(feature);
     if(feature.properties["building"] != null) {
       return "black";
     }
@@ -250,23 +250,18 @@
       "secondary", "secondary_link", "tertiary", "tertiary_link",
       "unclassified", "residential",
       "service", "track", "road"].includes(feature.properties["area:highway"])) {
-        console.log("area:highway recog");
       return "#555555";
     }
     if(["footway", "pedestrian", "path"].includes(feature.properties["area:highway"]) || (feature.properties["highway"] == "pedestrian" && feature.properties["area"] === "yes")) {
-      console.log("area:highway recog");
       return "#aaaaaa";
     }
     if(feature.properties["area:highway"] === "cycleway" ) {
-      console.log("area:highway recog");
       return "#9595b4";
     }
     if(feature.properties["area:highway"] === "bicycle_crossing" ) {
-      console.log("area:highway recog");
       return "#bea4c1";
     }
     if(feature.properties["area:highway"] === "crossing" ) {
-      console.log("area:highway recog");
       return "#a06060";
     }  
     if(feature.properties["natural"] === "water" || feature.properties["waterway"] === "riverbank") {
@@ -284,7 +279,6 @@
     if(feature.properties["man_made"] === "bridge") {
       return "gray";
     }
-    console.log("NONE NOTHING FOR YOU");
     return "none";
 }
 
