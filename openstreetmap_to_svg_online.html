@@ -31,19 +31,6 @@
     />
 </head>
 <body>
-  <!-- dependencies of library-->
-  <script src="leaflet-version0.7.js"></script>
-  <script src="leaflet.draw.js"></script>
-  <script src='osmtogeojson.js'></script>
-  <script src="turf.min.js"></script>
-
-  <!-- library for drawing -->
-  <script src="lunar_assembler.js"></script>
-
-  <!-- actual code -->
-  <script src="high_zoom_map_style.js"></script>
-
-
   <div id="main_content_wrap" class="outer">
     <section id="main_content" class="inner">
     Generation of SVG files from OpenStreetMap data. Experimental proof of concept. Map style is very limited (support for areas such as buildings, water, parks, forests, area:highway).
@@ -62,6 +49,17 @@
         note: right now id="map" is mandatory - without it everything will break.
         Feel free to make PR if that is causing problems for you
     -->
+  <!-- dependencies of library-->
+  <script src="lunar_assembler_dependencies/leaflet-version0.7.js"></script> <!-- leaflet must be imported after map id exists-->
+  <script src="lunar_assembler_dependencies/leaflet.draw.js"></script>
+  <script src='lunar_assembler_dependencies/osmtogeojson.js'></script>
+  <script src="lunar_assembler_dependencies/turf.min.js"></script>
+
+  <!-- library for drawing -->
+  <script src="lunar_assembler.js"></script> <!-- must be imorted after leaflet-->
+
+  <!-- actual code -->
+  <script src="high_zoom_map_style.js"></script>
 
 <div id="generated_svg_within">
 </div>
