@@ -120,7 +120,7 @@
       landcover.features = [];
       other.features = [];
       d3_data_geojson.features.forEach(function(feature) {
-        if(feature.properties["building"] != null || feature.properties["man_made"] == "bridge" || feature.properties["area:higwhay"] != null) {
+        if(feature.properties["building"] != null || feature.properties["man_made"] == "bridge" || feature.properties["area:highway"] != null) {
           buildings.features.push(feature);
         } else if(feature.properties["natural"] != null || feature.properties["landuse"] == "forest") {
           landcover.features.push(feature);
