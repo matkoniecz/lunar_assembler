@@ -276,10 +276,16 @@
     if(feature.properties["natural"] === "wood" || feature.properties["landuse"] === "forest")  {
       return "green";
     }
-    if(feature.properties["leisure"] === "park") {
+    if(feature.properties["landuse"] === "industrial")  {
+      return "efdfef";
+    }
+    if(["farmland", "vineyard"].includes(feature.properties["landuse"])){
+      return "#eef0d5";
+    }
+    if(["park", "pitch"].includes(feature.properties["leisure"]) || feature.properties["landuse"] === "village_green") {
       return "#c8facc";
     }
-    if(feature.properties["landuse"] === "grass" || feature.properties["natural"] in ["grassland", "meadow"]) {
+    if(feature.properties["landuse"] === "grass" || ["grassland", "meadow"].includes(feature.properties["natural"])) {
       return "#a2ce8d";
     }
     if(feature.properties["man_made"] === "bridge") {
