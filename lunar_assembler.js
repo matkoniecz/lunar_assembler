@@ -115,12 +115,20 @@
       var landuse = JSON.parse(JSON.stringify(d3_data_geojson));
       var landcover = JSON.parse(JSON.stringify(d3_data_geojson));
       var other = JSON.parse(JSON.stringify(d3_data_geojson));
+      var linear_roads = JSON.parse(JSON.stringify(d3_data_geojson));
+      var area_highway = JSON.parse(JSON.stringify(d3_data_geojson));
       buildings.features = [];
       landuse.features = [];
       landcover.features = [];
       other.features = [];
+      linear_roads.features = [];
+      area_highway.features = [];
       d3_data_geojson.features.forEach(function(feature) {
-        if(feature.properties["building"] != null || feature.properties["man_made"] == "bridge" || feature.properties["area:highway"] != null) {
+        if(feature.properties["highway"] != null) {
+          linear_roads.features.push(feature);
+        } if(feature.properties["area:highway"] != null) {
+          area_highway.features.push(feature);
+        } if(feature.properties["building"] != null || feature.properties["man_made"] == "bridge" || feature.properties["area:highway"] != null) {
           buildings.features.push(feature);
         } else if(feature.properties["natural"] != null || feature.properties["landuse"] == "forest") {
           landcover.features.push(feature);
@@ -133,7 +141,7 @@
       console.log("AFTER ITERATION")
       //console.log(buildings_d3_data_geojson)
   
-      d3_data_geojson.features = landuse.features.concat(landcover.features).concat(buildings.features).concat(other.features);
+      d3_data_geojson.features = landuse.features.concat(landcover.features).concat(buildings.features).concat(other.features).concat(linear_roads.features).concat(area_highway.features);
       console.log(d3_data_geojson.features)
       update3Map(geoGenerator, d3_data_geojson, selector);
       download("generated.svg", document.getElementById('generated_svg_within').innerHTML)
