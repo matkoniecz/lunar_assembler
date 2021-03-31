@@ -311,6 +311,9 @@ function strokeColoring(feature){
       return "#9595b4";
     }
 
+    if(feature.properties["aeroway"] === "runway" ||  feature.properties["aeroway"] === "taxiway" ) {
+      return "purple";
+    }
   return "none";
 }
 
@@ -320,6 +323,13 @@ function strokeWidth(feature){
       "unclassified", "residential"].includes(feature.properties["highway"])) {
       return 2;
     }
+    if(feature.properties["aeroway"] === "runway" ) {
+      return 5;
+    }
+    if(feature.properties["aeroway"] === "taxiway" ) {
+      return 2;
+    }
+
   return 1
 }
 
