@@ -314,6 +314,10 @@ function strokeColoring(feature){
     if(feature.properties["aeroway"] === "runway" ||  feature.properties["aeroway"] === "taxiway" ) {
       return "purple";
     }
+
+    if(["rail", "disused", "tram", "subway", "narrow_gauge", "light_rail", "preserved", "construction", "miniature", "monorail"].includes(feature.properties["railway"])) {
+      return "black";
+    }
   return "none";
 }
 
@@ -327,6 +331,9 @@ function strokeWidth(feature){
       return 5;
     }
     if(feature.properties["aeroway"] === "taxiway" ) {
+      return 2;
+    }
+    if(["rail", "disused", "tram", "subway", "narrow_gauge", "light_rail", "preserved", "construction", "miniature", "monorail"].includes(feature.properties["railway"])) {
       return 2;
     }
 
