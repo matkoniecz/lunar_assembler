@@ -45,6 +45,12 @@ paintOrder(feature) {
     if(feature.properties["building"] != null) {
         return 900;
     }
+    if(feature.properties["barrier"] != null) {
+        return 850;
+    }
+    if(feature.properties["waterway"] != null) {
+      return 850;
+  }
     if(feature.properties["highway"] != null) {
         return 800;
     }
@@ -143,7 +149,11 @@ strokeColoring(feature){
       if(["rail", "disused", "tram", "subway", "narrow_gauge", "light_rail", "preserved", "construction", "miniature", "monorail"].includes(feature.properties["railway"])) {
         return "black";
       }
-    return "none";
+      if(feature.properties["waterway"] != null ) {
+        return "blue";
+      }
+
+      return "none";
   },
   
 strokeWidth(feature){
@@ -154,6 +164,18 @@ strokeWidth(feature){
       }
       if(feature.properties["aeroway"] === "runway" ) {
         return 5;
+      }
+      if(feature.properties["waterway"] === "river" ) {
+        return 10;
+      }
+      if(feature.properties["waterway"] === "canal" ) {
+        return 7;
+      }
+      if(feature.properties["waterway"] === "stream" ) {
+        return 2;
+      }
+      if(["ditch", "drain"].includes(feature.properties["waterway"] )) {
+        return 1;
       }
       if(feature.properties["aeroway"] === "taxiway" ) {
         return 2;
