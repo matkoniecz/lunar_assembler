@@ -1,4 +1,8 @@
-Tool for making SVG maps from OpenStreetMap data, available as website and easy to use.
+Generate SVG maps from OpenStreetMap data in browser.
+
+Lunar assembler will be JS library allowing easy setup of static websites allowing this (thank to amazing Overpass API).
+
+Right now it is pile of JS code and proof-of-concept website - that works already :)
 
 # Lunar assembler
 
