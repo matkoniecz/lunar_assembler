@@ -49,7 +49,7 @@ paintOrder(feature) {
         return 850;
     }
     if(feature.properties["waterway"] != null) {
-      return 850;
+      return 830;
   }
     if(feature.properties["highway"] != null) {
         return 800;
