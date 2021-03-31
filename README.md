@@ -5,6 +5,8 @@ Lunar assembler will be JS library allowing easy setup of static websites allowi
 Right now it is pile of JS code and proof-of-concept website - that works already :)
 
 # Lunar assembler
+##  In action
+![images_for_description/lunar_assembler_in_action.gif](images_for_description/lunar_assembler_in_action.gif)
 
 ## Potential uses
 
