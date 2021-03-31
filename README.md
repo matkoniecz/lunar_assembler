@@ -22,6 +22,10 @@ Please create a new issue if you want to use it but current instructions are ins
 
 I know that documentation may be far better, but I am not sure what kind of additional documentation would be most useful.
 
+## Alternatives
+
+As usual [OSM Wiki documentation](https://wiki.openstreetmap.org/wiki/SVG#Ways_to_create_an_SVG_map_from_OpenStreetMap) is useful.
+
 ## Delibrately rejected features
 
 
