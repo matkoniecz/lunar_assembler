@@ -27,7 +27,9 @@ I know that documentation may be far better, but I am not sure what kind of addi
 
 Exact duplicates of more popular standard tags will not be supported (for example `landcover=water` or `landcover=trees`).
 
-Note that once insane architecture will be refactored making own website with own map style should be relatively easy. See [issue #5](https://github.com/matkoniecz/lunar_assembler/issues/5) - help is welcomed.
+`landuse=reservoir` will not be supported, that is bad tagging scheme.
+
+Note that once insane architecture will be refactored making own website with own map style should be relatively easy and that possibly controversial decisions will be made in a separate repo making my own map style. See [issue #5](https://github.com/matkoniecz/lunar_assembler/issues/5) - help is welcomed.
 
 ## Sponsors
 
