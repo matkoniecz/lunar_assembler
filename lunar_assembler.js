@@ -93,7 +93,7 @@
   
   
   
-  function renderUsingD3(geoJSONRepresentingBoundaries, data_geojson, width, height, selector, mapStyle) {
+  function renderUsingD3(geoJSONRepresentingBoundaries, data_geojson, width, height, mapStyle) {
       // rewinding is sometimes needed, sometimes not
       // rewinding is sometimes broken in my code (at least in oce case it was borked by my bug in futher processing!), sometimes not
       // see https://gis.stackexchange.com/questions/392452/why-d3-js-works-only-with-geojson-violating-right-hand-rule
@@ -109,7 +109,9 @@
       var geoGenerator = d3.geoPath()
       .projection(projection);
   
-      document.getElementById('generated_map').innerHTML=""
+      selector = '#generated_svg_within g.generated_map'
+      let generated = '<div style="background-color:white"><svg width="' + width + 'px" height="' + height + 'px">' + "\n" + '<g class="generated_map" id="generated_map"></g>' + "\n" + '</svg></div>'
+      document.getElementById('generated_svg_within').innerHTML=generated
   
       d3_data_geojson.features.sort(mapStyle.paintOrderCompareFunction)
       console.log(d3_data_geojson.features)

@@ -46,11 +46,7 @@
     </ul>
     <p>If you used this for something - you are welcomed to share it <a href="https://github.com/matkoniecz/lunar_assembler/issues/new">publicly</a> or by sending my an <a href="mailto:matkoniecz@tutanota.com">email</a>.</p>
 
-    <p>Have fun with using OpenStreetMap data for interesting and/or useful purposes! Just remember that you must mention source of data in way visible to whoever will be using it. See <a href="https://www.openstreetmap.org/copyright">this page</a> for details, including cases where it is legally allowed to avoid giving a clear credit (but I encourage to do this in all cases).</p>
-
-    <p>As mentioned this is experimental tool, many obvious issues are known - but if something was missed or you want to help see <a href="https://github.com/matkoniecz/lunar_assembler/issues">list of known issues and TODOs</a></p>
-
-    <p>(there is more text below map and space reserved for a generated map)
+    <p>(there is more text below map)
     
     <!--
     <script src="polygon-clipping.umd.js"></script>
@@ -124,7 +120,7 @@
             const width=800;
             const height=600;
             const geoJSONRepresentingBoundaries = leafletBoundsToGeoJSONFeatureCollectionPolygon(bounds);
-            renderUsingD3(geoJSONRepresentingBoundaries, geoJSON, width, height, '#generated_svg_within g.generated_map', mapStyle); //mapStyle is defined in separate .js file, imported here
+            renderUsingD3(geoJSONRepresentingBoundaries, geoJSON, width, height, mapStyle); //mapStyle is defined in separate .js file, imported here
 
 
             // TODO:
@@ -135,17 +131,17 @@
 
     </script>
 
-<div id="generated_svg_within" style="background-color:white">
-  <svg width="800px" height="600px">
-    <g class="generated_map" id="generated_map"></g>
-  </svg>
+<div id="generated_svg_within">
 </div>
+    <button id="download" href="#">Download SVG</button>
   
-  
+    <p>Have fun with using OpenStreetMap data for interesting and/or useful purposes! Just remember that you must mention source of data in way visible to whoever will be using it. See <a href="https://www.openstreetmap.org/copyright">this page</a> for details, including cases where it is legally allowed to avoid giving a clear credit (but I encourage to do this in all cases).</p>
+
+    <p>As mentioned this is experimental tool, many obvious issues are known - but if something was missed or you want to help see <a href="https://github.com/matkoniecz/lunar_assembler/issues">list of known issues and TODOs</a></p>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.2/d3.min.js"></script>
   
  
-    <button id="download" href="#">Download SVG</button>
     <p>If you want to help mapping and you are unsure how to start - you can try <a href="https://github.com/streetcomplete/StreetComplete#download">StreetComplete</a> (an Android app) allowing contributions, with sole requirements being (1) ability to read (2) ability to see things (3) ability to create an OpenStreetMap acount.</p>
     
     <p>If you want to map something (map missing objects, fix mistake) and you are unsure how to start - visit <a href="https://www.openstreetmap.org/">openstreetmap.org</a>, zoom in to interesting area and press "edit" button and follow instructions. You can contact OpenStreetMap community using one of global or local channels listed at <a href="https://community.osm.be/">community.osm.be</a>.</p>
