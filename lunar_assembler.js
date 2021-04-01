@@ -160,7 +160,6 @@ async function handleTriggerFromGUI(bounds){
       d3_data_geojson.features.sort(mapStyle.paintOrderCompareFunction)
       console.log(d3_data_geojson.features)
       update3Map(geoGenerator, d3_data_geojson, selector, mapStyle);
-      download("generated.svg", document.getElementById('generated_svg_within').innerHTML)
     }
     
     function update3Map(geoGenerator, used_data, selector) {
