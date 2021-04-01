@@ -110,7 +110,7 @@ async function handleTriggerFromGUI(bounds){
                 const osmJSON = responseData;
                 return osmJSON;
               } else {
-                alert("Overpass Turbo refused to provide data, you likely exceed usage limit of that free service.")
+                alert("Overpass API refused to provide data. Either selected area was too large, or you exceed usage limit of that free service. Please wait a bit and retry. Overpass API is used to get data from OpenStreetMap for a given area.")
               }
           } 
           function toGeoJSON(osmJSON) {
