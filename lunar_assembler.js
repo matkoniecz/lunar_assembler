@@ -158,7 +158,7 @@ async function handleTriggerFromGUI(bounds){
       .projection(projection);
   
       selector = '#generated_svg_within g.generated_map'
-      let generated = '<svg width="' + width + 'px" height="' + height + 'px">' + "\n" + '<g class="generated_map" id="generated_map"></g>' + "\n" + '</svg>'
+      let generated = '<svg height="100%" width="100%" viewBox="0 0 ' + width + ' ' + height + '">' + "\n" + '<g class="generated_map" id="generated_map"></g>' + "\n" + '</svg>'
       document.getElementById('generated_svg_within').innerHTML=generated
   
       d3_data_geojson.features.sort(mapStyle.paintOrderCompareFunction)
