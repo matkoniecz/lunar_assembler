@@ -1,43 +1,51 @@
-var map = L.map('map').setView([50.05514, 19.92824], 18);
-mapLink = 
-    '<a href="https://openstreetmap.org">OpenStreetMap</a>';
-L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; ' + mapLink + ' Contributors',
-    maxZoom: 18,
-    }).addTo(map);
+function initializeLunarAssembler({map_div_id, download_trigger_id, lat, lon, zoom} = {}) {
+  var map = L.map(map_div_id).setView([lat, lon], zoom);
+  mapLink = 
+      '<a href="https://openstreetmap.org">OpenStreetMap</a>';
+  L.tileLayer(
+      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; ' + mapLink + ' Contributors',
+      maxZoom: 18,
+      }).addTo(map);
 
-var drawnItems = new L.FeatureGroup();
-map.addLayer(drawnItems);
+  var drawnItems = new L.FeatureGroup();
+  map.addLayer(drawnItems);
 
-var drawControl = new L.Control.Draw({
-    draw: {
-        polygon: false,
-        polyline: false,
-        marker: false,
-        circle: false,
-        circlemarker: false
-    }
-});
-map.addControl(drawControl);
+  var drawControl = new L.Control.Draw({
+      draw: {
+          polygon: false,
+          polyline: false,
+          marker: false,
+          circle: false,
+          circlemarker: false
+      }
+  });
+  map.addControl(drawControl);
 
-map.on('draw:created', function (e) {
-    var type = e.layerType,
-        layer = e.layer;
-        corners = layer.getLatLngs();
+  map.on('draw:created', function (e) {
+      var type = e.layerType,
+          layer = e.layer;
+          corners = layer.getLatLngs();
 
-    drawnItems.addLayer(layer);
+      drawnItems.addLayer(layer);
 
-    handleTriggerFromGUI(layer.getBounds());
-});
+      handleTriggerFromGUI(layer.getBounds(), download_trigger_id);
+  });
 
-async function handleTriggerFromGUI(bounds){
+  d3.select("#" + download_trigger_id).on("click", function(){
+    download("generated.svg", document.getElementById('generated_svg_within').innerHTML);
+  })
+}
+
+async function handleTriggerFromGUI(bounds, download_trigger_id){
     let osmJSON = await downloadOpenStreetMapData(bounds) // https://leafletjs.com/reference-1.6.0.html#latlngbounds-getcenter
     let geoJSON = toGeoJSON(osmJSON)
     const width=800;
     const height=600;
     const geoJSONRepresentingBoundaries = leafletBoundsToGeoJSONFeatureCollectionPolygon(bounds);
-    renderUsingD3(geoJSONRepresentingBoundaries, geoJSON, width, height, mapStyle); //mapStyle is defined in separate .js file, imported here
+    renderUsingD3(geoJSONRepresentingBoundaries, geoJSON, width, height, mapStyle); //mapStyle is defined in separate .js file, imported here - TODO, pass it here(???? what about multple styles at once?)
+    document.getElementById(download_trigger_id).style.display = '';
+    document.getElementById('instruction_hidden_after_first_generation').style.display = 'none';
 }
 
 // TODO - there is a function to do this, right?
