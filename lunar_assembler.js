@@ -185,7 +185,7 @@ async function handleTriggerFromGUI(bounds, download_trigger_id){
         .attr("stroke", mapStyle.strokeColoring)
           .attr("stroke-width", mapStyle.strokeWidth)
           .attr("fill", mapStyle.fillColoring)
-          .attr("name", mapStyle.name)
+          //.attr("name", mapStyle.name) - note that passing name with & breaks SVG (at least more fragile ones) - TODO: fix and reenable or drop that
     }
     
     
