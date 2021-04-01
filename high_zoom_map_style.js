@@ -90,7 +90,7 @@ fillColoring(feature){
       "service", "track", "road"].includes(feature.properties["area:highway"])) {
       return "#555555";
     }
-    if(["footway", "pedestrian", "path"].includes(feature.properties["area:highway"]) || (feature.properties["highway"] == "pedestrian" && feature.properties["area"] === "yes")) {
+    if(["footway", "pedestrian", "path", "steps"].includes(feature.properties["area:highway"]) || (feature.properties["highway"] == "pedestrian" && feature.properties["area"] === "yes")) {
       return "#aaaaaa";
     }
     if(feature.properties["area:highway"] === "cycleway" ) {
