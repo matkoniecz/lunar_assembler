@@ -101,7 +101,10 @@ async function handleTriggerFromGUI(bounds){
               const response = await fetch("https://overpass-api.de/api/interpreter", {
                   method: 'POST',
                   headers: {
-                      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                      // considered adding also deployed at ' + window.location.href + ' -
+                      // but it may leak private data
+                      "User-Agent": 'lunar_assembler SVG generator - please contact Mateusz Konieczny matkoniecz@gmail.com (library author) or website operator if usage is causing any issues',
                   },
                   body: new URLSearchParams({'data': query})
               })
