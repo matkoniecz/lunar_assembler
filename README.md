@@ -39,6 +39,12 @@ Exact duplicates of more popular standard tags will not be supported (for exampl
 
 Note that once insane architecture will be refactored making own website with own map style should be relatively easy and that possibly controversial decisions will be made in a separate repo making my own map style. See [issue #5](https://github.com/matkoniecz/lunar_assembler/issues/5) - help is welcomed.
 
+## Published
+
+[dev version served from this repo](https://matkoniecz.github.io/lunar_assembler/dev.html)
+
+[current release and (for now only known use of it)](https://mapsaregreat.com/osm_to_svg_in_browser/)
+
 ## Sponsors
 
 <a href="https://osmfoundation.org/"><img src="images_for_description/logo_osmf.png" height="100"/></a><br/>
