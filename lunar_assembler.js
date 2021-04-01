@@ -108,7 +108,10 @@ async function handleTriggerFromGUI(bounds){
                       "User-Agent": 'lunar_assembler SVG generator - please contact Mateusz Konieczny matkoniecz@gmail.com (library author) or website operator if usage is causing any issues',
                   },
                   body: new URLSearchParams({'data': query})
-              })
+              }).catch(err => {
+                alert(err);
+                console.log(err.response.data);
+              });
               if (response.ok) {
                 const responseData = response.json();
                 const osmJSON = responseData;
