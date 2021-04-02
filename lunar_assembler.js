@@ -42,14 +42,13 @@ async function handleTriggerFromGUI(bounds, download_trigger_id){
     let geoJSON = toGeoJSON(osmJSON)
     const width=800;
     const height=600;
-    const geoJSONRepresentingBoundaries = leafletBoundsToGeoJSONFeatureCollectionPolygon(bounds);
-    renderUsingD3(geoJSONRepresentingBoundaries, geoJSON, width, height, mapStyle); //mapStyle is defined in separate .js file, imported here - TODO, pass it here(???? what about multple styles at once?)
+    renderUsingD3(bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth(), geoJSON, width, height, mapStyle); //mapStyle is defined in separate .js file, imported here - TODO, pass it here(???? what about multple styles at once?)
     document.getElementById(download_trigger_id).style.display = '';
     document.getElementById('instruction_hidden_after_first_generation').style.display = 'none';
 }
 
 // TODO - there is a function to do this, right?
-        function leafletBoundsToGeoJSONFeatureCollectionPolygon(bounds) {
+        function geoJSONPolygonRepresentingBBox(west, south, east, north) {
             return {
               "type": "FeatureCollection",
               "features": [
@@ -61,24 +60,19 @@ async function handleTriggerFromGUI(bounds, download_trigger_id){
                     "coordinates": [
                       [
                         [
-                          bounds.getWest(),
-                          bounds.getSouth(),
+                          west, south,
                         ],
                         [
-                          bounds.getEast(),
-                          bounds.getSouth(),
+                          east, south,
                         ],
                         [
-                          bounds.getEast(),
-                          bounds.getNorth(),
+                          east, north,
                         ],
                         [
-                          bounds.getWest(),
-                          bounds.getNorth(),
+                          west, north,
                         ],
                         [
-                          bounds.getWest(),
-                          bounds.getSouth(),
+                          west, south,
                         ]
                       ]
                     ]
@@ -140,8 +134,10 @@ async function handleTriggerFromGUI(bounds, download_trigger_id){
         // https://gis.stackexchange.com/questions/392452/why-d3-js-works-only-with-geojson-violating-right-hand-rule
         // I opened https://github.com/d3/d3-shape/issues/178
         const d3_geojson = { ...geojson_that_is_7946_compliant_with_right_hand_winding_order };
-        d3_geojson.features = d3_geojson.features.map(f =>
-          turf.rewind(f, { reverse: true })
+        d3_geojson.features = d3_geojson.features.map(f => {
+            //console.log(f);
+            return turf.rewind(f, { reverse: true })
+          }
         );
         //alert(JSON.stringify(d3_geojson))
         return d3_geojson;
@@ -149,11 +145,14 @@ async function handleTriggerFromGUI(bounds, download_trigger_id){
   
   
   
-  function renderUsingD3(geoJSONRepresentingBoundaries, data_geojson, width, height, mapStyle) {
+  function renderUsingD3(west, south, east, north, data_geojson, width, height, mapStyle) {
+      var geoJSONRepresentingBoundaries = geoJSONPolygonRepresentingBBox(west, south, east, north);
       // rewinding is sometimes needed, sometimes not
       // rewinding is sometimes broken in my code (at least in oce case it was borked by my bug in futher processing!), sometimes not
       // see https://gis.stackexchange.com/questions/392452/why-d3-js-works-only-with-geojson-violating-right-hand-rule
       // not sure what is going on here
+
+      data_geojson = clipGeometries(west, south, east, north, data_geojson);
       console.log("data_geojson: " + JSON.stringify(data_geojson))
       var d3_data_geojson = rewind(data_geojson);
       var d3_geoJSONRepresentingBoundaries = rewind(geoJSONRepresentingBoundaries);
@@ -172,6 +171,25 @@ async function handleTriggerFromGUI(bounds, download_trigger_id){
       d3_data_geojson.features.sort(mapStyle.paintOrderCompareFunction)
       console.log(d3_data_geojson.features)
       update3Map(geoGenerator, d3_data_geojson, selector, mapStyle);
+    }
+
+    function clipGeometries(west, south, east, north, data_geojson) {
+      var bbox = [west, south, east, north];
+      var i = data_geojson.features.length;
+      var survivingFeatures = [];
+      while (i--) {
+        // once point rendering will appear something
+        // like https://www.npmjs.com/package/@turf/boolean-point-in-polygon
+        // will need to be used    
+        if(data_geojson.features[i].geometry.type != "Point" && data_geojson.features[i].geometry.type != "MultiPoint") {
+            data_geojson.features[i].geometry = turf.bboxClip(data_geojson.features[i].geometry, bbox).geometry;
+        }
+        if (data_geojson.features[i].geometry != []) {
+          survivingFeatures.push(data_geojson.features[i]);
+        }
+      }
+      data_geojson.features = survivingFeatures;
+      return data_geojson;
     }
     
     function update3Map(geoGenerator, used_data, selector) {
