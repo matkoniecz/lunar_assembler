@@ -18,7 +18,9 @@ Visiting page in browser is significantly easier to use and has much lower barri
 
 So despite my dislike toward JS and lack of expertise with wring JS code it is implemented as program running on website.
 
-Note: my dislike toward JS reduced while writing this.
+Note: my dislike toward JS was signifcantly reduced while writing this.
+
+My dislike toward `npm` ecosystem got confirmed, at least for now.
 
 # Fundamentals
 Obtains OpenStreetMap data and generates SVG map from that.
