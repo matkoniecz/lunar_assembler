@@ -42,7 +42,7 @@ async function handleTriggerFromGUI(bounds, download_trigger_id){
     let geoJSON = toGeoJSON(osmJSON)
     const width=800;
     const height=600;
-    renderUsingD3(bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth(), geoJSON, width, height, mapStyle); //mapStyle is defined in separate .js file, imported here - TODO, pass it here(???? what about multple styles at once?)
+    render(bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth(), geoJSON, width, height, mapStyle); //mapStyle is defined in separate .js file, imported here - TODO, pass it here(???? what about multple styles at once?)
     document.getElementById(download_trigger_id).style.display = '';
     document.getElementById('instruction_hidden_after_first_generation').style.display = 'none';
 }
@@ -144,7 +144,30 @@ async function handleTriggerFromGUI(bounds, download_trigger_id){
       }
   
   
-  
+  function render(west, south, east, north, data_geojson, width, height, mapStyle) {
+    data_geojson = clipGeometries(west, south, east, north, data_geojson);
+    renderUsingD3(west, south, east, north, data_geojson, width, height, mapStyle)
+}
+
+function clipGeometries(west, south, east, north, data_geojson) {
+  var bbox = [west, south, east, north];
+  var i = data_geojson.features.length;
+  var survivingFeatures = [];
+  while (i--) {
+    // once point rendering will appear something
+    // like https://www.npmjs.com/package/@turf/boolean-point-in-polygon
+    // will need to be used    
+    if(data_geojson.features[i].geometry.type != "Point" && data_geojson.features[i].geometry.type != "MultiPoint") {
+        data_geojson.features[i].geometry = turf.bboxClip(data_geojson.features[i].geometry, bbox).geometry;
+    }
+    if (data_geojson.features[i].geometry != []) {
+      survivingFeatures.push(data_geojson.features[i]);
+    }
+  }
+  data_geojson.features = survivingFeatures;
+  return data_geojson;
+}
+
   function renderUsingD3(west, south, east, north, data_geojson, width, height, mapStyle) {
       var geoJSONRepresentingBoundaries = geoJSONPolygonRepresentingBBox(west, south, east, north);
       // rewinding is sometimes needed, sometimes not
@@ -152,7 +175,6 @@ async function handleTriggerFromGUI(bounds, download_trigger_id){
       // see https://gis.stackexchange.com/questions/392452/why-d3-js-works-only-with-geojson-violating-right-hand-rule
       // not sure what is going on here
 
-      data_geojson = clipGeometries(west, south, east, north, data_geojson);
       console.log("data_geojson: " + JSON.stringify(data_geojson))
       var d3_data_geojson = rewind(data_geojson);
       var d3_geoJSONRepresentingBoundaries = rewind(geoJSONRepresentingBoundaries);
@@ -173,25 +195,6 @@ async function handleTriggerFromGUI(bounds, download_trigger_id){
       update3Map(geoGenerator, d3_data_geojson, selector, mapStyle);
     }
 
-    function clipGeometries(west, south, east, north, data_geojson) {
-      var bbox = [west, south, east, north];
-      var i = data_geojson.features.length;
-      var survivingFeatures = [];
-      while (i--) {
-        // once point rendering will appear something
-        // like https://www.npmjs.com/package/@turf/boolean-point-in-polygon
-        // will need to be used    
-        if(data_geojson.features[i].geometry.type != "Point" && data_geojson.features[i].geometry.type != "MultiPoint") {
-            data_geojson.features[i].geometry = turf.bboxClip(data_geojson.features[i].geometry, bbox).geometry;
-        }
-        if (data_geojson.features[i].geometry != []) {
-          survivingFeatures.push(data_geojson.features[i]);
-        }
-      }
-      data_geojson.features = survivingFeatures;
-      return data_geojson;
-    }
-    
     function update3Map(geoGenerator, used_data, selector) {
       var u = d3.select(selector) // should use selector
         .selectAll('path')
