@@ -39,6 +39,10 @@ function initializeLunarAssembler({map_div_id, download_trigger_id, lat, lon, zo
 
 async function handleTriggerFromGUI(bounds, download_trigger_id){
     let osmJSON = await downloadOpenStreetMapData(bounds) // https://leafletjs.com/reference-1.6.0.html#latlngbounds-getcenter
+    if(osmJSON == -1) {
+      console.log("FILURE of download!");
+      return;
+    }
     let geoJSON = toGeoJSON(osmJSON)
     const width=800;
     const height=600;
@@ -113,6 +117,7 @@ async function handleTriggerFromGUI(bounds, download_trigger_id){
               }).catch(err => {
                 alert(err);
                 console.log(err.response.data);
+                return -1
               });
               if (response.ok) {
                 const responseData = response.json();
@@ -120,6 +125,7 @@ async function handleTriggerFromGUI(bounds, download_trigger_id){
                 return osmJSON;
               } else {
                 alert("Overpass API refused to provide data. Either selected area was too large, or you exceed usage limit of that free service. Please wait a bit and retry. Overpass API is used to get data from OpenStreetMap for a given area.")
+                return -1 // is there a better way to handle failures? throw exception? From looking at https://stackoverflow.com/a/27724419/4130619 code for that would be even worse
               }
           } 
           function toGeoJSON(osmJSON) {
