@@ -1,6 +1,6 @@
 {
-  "version": "0.2.0",
-  "license": "MIT",
+  "version": "0.0.4",
+  "license": "AGPL-3.0-only",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
@@ -33,16 +33,16 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "jeszcze_jedna_biblioteka_testowa_tym_razem_mateusza_od_openstreetmap",
+  "name": "lunar_assembler",
   "author": "Mateusz Konieczny",
-  "module": "dist/jeszcze_jedna_biblioteka_testowa_tym_razem_mateusza_od_openstreetmap.esm.js",
+  "module": "dist/lunar_assembler.esm.js",
   "size-limit": [
     {
-      "path": "dist/jeszcze_jedna_biblioteka_testowa_tym_razem_mateusza_od_openstreetmap.cjs.production.min.js",
+      "path": "dist/lunar_assembler.cjs.production.min.js",
       "limit": "10 KB"
     },
     {
-      "path": "dist/jeszcze_jedna_biblioteka_testowa_tym_razem_mateusza_od_openstreetmap.esm.js",
+      "path": "dist/lunar_assembler.esm.js",
       "limit": "10 KB"
     }
   ],
