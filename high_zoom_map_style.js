@@ -73,6 +73,13 @@ paintOrder(feature) {
     return 0;
 },
 
+motorizedRoadValuesArray(){
+  return ["motorway", "motorway_link", "trunk", "trunk_link", "primary", "primary_link",
+  "secondary", "secondary_link", "tertiary", "tertiary_link",
+  "unclassified", "residential",
+  "service", "track", "road"]
+},
+
 fillColoring(feature){
     console.log(feature);
     if (["Point"].includes(feature.geometry.type)) {
@@ -84,10 +91,7 @@ fillColoring(feature){
     if(feature.properties["building"] != null) {
       return "black";
     }
-    if(["motorway", "motorway_link", "trunk", "trunk_link", "primary", "primary_link",
-      "secondary", "secondary_link", "tertiary", "tertiary_link",
-      "unclassified", "residential",
-      "service", "track", "road"].includes(feature.properties["area:highway"])) {
+    if(mapStyle.motorizedRoadValuesArray().includes(feature.properties["area:highway"])) {
       return "#555555";
     }
     if(["footway", "pedestrian", "path", "steps"].includes(feature.properties["area:highway"]) || (feature.properties["highway"] == "pedestrian" && feature.properties["area"] === "yes")) {
@@ -137,10 +141,7 @@ strokeColoring(feature){
     if(["fence", "wall"].includes(feature.properties["barrier"])) {
         return "black";
     }
-    if(["motorway", "motorway_link", "trunk", "trunk_link", "primary", "primary_link",
-        "secondary", "secondary_link", "tertiary", "tertiary_link",
-        "unclassified", "residential",
-        "service", "track", "road"].includes(feature.properties["highway"])) {
+    if(mapStyle.motorizedRoadValuesArray().includes(feature.properties["highway"])) {
         return "#555555";
       }
       if(["footway", "pedestrian", "path", "pedestrian"].includes(feature.properties["highway"])) {
@@ -165,9 +166,7 @@ strokeColoring(feature){
   },
   
 strokeWidth(feature){
-    if(["motorway", "motorway_link", "trunk", "trunk_link", "primary", "primary_link",
-        "secondary", "secondary_link", "tertiary", "tertiary_link",
-        "unclassified", "residential"].includes(feature.properties["highway"])) {
+    if(mapStyle.motorizedRoadValuesArray().includes(feature.properties["highway"])) {
         return 2;
       }
       if(feature.properties["aeroway"] === "runway" ) {
