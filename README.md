@@ -1,3 +1,11 @@
+# note to self
+
+`npx tsdx create library_name` to autogenerate skeleton
+
+`npm login` `npm publish` works in getting package published (but this readme itself recommends `np`! Investigate!)
+
+`npx mrm prettier` - autoformatter
+
 # TSDX User Guide
 
 Congrats! You just saved yourself hours of work by bootstrapping this project with TSDX. Let’s get you oriented with what’s here and how to use it.
