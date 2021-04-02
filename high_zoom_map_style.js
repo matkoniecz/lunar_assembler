@@ -193,6 +193,24 @@ strokeWidth(feature){
   
     return 1
   },
+
+mergeIntoGroup(feature){
+  // note that points and lines are not being merged!
+  // only areas (including multipolygins) can be merged for now
+  // please open an issue if you need it, it increaes chance of implementation a bit
+  // or open pull request with an implementation
+  if(mapStyle.motorizedRoadValuesArray().includes(feature.properties["area:highway"])) {
+    return 'area:highway_carriageway';
+  }
+  if(["footway", "pedestrian", "path", "steps"].includes(feature.properties["area:highway"]) || (feature.properties["highway"] == "pedestrian" && feature.properties["area"] === "yes")) {
+    return 'area:highway_footway';
+  }
+  if(feature.properties["area:highway"] == "cycleway") {
+    return 'area:highway_cycleway';
+  }
+  return null;
+},
+
   
 name(feature){
     return feature.properties.name

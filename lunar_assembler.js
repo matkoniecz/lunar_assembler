@@ -146,7 +146,58 @@ async function handleTriggerFromGUI(bounds, download_trigger_id){
   
   function render(west, south, east, north, data_geojson, width, height, mapStyle) {
     data_geojson = clipGeometries(west, south, east, north, data_geojson);
-    renderUsingD3(west, south, east, north, data_geojson, width, height, mapStyle)
+    data_geojson = mergeAsRequestedByMapStyle(data_geojson, mapStyle);
+    renderUsingD3(west, south, east, north, data_geojson, width, height, mapStyle);
+}
+
+function mergeAsRequestedByMapStyle(data_geojson, mapStyle) {
+  var i = data_geojson.features.length;
+  var processeedFeatures = [];
+  var mergingGroups = {}
+  while (i--) {
+    var feature = data_geojson.features[i]
+    if(feature.geometry.type == "Point" || feature.geometry.type === "MultiPoint") {
+      // skipping handling them for now
+      // once point rendering will appear something will need to be done with it
+      processeedFeatures.push(feature);
+    } else if (feature.geometry.type ==  "LineString" || feature.geometry.type == "MultiLineString") {
+      // also not supported, lines are not being merged for now
+      processeedFeatures.push(feature);
+    } else if (feature.geometry.type ==  "Polygon" || feature.geometry.type == "MultiPolygon") {
+      const mergeGroup = mapStyle.mergeIntoGroup(feature);
+      if(mergeGroup === null) {
+        processeedFeatures.push(feature);
+      } else {
+        if (mergingGroups[mergeGroup] === undefined) {
+          mergingGroups[mergeGroup] = [];
+        }
+        mergingGroups[mergeGroup].push(feature);
+      }
+    } else {
+      processeedFeatures.push(feature);
+      console.log("very unexpected " + feature.geometry.type + " appeared in mergeAsRequestedByMapStyle, logging its data <")
+      console.log(feature)
+      console.log("> LOGGED")
+    }
+  }
+  keys = Object.keys(mergingGroups)
+  for(var i=0; i<keys.length; i++) {
+    const key = keys[i]
+    const forMerging = mergingGroups[key]
+    // TODO: how to deal with tag values? I will just take the first object
+    var produced = forMerging[0];
+    var coordinatesForMerging = []
+    for(var k=0; k<forMerging.length; k++) {
+      coordinatesForMerging.push(forMerging[k].geometry.coordinates)
+    }
+    // it is union so output will be nonepty
+    // https://github.com/mfogel/polygon-clipping#output
+    produced.geometry.type = "MultiPolygon" 
+    produced.geometry.coordinates = polygonClipping.union(...coordinatesForMerging)
+    processeedFeatures.push(produced)
+  }
+  data_geojson.features = processeedFeatures;
+  return data_geojson;
 }
 
 function clipGeometries(west, south, east, north, data_geojson) {
