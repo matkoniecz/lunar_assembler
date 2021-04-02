@@ -1,3 +1,11 @@
+# Why it exists
+
+I needed SVG generator from OpenStreetMap data that would be accessible to anyone, without requirements to install anything new.
+
+Generated SVG must be usable as design files for laser cutter, for a [specific project](https://wiki.openstreetmap.org/wiki/Microgrants/Microgrants_2020/Proposal/Tactile_maps_for_blind_or_visually_impaired_children) (tactile maps for blind or visually impaired children).
+
+I am not a JS expert, I prefer to ship something rather than produce piles of beautiful unused code - so first version will be as dumb as possible.
+
 # Why JS? Why?
 
 I started writing it as Python script, before realising that intended audience should not be assumed to be programmers (unlike say [library for automating OSM edits](https://github.com/matkoniecz/osm_bot_abstraction_layer)).
@@ -29,39 +37,23 @@ Some were potentially adaptable, but ignored due to having too interesting archi
 
 # GUI for triggerring that
 
-[NOT DONE AT ALL, UNCLEAR DOABILITY]
-GUI for selecting rectangle that will be processed - Leaflet
+GUI for selecting rectangle that will be processed - Leaflet + Leaflet-draw plugin.
 
 # Obtaining OSM data
 Gets bounding box, ends with geojson for futher processing.
 
-[NOT DONE AT ALL, STANDARD TASK NEVER DONE BY ME]
 Fetching OpenStreeMap data - Overpass API
-Either:
-[COVERED BY ABOVE]
-multiple queries
-[NOT DONE AT ALL, UNCLEAR DOABILITY]
-filtering data from "get all query"
 
-Either:
-
-[NOT DONE AT ALL, UNCLEAR DOABILITY]
-Dropping extra tags, after that using osmtogeojson
-[NOT DONE AT ALL, UNCLEAR DOABILITY]
-using osmtogeojson dropping unwanted point geometries.
-
-And one extra steps is needed because d3 is extraspecial and is deliberately breaking RFC 7946. So it is necessary to rewind all geometries to follow left-hand rule rather than right-hand rule. And d3 for now has this trap rather than fix it and release breaking update that would [fix this mess](https://github.com/d3/d3-geo/pull/79#issuecomment-281031437).
+And one extra step is needed because d3 is extraspecial and is deliberately breaking RFC 7946. So it is necessary to rewind all geometries to follow left-hand rule rather than right-hand rule. And d3 for now has this trap rather than fix it and release breaking update that would [fix this mess](https://github.com/d3/d3-geo/pull/79#issuecomment-281031437).
 
 # Generating SVG
 
 [NOT DONE AT ALL]
 Intersecting geojson data with geojson pattern (needed for some later)
 
-[done]
 Rendering geojson data as SVG.
 
 [NOT DONE AT ALL, UNCLEAR DOABILITY]
 * support for adding raster patters
 
-[done]
 Allowing to download that SVG.
