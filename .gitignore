@@ -1,4 +1,5 @@
 *.log
 .DS_Store
 node_modules
-dist
+dist/*
+!dist/lunar_assembler.umd.production.min.js
