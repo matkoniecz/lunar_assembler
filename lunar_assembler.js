@@ -1,6 +1,6 @@
 function initializeLunarAssembler({map_div_id, download_trigger_id, lat, lon, zoom} = {}) {
   var map = L.map(map_div_id).setView([lat, lon], zoom);
-  mapLink = 
+  var mapLink = 
       '<a href="https://openstreetmap.org">OpenStreetMap</a>';
   L.tileLayer(
       'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
