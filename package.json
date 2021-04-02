@@ -11,15 +11,16 @@
     "node": ">=10"
   },
   "scripts": {
-    "start": "tsdx watch",
-    "build": "tsdx build",
+    "start": "tsdx watch --format umd",
+    "build": "tsdx build --format umd",
     "test": "tsdx test",
     "posttest": "npm run format",
     "lint": "tsdx lint",
     "prepare": "tsdx build",
     "size": "size-limit",
     "analyze": "size-limit --why",
-    "format": "prettier --loglevel warn --write \"**/*.{ts,tsx,css,md}\""
+    "format": "prettier --loglevel warn --write \"**/*.{ts,tsx,css,md}\"",
+    "serve": "serve ."
   },
   "husky": {
     "hooks": {
@@ -47,15 +48,16 @@
   ],
   "devDependencies": {
     "@size-limit/preset-small-lib": "^4.10.2",
+    "@types/leaflet": "^1.7.0",
     "husky": "^6.0.0",
     "prettier": "^2.2.1",
+    "serve": "^11.3.2",
     "size-limit": "^4.10.2",
     "tsdx": "^0.14.1",
     "tslib": "^2.1.0",
     "typescript": "^3.9.9"
   },
   "dependencies": {
-    "@types/leaflet": "^1.7.0",
     "leaflet": "^1.7.1"
   }
 }
