@@ -48,7 +48,9 @@
   ],
   "devDependencies": {
     "@size-limit/preset-small-lib": "^4.10.2",
+    "@types/d3": "^5.0.0",
     "@types/leaflet": "^1.7.0",
+    "@types/leaflet-draw": "^0.4.12",
     "husky": "^6.0.0",
     "prettier": "^2.2.1",
     "serve": "^11.3.2",
@@ -58,6 +60,8 @@
     "typescript": "^3.9.9"
   },
   "dependencies": {
-    "leaflet": "^1.7.1"
+    "d3": "^6.6.2",
+    "leaflet": "^1.7.1",
+    "leaflet-draw": "github:Leaflet/Leaflet.draw"
   }
 }

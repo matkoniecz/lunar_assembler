@@ -1,4 +1,4 @@
-function initializeLunarAssembler({map_div_id, download_trigger_id, lat, lon, zoom} = {}) {
+function initializeLunarAssemblerHidden(map_div_id, download_trigger_id, lat, lon, zoom) {
   var map = L.map(map_div_id).setView([lat, lon], zoom);
   var mapLink = 
       '<a href="https://openstreetmap.org">OpenStreetMap</a>';
