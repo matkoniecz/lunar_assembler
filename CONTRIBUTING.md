@@ -16,6 +16,10 @@ Requires `npm` itself :(
 
 `npm install`
 
+# Building
+
+`npm run build`
+
 # Detect code style issues
 
 `npx mrm prettier`
