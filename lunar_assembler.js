@@ -103,7 +103,8 @@ async function handleTriggerFromGUI(bounds, download_trigger_id){
               query += bounds.getEast();
               query += ");";
               query += "out body;>;out skel qt;";
-              console.log("overpass query: " + query);
+              console.log("overpass query in the next line:");
+              console.log(query);
   
               const response = await fetch("https://overpass-api.de/api/interpreter", {
                   method: 'POST',
@@ -232,10 +233,12 @@ function clipGeometries(west, south, east, north, data_geojson) {
       // see https://gis.stackexchange.com/questions/392452/why-d3-js-works-only-with-geojson-violating-right-hand-rule
       // not sure what is going on here
 
-      console.log("data_geojson: " + JSON.stringify(data_geojson))
+      console.log("data_geojson in the next line (before d3 rewind):")
+      console.log(JSON.stringify(data_geojson))
       var d3_data_geojson = rewind(data_geojson);
       var d3_geoJSONRepresentingBoundaries = rewind(geoJSONRepresentingBoundaries);
-      console.log("d3_geojson: " + JSON.stringify(d3_data_geojson))
+      console.log("data_geojson in the next line (after d3 rewind):")
+      console.log(JSON.stringify(d3_data_geojson))
   
       var projection = d3.geoMercator().fitSize([width, height], d3_geoJSONRepresentingBoundaries)
   
