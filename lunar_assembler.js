@@ -5,7 +5,7 @@ function initializeLunarAssembler({map_div_id, download_trigger_id, lat, lon, zo
   L.tileLayer(
       'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; ' + mapLink + ' Contributors',
-      maxZoom: 18,
+      maxZoom: 19,
       }).addTo(map);
 
   var drawnItems = new L.FeatureGroup();
