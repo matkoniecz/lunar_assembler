@@ -12,18 +12,11 @@ Note that by contributing code you are licensing it to license used by this repo
 
 # Installing development dependencies
 
-missing for now
+Requires `npm` itself :(
+
+`npm install`
 
 # Detect code style issues
 
-????
-
-TODO: find JS linter
-
-# Automatically reformat code to follow some sane coding style
-
-????
-
-TODO: find JS code autoformatter
-
+`npx mrm prettier`
 
