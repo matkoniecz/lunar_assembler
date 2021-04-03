@@ -10,7 +10,7 @@ I am not a JS expert, I prefer to ship something rather than produce piles of be
 
 I started writing it as Python script, before realising that intended audience should not be assumed to be programmers (unlike say [library for automating OSM edits](https://github.com/matkoniecz/osm_bot_abstraction_layer)).
 
-If I would jump through hoops I would be able to upgrade CLI tool into having some clunky interface with self-contained installer.
+If I would jump through hoops I would be able to upgrade CLI tool into having some clunky GUI interface with self-contained installer.
 
 Still, people would need to install random executable.
 
@@ -20,7 +20,29 @@ So despite my dislike toward JS and lack of expertise with wring JS code it is i
 
 Note: my dislike toward JS was signifcantly reduced while writing this.
 
-My dislike toward `npm` ecosystem got confirmed, at least for now.
+## npm rant
+
+My dislike toward `npm` ecosystem got confirmed, at least for now. At least `npm_attempt` branch was so far massive time sink, I wasted a lot of time and I still have no working replacement. Note: while it may be a TypeScript fault or my failure to find a proper documentation... I tried really hard how to make something that would allow me to
+
+- specify dependencies
+- allow to easily update them
+- generate .js bundle from that
+- - skipping unused code from libraries is strongly preferable, but that is optional
+- do some code linting/autoformatting
+
+And I failed completely. Note that it is likely problem is not caused by my incopetence. I figured how to do it in Ruby and in Python, with just idcoumetation found online. And here I failed even with external help.
+
+Note: if someone is able to point out how can I get working `leaflet-draw` (or equivalent) in TypeScript I would be thanful ( current attempt state in [https://github.com/matkoniecz/lunar_assembler/commits/npm_attempt](https://github.com/matkoniecz/lunar_assembler/commits/npm_attempt) ).
+
+Similarly if someone knows sane way to have simple working method to manage `.js` dependencies I would appreciate it.
+
+Fun fact: [https://docs.npmjs.com/getting-started](https://docs.npmjs.com/getting-started) has info how to upgrade to a paid account but no info how to do that.
+
+[https://docs.npmjs.com/using-npm-packages-in-your-projects](https://docs.npmjs.com/using-npm-packages-in-your-projects) has
+
+> Once you have installed a package in node_modules, you can use it in your code.
+
+what explain exactly nothing how the heck I should do it
 
 # Fundamentals
 Obtains OpenStreetMap data and generates SVG map from that.
