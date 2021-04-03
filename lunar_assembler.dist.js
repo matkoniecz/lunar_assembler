@@ -1,3 +1,5 @@
+/* note that it is compilation of several codebases, released in total under AGPL-3.0-only, but parts are with far more liberal licenses */
+
 function initializeLunarAssembler({map_div_id, download_trigger_id, lat, lon, zoom} = {}) {
   var map = L.map(map_div_id).setView([lat, lon], zoom);
   var mapLink = 

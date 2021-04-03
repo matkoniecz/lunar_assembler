@@ -54,6 +54,7 @@ def path_of_files_from_folder(folder):
 
 def concatenate_matching(paths_for_merging, output, matcher):
     with open(output, 'w') as outfile:
+        outfile.write("/* note that it is compilation of several codebases, released in total under AGPL-3.0-only, but parts are with far more liberal licenses */\n\n")
         for filepath in paths_for_merging:
             if filepath.endswith(matcher):
                 with open(filepath) as infile:
