@@ -59,6 +59,10 @@ def concatenate_matching(root_filepath, paths_for_merging, output, matcher):
             if filepath.endswith(matcher):
                 outfile.write("\n\n" + "/* ------------------------ */" + "\n\n" + "/*" + filepath.replace(root_filepath, "") + "*/" + "\n\n")
                 with open(filepath) as infile:
-                    outfile.write(infile.read())
+                    code_for_merging = infile.read()
+                    code_for_merging = code_for_merging.replace("//# sourceMappingURL=leaflet.js.map", "")
+                    if "sourceMappingURL" in code_for_merging:
+                        raise ValueError("not cleaned sourceMappingURL! " + filename)
+                    outfile.write(code_for_merging)
 
 main()
