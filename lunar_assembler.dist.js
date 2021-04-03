@@ -223,11 +223,12 @@ function clipGeometries(west, south, east, north, data_geojson) {
     // once point rendering will appear something
     // like https://www.npmjs.com/package/@turf/boolean-point-in-polygon
     // will need to be used    
-    if(data_geojson.features[i].geometry.type != "Point" && data_geojson.features[i].geometry.type != "MultiPoint") {
-        data_geojson.features[i].geometry = turf.bboxClip(data_geojson.features[i].geometry, bbox).geometry;
+    var feature = data_geojson.features[i];
+    if(feature.geometry.type != "Point" && feature.geometry.type != "MultiPoint") {
+        feature.geometry = turf.bboxClip(feature.geometry, bbox).geometry;
     }
-    if (data_geojson.features[i].geometry != []) {
-      survivingFeatures.push(data_geojson.features[i]);
+    if (feature.geometry != []) {
+      survivingFeatures.push(feature);
     }
   }
   data_geojson.features = survivingFeatures;
