@@ -1,5 +1,11 @@
 /* note that it is compilation of several codebases, released in total under AGPL-3.0-only, but parts are with far more liberal licenses */
 
+
+
+/* ------------------------ */
+
+/*/lunar_assembler_dependencies/leaflet-draw.v-zombie-bleeding-edge-latest-commit.css*/
+
 /* ================================================================== */
 /* Toolbars
 /* ================================================================== */
@@ -325,6 +331,12 @@
 .leaflet-oldie .leaflet-draw-toolbar {
 	border: 1px solid #999;
 }
+
+
+/* ------------------------ */
+
+/*/lunar_assembler_dependencies/leaflet-version0.7.css*/
+
 /* required styles */
 
 .leaflet-map-pane,

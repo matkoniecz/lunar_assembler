@@ -27,10 +27,10 @@ def main():
     paths_for_merging += path_of_files_from_folder(dependency_folder_location)
 
     output = os.path.join(build_script_location, 'lunar_assembler.dist.js')
-    concatenate_matching(paths_for_merging, output, ".js")
+    concatenate_matching(build_script_location, paths_for_merging, output, ".js")
 
     output = os.path.join(build_script_location, 'lunar_assembler.dist.css')
-    concatenate_matching(paths_for_merging, output, ".css")
+    concatenate_matching(build_script_location, paths_for_merging, output, ".css")
 
     for filepath in paths_for_merging:
         if filepath.endswith(".js"):
@@ -52,11 +52,12 @@ def path_of_files_from_folder(folder):
         break # without going into inner folders
     return returned
 
-def concatenate_matching(paths_for_merging, output, matcher):
+def concatenate_matching(root_filepath, paths_for_merging, output, matcher):
     with open(output, 'w') as outfile:
         outfile.write("/* note that it is compilation of several codebases, released in total under AGPL-3.0-only, but parts are with far more liberal licenses */\n\n")
         for filepath in paths_for_merging:
             if filepath.endswith(matcher):
+                outfile.write("\n\n" + "/* ------------------------ */" + "\n\n" + "/*" + filepath.replace(root_filepath, "") + "*/" + "\n\n")
                 with open(filepath) as infile:
                     outfile.write(infile.read())
 
