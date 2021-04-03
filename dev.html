@@ -24,15 +24,12 @@
     <title>Generate SVG map from OpenStreetMap data</title>
     <link 
         rel="stylesheet" 
-        href="lunar_assembler_dependencies/leaflet-version0.7.css"
-    />
-    <link 
-        rel="stylesheet" 
-        href="lunar_assembler_dependencies/leaflet.draw.css"
+        href="lunar_assembler.dist.css"
     />
 </head>
 <body>
-  <div id="main_content_wrap" class="outer">
+    <script src="lunar_assembler.dist.js"></script>
+    <div id="main_content_wrap" class="outer">
     <section id="main_content" class="inner">
     Generation of SVG files from OpenStreetMap data. Experimental proof of concept. Map style is very limited (support for areas such as buildings, water, parks, forests, area:highway).
     <ul>
@@ -55,7 +52,6 @@
 
     <p>As mentioned this is experimental tool, many obvious issues are known - but if something was missed or you want to help see <a href="https://github.com/matkoniecz/lunar_assembler/issues">list of known issues and TODOs</a></p>
 
-    <script src="lunar_assembler_dependencies/d3-v4.2.2.min.js"></script>
   
  
     <p>If you want to help mapping and you are unsure how to start - you can try <a href="https://github.com/streetcomplete/StreetComplete#download">StreetComplete</a> (an Android app) allowing contributions, with sole requirements being (1) ability to read (2) ability to see things (3) ability to create an OpenStreetMap acount.</p>
@@ -64,9 +60,6 @@
     
     You can visit <a href="https://github.com/matkoniecz/lunar_assembler">matkoniecz/lunar_assembler</a> to see code, obtain code or contribute. This software as <a href="https://www.gnu.org/licenses/agpl-3.0.html">AGPLv3</a> licenced.
 </section>
-<!-- dependencies of library-->
-<script src="lunar_assembler_dependencies/leaflet-v0.7.js"></script>
-<script src="lunar_assembler_dependencies/polygon-clipping.umd.js"></script>
 
 <!--
 released version of leaflet.draw has breaking bug on mobile devices
@@ -112,12 +105,6 @@ released version of leaflet.draw has breaking bug on mobile devices
 <!--
 END OF TEMPORARY HACK
 -->
-
-<script src='lunar_assembler_dependencies/osmtogeojson.js'></script>
-<script src="lunar_assembler_dependencies/turf.min.js"></script>
-
-<!-- library for drawing -->
-<script src="lunar_assembler.js"></script> 
 
 <!-- actual code -->
 <script src="high_zoom_map_style.js"></script>
