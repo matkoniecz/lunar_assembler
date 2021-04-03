@@ -219,7 +219,8 @@ function clipGeometries(west, south, east, north, data_geojson) {
     if(feature.geometry.type != "Point" && feature.geometry.type != "MultiPoint") {
         feature.geometry = turf.bboxClip(feature.geometry, bbox).geometry;
     }
-    if (feature.geometry != []) {
+    var filtered = dropDegenerateGeometrySegments(feature)
+    if(filtered != null) {
       survivingFeatures.push(feature);
     }
   }
@@ -227,6 +228,68 @@ function clipGeometries(west, south, east, north, data_geojson) {
   return data_geojson;
 }
 
+function dropDegenerateGeometrySegments(feature){
+  if (feature.geometry.type == "MultiPolygon") {
+    // multipolygon may have multiple outer rings
+    // in case where some of them are completely outside bounding box, 
+    // their geometry part becomes []
+    // what crashes further processing
+    // following is a real case:
+    /*
+    {
+      "type": "MultiPolygon",
+      "coordinates": [
+        [],
+        [],
+        [
+          [
+            [
+              19.88054854391,
+              50.08241179037703
+            ],
+            [
+              19.88054854391,
+              50.082290158188336
+            ],
+            [
+              19.8806218,
+              50.0822914
+            ],
+            [
+              19.8806948,
+              50.0823309
+            ],
+            [
+              19.88068365233083,
+              50.08241179037703
+            ],
+            [
+              19.88054854391,
+              50.08241179037703
+            ]
+          ]
+        ]
+      ]
+    }
+    */
+    var survivingGeometryParts = []
+    var k = feature.geometry.coordinates.length
+    while (k--) {
+      var geometryPart = feature.geometry.coordinates[k];
+      if (geometryPart.length != 0) /* in js [] != [] */ {
+        survivingGeometryParts.push(geometryPart);
+      }
+    }
+    if (survivingGeometryParts.length == 0) {
+      return null;
+    } else {
+      console.log(survivingGeometryParts);
+      feature.geometry.coordinates = survivingGeometryParts;
+    }
+  }
+  console.log(feature)
+  return feature;
+}
   function renderUsingD3(west, south, east, north, data_geojson, width, height, mapStyle) {
       var geoJSONRepresentingBoundaries = geoJSONPolygonRepresentingBBox(west, south, east, north);
       // rewinding is sometimes needed, sometimes not
