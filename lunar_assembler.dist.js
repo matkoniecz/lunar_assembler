@@ -6,10 +6,59 @@
 
 /*lunar_assembler.js*/
 
-function initializeLunarAssembler({map_div_id, download_trigger_id, lat, lon, zoom} = {}) {
+const predictedTimeInSeconds = 35;
+var completed = false;
+var doneInPercents = 0;
+const timeBetweenUpdatesInSeconds = 0.1;
+const updateCount = predictedTimeInSeconds / timeBetweenUpdatesInSeconds;
+const incrementOnUpdateBy = 100 / updateCount;
+let progressBar;
+
+function initializeLunarAssembler({map_div_id, download_trigger_id, progress_bar_id, lat, lon, zoom} = {}) {
   initializeSelectorMap(map_div_id, lat, lon, zoom, download_trigger_id);
   initilizeDownloadButton(download_trigger_id);
+  progressBar = document.getElementById(progress_bar_id);
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// progress bar fun
+// TODO:
+// not entirely fake as it is based on expected real time
+// and not intentionally misleading like for example randomized booking.com displays
+//
+// it would be nice to have it based on area size - there is probably some relation here
+
+function setProgressValue(newProgress) {
+  doneInPercents = newProgress;
+  if(doneInPercents >= 100) {
+    doneInPercents = 100;
+  }
+  progressBar.value = doneInPercents;
+}
+
+function markAsCompleted(){
+  setProgressValue(100);
+  completed = true;
+}
+
+function startShowingProgress(){
+  doneInPercents = 0;
+  completed = false;
+  const interval = setInterval(() => {
+  if(completed) {
+    clearInterval(interval); // terminates
+  } else {
+    var progress = doneInPercents + incrementOnUpdateBy;
+    if (progress > 95) {
+      progress = 10;
+    }
+    setProgressValue(progress)
+  }
+}, timeBetweenUpdatesInSeconds * 1000);
+}
+
+// end of progress bar fun
+//////////////////////////////////////////////////////////////////////////////////////////
 
 function initializeSelectorMap(map_div_id, lat, lon, zoom, download_trigger_id) {
   var map = L.map(map_div_id).setView([lat, lon], zoom);
@@ -56,6 +105,7 @@ function nameOfSVGHolderId(){
   return "generated_svg_within";
 }
 async function handleTriggerFromGUI(bounds, download_trigger_id){
+    startShowingProgress();
     let osmJSON = await downloadOpenStreetMapData(bounds) // https://leafletjs.com/reference-1.6.0.html#latlngbounds-getcenter
     if(osmJSON == -1) {
       console.log("FILURE of download!");
@@ -67,6 +117,7 @@ async function handleTriggerFromGUI(bounds, download_trigger_id){
     render(bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth(), geoJSON, width, height, mapStyle); //mapStyle is defined in separate .js file, imported here - TODO, pass it here(???? what about multple styles at once?)
     document.getElementById(download_trigger_id).style.display = '';
     document.getElementById('instruction_hidden_after_first_generation').style.display = 'none';
+    markAsCompleted();
 }
 
 // TODO - there is a function to do this, right?
