@@ -7,6 +7,11 @@
 /*lunar_assembler.js*/
 
 function initializeLunarAssembler({map_div_id, download_trigger_id, lat, lon, zoom} = {}) {
+  initializeSelectorMap(map_div_id, lat, lon, zoom, download_trigger_id);
+  initilizeDownloadButton(download_trigger_id);
+}
+
+function initializeSelectorMap(map_div_id, lat, lon, zoom, download_trigger_id) {
   var map = L.map(map_div_id).setView([lat, lon], zoom);
   var mapLink = 
       '<a href="https://openstreetmap.org">OpenStreetMap</a>';
@@ -39,12 +44,17 @@ function initializeLunarAssembler({map_div_id, download_trigger_id, lat, lon, zo
 
       handleTriggerFromGUI(layer.getBounds(), download_trigger_id);
   });
+}
 
+function initilizeDownloadButton(download_trigger_id){
   d3.select("#" + download_trigger_id).on("click", function(){
-    download("generated.svg", document.getElementById('generated_svg_within').innerHTML);
+    download("generated.svg", document.getElementById(nameOfSVGHolderId()).innerHTML);
   })
 }
 
+function nameOfSVGHolderId(){
+  return "generated_svg_within";
+}
 async function handleTriggerFromGUI(bounds, download_trigger_id){
     let osmJSON = await downloadOpenStreetMapData(bounds) // https://leafletjs.com/reference-1.6.0.html#latlngbounds-getcenter
     if(osmJSON == -1) {
@@ -318,9 +328,9 @@ function dropDegenerateGeometrySegments(feature){
       var geoGenerator = d3.geoPath()
       .projection(projection);
   
-      selector = '#generated_svg_within g.generated_map'
+      selector = '#' + nameOfSVGHolderId() +' g.generated_map'
       let generated = '<svg height="100%" width="100%" viewBox="0 0 ' + width + ' ' + height + '">' + "\n" + '<g class="generated_map" id="generated_map"></g>' + "\n" + '</svg>'
-      document.getElementById('generated_svg_within').innerHTML=generated
+      document.getElementById(nameOfSVGHolderId()).innerHTML=generated
   
       d3_data_geojson.features.sort(mapStyle.paintOrderCompareFunction)
       console.log(d3_data_geojson.features)
