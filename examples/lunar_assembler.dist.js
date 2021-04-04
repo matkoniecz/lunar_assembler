@@ -13,6 +13,7 @@ const timeBetweenUpdatesInSeconds = 0.1;
 const updateCount = predictedTimeInSeconds / timeBetweenUpdatesInSeconds;
 const incrementOnUpdateBy = 100 / updateCount;
 let progressBar;
+let handleOfProgressBarAnimation;
 
 function initializeLunarAssembler({map_div_id, download_trigger_id, progress_bar_id, lat, lon, zoom} = {}) {
   initializeSelectorMap(map_div_id, lat, lon, zoom, download_trigger_id);
@@ -41,12 +42,17 @@ function markAsCompleted(){
   completed = true;
 }
 
+function markAsFailed(){
+  clearInterval(handleOfProgressBarAnimation); // terminates
+  setProgressValue(0);
+}
+
 function startShowingProgress(){
   doneInPercents = 0;
   completed = false;
-  const interval = setInterval(() => {
+  handleOfProgressBarAnimation = setInterval(() => {
   if(completed) {
-    clearInterval(interval); // terminates
+    clearInterval(handleOfProgressBarAnimation); // terminates
   } else {
     var progress = doneInPercents + incrementOnUpdateBy;
     if (progress > 95) {
@@ -109,6 +115,8 @@ async function handleTriggerFromGUI(bounds, download_trigger_id){
     let osmJSON = await downloadOpenStreetMapData(bounds) // https://leafletjs.com/reference-1.6.0.html#latlngbounds-getcenter
     if(osmJSON == -1) {
       console.log("FILURE of download!");
+      markAsFailed();
+      alert("Overpass API refused to provide data. Either selected area was too large, or you exceed usage limit of that free service. Please wait a bit and retry. Overpass API is used to get data from OpenStreetMap for a given area.")
       return;
     }
     let geoJSON = toGeoJSON(osmJSON)
@@ -194,7 +202,6 @@ async function handleTriggerFromGUI(bounds, download_trigger_id){
                 const osmJSON = responseData;
                 return osmJSON;
               } else {
-                alert("Overpass API refused to provide data. Either selected area was too large, or you exceed usage limit of that free service. Please wait a bit and retry. Overpass API is used to get data from OpenStreetMap for a given area.")
                 return -1 // is there a better way to handle failures? throw exception? From looking at https://stackoverflow.com/a/27724419/4130619 code for that would be even worse
               }
           } 
