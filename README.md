@@ -1,10 +1,10 @@
 SVG maps from OpenStreetMap data in browser.
 
-Available at [mapsaregreat.com/osm_to_svg_in_browser/](https://mapsaregreat.com/osm_to_svg_in_browser/)
+Fully functional example is at [mapsaregreat.com/osm_to_svg_in_browser/](https://mapsaregreat.com/osm_to_svg_in_browser/)
 
-Lunar assembler will be JS library allowing easy setup of static websites allowing this (thank to amazing Overpass API).
+Lunar assembler is a JS library allowing easy setup of static websites allowing this (thank to amazing Overpass API).
 
-Right now it is pile of JS code and proof-of-concept website.
+Code used to run mentioned example can be found in example folder.
 
 # Lunar assembler
 ##  In action
