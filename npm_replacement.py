@@ -26,10 +26,10 @@ def main():
     paths_for_merging.append("lunar_assembler.js")
     paths_for_merging += path_of_files_from_folder(dependency_folder_location)
 
-    output = os.path.join(build_script_location, 'lunar_assembler.dist.js')
+    output = os.path.join(build_script_location, 'example', 'lunar_assembler.dist.js')
     concatenate_matching(build_script_location, paths_for_merging, output, ".js")
 
-    output = os.path.join(build_script_location, 'lunar_assembler.dist.css')
+    output = os.path.join(build_script_location, 'example', 'lunar_assembler.dist.css')
     concatenate_matching(build_script_location, paths_for_merging, output, ".css")
 
     for filepath in paths_for_merging:
