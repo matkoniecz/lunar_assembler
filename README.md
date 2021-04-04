@@ -8,7 +8,7 @@ Code used to run mentioned example can be found in example folder.
 
 # Lunar assembler
 ##  In action
-![images_for_description/lunar_assembler_in_action.gif](images_for_description/lunar_assembler_in_action.gif)
+![examples/lunar_assembler_in_action.gif](examples/lunar_assembler_in_action.gif)
 
 ## Potential uses
 
@@ -42,7 +42,7 @@ Note that once insane architecture will be refactored making own website with ow
 
 ## Published
 
-[dev version served from this repo](https://matkoniecz.github.io/lunar_assembler/dev.html)
+[dev version served from this repo](https://matkoniecz.github.io/lunar_assembler/examples/dev.html)
 
 [current release and (for now only known use of it)](https://mapsaregreat.com/osm_to_svg_in_browser/)
 
