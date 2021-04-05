@@ -31,14 +31,9 @@
     <script src="lunar_assembler.dist.js"></script>
     <div id="main_content_wrap" class="outer">
     <section id="main_content" class="inner">
-    Generation of vector maps from OpenStreetMap data. Map style has support for areas such as buildings, water, parks, forests, road areas and linear features such as roads, railways, waterways, taxiway, runways. Produced SVG files can be downloaded.
-    <ul>
-    <li>Move map to a small area interesting for you (a single park will work, generating map of Poland will fail).</li>
-    <li>Press "rectangle" button, select interesting area for you.</li>
-    <li>Wait - waiting several seconds is normal, currently no progress info is displayed.</li>
-    <li>Generated map should appear below map used for selecting, download should be also automatically triggered. There is also download button available below generated map image.</li>
-    <li>Use this for something!</li>
-    </ul>
+    <p>Generation of vector maps from OpenStreetMap data.</p>
+    
+    <p id="instruction_hidden_after_first_generation">Press rectangle button, select rectangle on a map and wait. Note that this tool will work well with small areas. Entire cities may work, but will require long processing. Processing entire countries will fail.</p>
 
     <p>(there is more text below map, you can also see an <a href="lunar_assembler_in_action.gif">animation</a> showing how this tool is supposed to work)
     
@@ -46,8 +41,18 @@
         <div class="generated_svg_map_within" id="generated_svg_within"></div>
         <progress id="progress_bar" value="0" max="100" style="width: 100%"></progress>
         <div id="map" class="leaflet_interactive_map_not_hiding_further_content"></div>
-    <p id="instruction_hidden_after_first_generation">Press rectangle button, select rectangle on a map and wait</p>
   
+    <p>
+        <ul>
+            <li>Move map to a small area interesting for you (a single park will work, generating map of Poland will fail).</li>
+            <li>Press "rectangle" button, select interesting area for you.</li>
+            <li>Wait - waiting several seconds is normal, currently no progress info is displayed.</li>
+            <li>Generated map should appear below map used for selecting, download should be also automatically triggered. There is also download button available below generated map image.</li>
+            <li>Use this for something!</li>
+        </ul>
+    </p>      
+    <p>Map style has support for areas such as buildings, water, parks, forests, road areas and linear features such as roads, railways, waterways, taxiway, runways. Produced SVG files can be downloaded.</p>
+
     <p>Have fun with using OpenStreetMap data for interesting and/or useful purposes! Just remember that you must mention source of data in way visible to whoever will be using it. See <a href="https://www.openstreetmap.org/copyright">this page</a> for details, including cases where it is legally allowed to avoid giving a clear credit (but I encourage to do this in all cases).</p>
 
     <p>If you liked this tool, something was confusing - you are welcomed to comment about it <a href="https://github.com/matkoniecz/lunar_assembler/issues/new">by creating a public issue</a> or by sending me an <a href="mailto:matkoniecz@tutanota.com">email</a>. You can also post comment in <a href="https://www.openstreetmap.org/user/Mateusz%20Konieczny/diary/396309">OSM diary entry</a>.</p>
