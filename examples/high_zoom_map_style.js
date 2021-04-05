@@ -112,7 +112,7 @@ fillColoring(feature){
     if(feature.properties["natural"] === "wood" || feature.properties["landuse"] === "forest")  {
       return "green";
     }
-    if(["industrial", "railway", "quarry"].includes(feature.properties["landuse"])){
+    if(["industrial", "railway", "quarry", "construction"].includes(feature.properties["landuse"])){
         return "#efdfef";
     }
     if(["residential", "highway", "retail", "commercial", "garages"].includes(feature.properties["landuse"]) || ["school", "kidergarten", "university"].includes(feature.properties["amenity"])){
