@@ -30,21 +30,25 @@ I know that documentation may be far better, but I am not sure what kind of addi
 
 As usual [OSM Wiki documentation](https://wiki.openstreetmap.org/wiki/SVG#Ways_to_create_an_SVG_map_from_OpenStreetMap) is useful.
 
-## Skipped and rejected features
-
-Note that it is basically impossible to make SVGs that would qualify as high-quality cartography here. As reason why this project exists does not require it (generation of laser cutter designs) it was not considered during design and implementation. But feel free to open issues and create pull requests to add missing functionality!
-
-Exact duplicates of more popular standard tags will not be supported (for example `landcover=water` or `landcover=trees`).
-
-`landuse=reservoir` will not be supported, that is bad tagging scheme.
-
-Note that once insane architecture will be refactored making own website with own map style should be relatively easy and anyone interested will be able to make their own map style. See [issue #5](https://github.com/matkoniecz/lunar_assembler/issues/5) - help is welcomed.
-
 ## Published
 
 [dev version served from this repo](https://matkoniecz.github.io/lunar_assembler/examples/dev.html)
 
 [current release and (for now only known use of it)](https://mapsaregreat.com/osm_to_svg_in_browser/)
+
+## Skipped and rejected features
+
+Note that it is basically impossible to make SVGs that would qualify as high-quality cartography here. As reason why this project exists does not require it (generation of laser cutter designs) it was not considered during design and implementation. But feel free to open issues and create pull requests to add missing functionality!
+
+### Example map style
+
+Exact duplicates of more popular standard tags will not be supported (for example `landcover=water` or `landcover=trees`).
+
+`landuse=reservoir`, `landuse=depot` will not be supported due to being a bad tagging schemes.
+
+Note that making own website with own map style should be relatively easy and anyone interested is able to make their own map style.
+
+Please open an issue if you wanted to do this but you are stuck.
 
 ## Sponsors
 
