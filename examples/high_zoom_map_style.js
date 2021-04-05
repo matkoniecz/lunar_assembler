@@ -157,7 +157,7 @@ fillColoring(feature){
     if(["farmland", "vineyard"].includes(feature.properties["landuse"])){
       return "#eef0d5";
     }
-    if(["park", "pitch"].includes(feature.properties["leisure"]) || feature.properties["landuse"] === "village_green") {
+    if(["park", "pitch", "playground"].includes(feature.properties["leisure"]) || feature.properties["landuse"] === "village_green") {
       return "#c8facc";
     }
     if(["grass", "allotments", "orchard"].includes(feature.properties["landuse"]) || ["grassland", "meadow", "scrub", "heath"].includes(feature.properties["natural"]) || ["garden"].includes(feature.properties["leisure"])) {
