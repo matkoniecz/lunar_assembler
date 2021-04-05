@@ -160,7 +160,7 @@ fillColoring(feature){
     if(["park", "pitch", "playground"].includes(feature.properties["leisure"]) || feature.properties["landuse"] === "village_green") {
       return "#c8facc";
     }
-    if(["grass", "allotments", "orchard"].includes(feature.properties["landuse"]) || ["grassland", "meadow", "scrub", "heath"].includes(feature.properties["natural"]) || ["garden"].includes(feature.properties["leisure"])) {
+    if(["grass", "allotments", "orchard", "meadow"].includes(feature.properties["landuse"]) || ["grassland", "scrub", "heath"].includes(feature.properties["natural"]) || ["garden"].includes(feature.properties["leisure"])) {
       return "#a2ce8d";
     }
     if(feature.properties["man_made"] === "bridge") {
