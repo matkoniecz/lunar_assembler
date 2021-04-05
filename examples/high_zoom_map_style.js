@@ -48,14 +48,15 @@ paintOrder(feature) {
     if(feature.properties["barrier"] != null) {
         return 850;
     }
-    if(feature.properties["waterway"] != null) {
-      return 830;
-  }
     if(feature.properties["highway"] != null) {
         return 800;
     }
     if(feature.properties["man_made"] === "bridge") {
         return 700;
+    }
+    if(feature.properties["waterway"] != null) {
+      /* render waterway lines under bridge areas */
+      return 630;
     }
     if(feature.properties["natural"] === "water" || feature.properties["waterway"] === "riverbank") {
       // render natural=wood below natural=water
