@@ -151,7 +151,7 @@ fillColoring(feature){
     if(["industrial", "railway", "quarry", "construction", "military"].includes(feature.properties["landuse"]) || feature.properties["aeroway"] === "aerodrome"){
         return "#efdfef";
     }
-    if(["residential", "highway", "retail", "commercial", "garages"].includes(feature.properties["landuse"]) || ["school", "kidergarten", "university"].includes(feature.properties["amenity"])){
+    if(["residential", "highway", "retail", "commercial", "garages", "farmyard"].includes(feature.properties["landuse"]) || ["school", "kidergarten", "university"].includes(feature.properties["amenity"])){
         return "#efefef";
     }
     if(["farmland", "vineyard"].includes(feature.properties["landuse"])){
