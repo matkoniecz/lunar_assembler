@@ -104,8 +104,14 @@ paintOrder(feature) {
 }
     if(feature.properties["leisure"] != null) {
         // render leisure=park below natural=water or natural=wood
-        var priority = 0.01;
+        // but above landuse=residential
+        var priority = 0.03;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
+    }
+    if(feature.properties["landuse"] != null) {
+      //better higher and trigger layering problems quickly that have something failing ONLY in parks
+      var priority = 0.02;
+      return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
     }
     return valueRangeForOneLayer * layer;
 },
