@@ -142,7 +142,7 @@ fillColoring(feature){
     if(feature.properties["natural"] === "wood" || feature.properties["landuse"] === "forest")  {
       return "green";
     }
-    if(["industrial", "railway", "quarry", "construction"].includes(feature.properties["landuse"])){
+    if(["industrial", "railway", "quarry", "construction", "military"].includes(feature.properties["landuse"]) || feature.properties["aeroway"] === "aerodrome"){
         return "#efdfef";
     }
     if(["residential", "highway", "retail", "commercial", "garages"].includes(feature.properties["landuse"]) || ["school", "kidergarten", "university"].includes(feature.properties["amenity"])){
