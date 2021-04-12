@@ -240,7 +240,7 @@ var mapStyle = {
   },
 
   strokeColoring(feature) {
-    if (["fence", "wall"].includes(feature.properties["barrier"])) {
+    if (["fence", "wall", "guard_rail"].includes(feature.properties["barrier"])) {
       return "black";
     }
     if (
