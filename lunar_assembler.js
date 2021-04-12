@@ -400,9 +400,31 @@ function dropDegenerateGeometrySegments(feature){
       let generated = '<svg height="100%" width="100%" viewBox="0 0 ' + width + ' ' + height + '">' + "\n" + '<g class="generated_map" id="generated_map"></g>' + "\n" + '</svg>'
       document.getElementById(nameOfSVGHolderId()).innerHTML=generated
   
-      d3_data_geojson.features.sort(mapStyle.paintOrderCompareFunction)
+      // turn function returning value (layering order of function)
+      // into function taking two features and ordering them
+      var compareFunction = makeCompareFunctionForLayering(mapStyle.paintOrder)
+      d3_data_geojson.features.sort(compareFunction)
       console.log(d3_data_geojson.features)
       update3Map(geoGenerator, d3_data_geojson, selector, mapStyle);
+    }
+
+    function makeCompareFunctionForLayering(paintOrderFunction) {
+      // paintOrderFunction takes feature as input and outputs number
+      // higher number - more on top
+      return function(a, b) {
+        // < 0 - First element must be placed before second
+        // 0 - Both elements is equal, do not change order.
+        // > 0 - Second element must be placed before first.
+        // https://stackoverflow.com/a/41121134/4130619
+
+        // if featureFirst should be drawn over featureSecond
+        // on top of it, hding it
+        // return 1
+
+        return paintOrderFunction(a) - paintOrderFunction(b);
+        // TODO to halve calculations it would be possible to map features to values,
+        // and sort that values, right? Or maybe not...
+      }
     }
 
     function update3Map(geoGenerator, used_data, selector) {

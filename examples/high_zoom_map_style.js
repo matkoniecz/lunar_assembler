@@ -27,21 +27,6 @@ var mapStyle = {
     return ["rail", "disused", "tram", "subway", "narrow_gauge", "light_rail", "preserved", "construction", "miniature", "monorail"];
   },
   
-  paintOrderCompareFunction(featureFirst, featureSecond) {
-    // < 0 - First element must be placed before second
-    // 0 - Both elements is equal, do not change order.
-    // > 0 - Second element must be placed before first.
-    // https://stackoverflow.com/a/41121134/4130619
-
-    // if featureFirst should be drawn over featureSecond
-    // on top of it, hding it
-    // return 1
-
-    return mapStyle.paintOrder(featureFirst) - mapStyle.paintOrder(featureSecond);
-    // TODO to halve calculations it would be possible to map features to values,
-    // and sort that values, right? Or maybe not...
-  },
-
 paintOrder(feature) {
     // higher values: more on top
 
