@@ -62,8 +62,13 @@ paintOrder(feature) {
       }
     }
     
+    
+    if(mapStyle.railwayLinearValuesArray().includes(feature.properties["railway"])) {
+      var priority = 0.99;
+      return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
+    }
     if(feature.properties["area:highway"] != null) {
-        var priority = 0.99;
+        var priority = 0.98;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
     }
     if(feature.properties["building"] != null && feature.properties["location"] != "underground") {
@@ -74,7 +79,7 @@ paintOrder(feature) {
       var priority = 0.90;
       return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
   }
-    if(feature.properties["highway"] != null || mapStyle.railwayLinearValuesArray().includes(feature.properties["railway"])) {
+    if(feature.properties["highway"] != null) {
       var priority = 0.85;
       return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
   }
