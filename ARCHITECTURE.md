@@ -45,6 +45,7 @@ Fun fact: [https://docs.npmjs.com/getting-started](https://docs.npmjs.com/gettin
 what explain exactly nothing how the heck I should do it
 
 # Fundamentals
+
 Obtains OpenStreetMap data and generates SVG map from that.
 
 It must run as client side JS hosted on static page. Server-side solution is rejected as neither needed nor viable here. It also has nice side-effect of making potential reuse easier.
@@ -53,8 +54,8 @@ Performance is not considered during design, as main target of work would involv
 
 In addition, note that for bigger workloads you will need a database rather than running it in browser.
 
-
 ## Alternatives
+
 There are some [known tools](https://wiki.openstreetmap.org/wiki/SVG) for that, but none working as client-side JS.
 
 Some were potentially adaptable, but ignored due to having too interesting architecture. For example [Osmarender](https://wiki.openstreetmap.org/wiki/Osmarender/Convert_osm_data_from_OSM_file_to_an_SVG_image) using XSLT to transform OSM XML into SVG XML or compiling my Python scripts to JS using [pyodide](https://github.com/pyodide/pyodide).
@@ -64,6 +65,7 @@ Some were potentially adaptable, but ignored due to having too interesting archi
 GUI for selecting rectangle that will be processed - Leaflet + Leaflet-draw plugin.
 
 # Obtaining OSM data
+
 Gets bounding box, ends with geojson for futher processing.
 
 Fetching OpenStreeMap data - Overpass API
@@ -78,6 +80,7 @@ Intersecting geojson data with geojson pattern (needed for some later)
 Rendering geojson data as SVG.
 
 [NOT DONE AT ALL, UNCLEAR DOABILITY]
-* support for adding raster patters
+
+- support for adding raster patters
 
 Allowing to download that SVG.
