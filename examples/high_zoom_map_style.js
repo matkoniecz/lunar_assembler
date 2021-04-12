@@ -331,7 +331,7 @@ var mapStyle = {
         .motorizedRoadValuesArray()
         .includes(feature.properties["area:highway"])
     ) {
-      return "area:highway_carriageway";
+      return "area:highway_carriageway_layer" + feature.properties["layer"];
     }
     if (
       ["footway", "pedestrian", "path", "steps"].includes(
@@ -340,10 +340,10 @@ var mapStyle = {
       (feature.properties["highway"] == "pedestrian" &&
         feature.properties["area"] === "yes")
     ) {
-      return "area:highway_footway";
+      return "area:highway_footway" + feature.properties["layer"];
     }
     if (feature.properties["area:highway"] == "cycleway") {
-      return "area:highway_cycleway";
+      return "area:highway_cycleway" + feature.properties["layer"];
     }
     return null;
   },
