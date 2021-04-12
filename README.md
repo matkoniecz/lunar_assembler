@@ -7,7 +7,9 @@ Lunar assembler is a JS library allowing easy setup of static websites allowing 
 Code used to run mentioned example can be found in example folder.
 
 # Lunar assembler
-##  In action
+
+## In action
+
 ![examples/lunar_assembler_in_action.gif](examples/lunar_assembler_in_action.gif)
 
 ## Potential uses
