@@ -1,3 +1,4 @@
 lunar_assembler_dependencies
 examples/lunar_assembler.dist.css
 examples/lunar_assembler.dist.js
+*.html
