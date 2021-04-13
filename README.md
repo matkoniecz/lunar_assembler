@@ -36,6 +36,9 @@ As usual [OSM Wiki documentation](https://wiki.openstreetmap.org/wiki/SVG#Ways_t
 
 [dev version served from this repo](https://matkoniecz.github.io/lunar_assembler/examples/dev.html)
 
+
+[dev version of a laser map style is also served from this repo](https://matkoniecz.github.io/lunar_assembler/examples/dev-laser.html)
+
 [current release and (for now only known use of it)](https://mapsaregreat.com/osm_to_svg_in_browser/)
 
 ## Skipped and rejected features
