@@ -41,6 +41,16 @@ var mapStyle = {
     ];
   },
 
+  pedestrianWaysValuesArray() {
+    return [
+      "footway",
+      "path",
+      "steps",
+      "pedestrian",
+      "living_street",
+    ];
+  },
+
   railwayLinearValuesArray() {
     return [
       "rail",
@@ -165,7 +175,7 @@ var mapStyle = {
       return "#555555";
     }
     if (
-      ["footway", "pedestrian", "path", "steps", "living_street"].includes(
+      mapStyle.pedestrianWaysValuesArray().includes(
         feature.properties["area:highway"]
       ) ||
       (feature.properties["highway"] == "pedestrian" &&
@@ -258,7 +268,7 @@ var mapStyle = {
       return "#555555";
     }
     if (
-      ["footway", "pedestrian", "path", "steps", "pedestrian", "living_street"].includes(
+      mapStyle.pedestrianWaysValuesArray().includes(
         feature.properties["highway"]
       )
     ) {
@@ -339,7 +349,7 @@ var mapStyle = {
       return "area:highway_carriageway_layer" + feature.properties["layer"];
     }
     if (
-      ["footway", "pedestrian", "path", "steps", "living_street"].includes(
+      mapStyle.pedestrianWaysValuesArray().includes(
         feature.properties["area:highway"]
       ) ||
       (feature.properties["highway"] == "pedestrian" &&
