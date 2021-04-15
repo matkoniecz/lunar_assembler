@@ -33,7 +33,6 @@ var mapStyle = {
       "service",
       "track",
       "road",
-      "bus",
       "bus_stop",
       "taxi_stop",
     ];
