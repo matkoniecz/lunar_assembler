@@ -258,7 +258,7 @@ var mapStyle = {
       return "#555555";
     }
     if (
-      ["footway", "pedestrian", "path", "pedestrian", "living_street"].includes(
+      ["footway", "pedestrian", "path", "steps", "pedestrian", "living_street"].includes(
         feature.properties["highway"]
       )
     ) {
