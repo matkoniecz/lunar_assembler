@@ -33,6 +33,11 @@ var mapStyle = {
       "service",
       "track",
       "road",
+      "busway",
+      "bus_stop",
+      "taxi_stop",
+      "raceway",
+      "escape",
     ];
   },
 
@@ -160,7 +165,7 @@ var mapStyle = {
       return "#555555";
     }
     if (
-      ["footway", "pedestrian", "path", "steps"].includes(
+      ["footway", "pedestrian", "path", "steps", " living_street"].includes(
         feature.properties["area:highway"]
       ) ||
       (feature.properties["highway"] == "pedestrian" &&
