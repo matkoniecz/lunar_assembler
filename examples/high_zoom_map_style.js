@@ -339,7 +339,7 @@ var mapStyle = {
       return "area:highway_carriageway_layer" + feature.properties["layer"];
     }
     if (
-      ["footway", "pedestrian", "path", "steps"].includes(
+      ["footway", "pedestrian", "path", "steps", "living_street"].includes(
         feature.properties["area:highway"]
       ) ||
       (feature.properties["highway"] == "pedestrian" &&
