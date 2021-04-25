@@ -26,6 +26,7 @@ let progressBar;
 let handleOfProgressBarAnimation;
 
 function initializeLunarAssembler({
+  map_styles,
   map_div_id,
   download_trigger_id,
   progress_bar_id,
@@ -33,7 +34,7 @@ function initializeLunarAssembler({
   lon,
   zoom,
 } = {}) {
-  initializeSelectorMap(map_div_id, lat, lon, zoom, download_trigger_id);
+  initializeSelectorMap(map_styles, map_div_id, lat, lon, zoom, download_trigger_id);
   initilizeDownloadButton(download_trigger_id);
   progressBar = document.getElementById(progress_bar_id);
 }
@@ -84,6 +85,7 @@ function startShowingProgress() {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 function initializeSelectorMap(
+  mapStyles,
   map_div_id,
   lat,
   lon,
@@ -118,7 +120,7 @@ function initializeSelectorMap(
 
     drawnItems.addLayer(layer);
 
-    handleTriggerFromGUI(layer.getBounds(), download_trigger_id);
+    handleTriggerFromGUI(layer.getBounds(), download_trigger_id, mapStyles[0]); // TODO handle passing more than one map style!
   });
 }
 
@@ -134,7 +136,7 @@ function initilizeDownloadButton(download_trigger_id) {
 function nameOfSVGHolderId() {
   return "generated_svg_within";
 }
-async function handleTriggerFromGUI(bounds, download_trigger_id) {
+async function handleTriggerFromGUI(bounds, download_trigger_id, mapStyle) {
   startShowingProgress();
   let osmJSON = await downloadOpenStreetMapData(bounds); // https://leafletjs.com/reference-1.6.0.html#latlngbounds-getcenter
   if (osmJSON == -1) {
@@ -157,7 +159,7 @@ async function handleTriggerFromGUI(bounds, download_trigger_id) {
     width,
     height,
     mapStyle
-  ); //mapStyle is defined in separate .js file, imported here - TODO, pass it here(???? what about multple styles at once?)
+  );
   document.getElementById(download_trigger_id).style.display = "";
   document.getElementById(
     "instruction_hidden_after_first_generation"
@@ -504,7 +506,7 @@ function makeCompareFunctionForLayering(paintOrderFunction) {
   };
 }
 
-function update3Map(geoGenerator, used_data, selector) {
+function update3Map(geoGenerator, used_data, selector, mapStyle) {
   var u = d3
     .select(selector) // should use selector
     .selectAll("path")
