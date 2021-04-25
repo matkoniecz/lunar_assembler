@@ -10,13 +10,37 @@ Code used to run mentioned example can be found in example folder.
 
 ## In action
 
+[try it!](https://mapsaregreat.com/osm_to_svg_in_browser/)
+
 ![examples/lunar_assembler_in_action.gif](examples/lunar_assembler_in_action.gif)
+
+## Published
+
+[dev version served from this repo](https://matkoniecz.github.io/lunar_assembler/examples/dev.html)
+
+
+[dev version of a laser map style is also served from this repo](https://matkoniecz.github.io/lunar_assembler/examples/dev-laser.html)
+
+[current release and (for now only known use of it)](https://mapsaregreat.com/osm_to_svg_in_browser/)
 
 ## Potential uses
 
 SVG files may be much more accessible for futher processing than alternatives formats of OSM data.
 
 SVG files may be directly usable for some purposes, for example in laser cutters.
+
+## How can you use it?
+
+This work is AGPL licensed. This means that you also can use it, with requirement to share your improvements (see license for the full info, this is a single-sentence summary).
+
+[examples](examples) folder contains
+
+* `lunar_assembler.dist.js` (build .js file containing all necessary JS code)
+* `lunar_assembler.dist.css` (build .js file containing all necessary CSS code)
+* `dev.html` (example usage of `lunar_assembler`)
+* `high_zoom_map_style.js` (map style used in that example)
+
+Feel fre to use it in your own projects or build on it! Pull requests with improvements are also welcomed!
 
 ## Mentions of use are welcome
 
@@ -31,15 +55,6 @@ I know that documentation may be far better, but I am not sure what kind of addi
 ## Alternatives
 
 As usual [OSM Wiki documentation](https://wiki.openstreetmap.org/wiki/SVG#Ways_to_create_an_SVG_map_from_OpenStreetMap) is useful.
-
-## Published
-
-[dev version served from this repo](https://matkoniecz.github.io/lunar_assembler/examples/dev.html)
-
-
-[dev version of a laser map style is also served from this repo](https://matkoniecz.github.io/lunar_assembler/examples/dev-laser.html)
-
-[current release and (for now only known use of it)](https://mapsaregreat.com/osm_to_svg_in_browser/)
 
 ## Skipped and rejected features
 
