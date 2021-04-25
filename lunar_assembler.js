@@ -140,7 +140,7 @@ async function handleTriggerFromGUI(bounds, download_trigger_id, mapStyle) {
   startShowingProgress();
   let osmJSON = await downloadOpenStreetMapData(bounds); // https://leafletjs.com/reference-1.6.0.html#latlngbounds-getcenter
   if (osmJSON == -1) {
-    console.log("FILURE of download!");
+    console.log("FAILURE of download!");
     markAsFailed();
     alert(
       "Overpass API refused to provide data. Either selected area was too large, or you exceed usage limit of that free service. Please wait a bit and retry. Overpass API is used to get data from OpenStreetMap for a given area."
