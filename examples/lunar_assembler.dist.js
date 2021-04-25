@@ -277,6 +277,9 @@ function render(
 ) {
   data_geojson = clipGeometries(west, south, east, north, data_geojson);
   data_geojson = mergeAsRequestedByMapStyle(data_geojson, mapStyle);
+  if ('transformGeometryAtFinalStep' in mapStyle) {
+    data_geojson = mapStyle.transformGeometryAtFinalStep(data_geojson);
+  }
   renderUsingD3(
     west,
     south,
@@ -348,6 +351,7 @@ function mergeAsRequestedByMapStyle(data_geojson, mapStyle) {
     produced.geometry.coordinates = polygonClipping.union(
       ...coordinatesForMerging
     );
+    produced.properties['lunar_assembler_merge_group'] = key
     processeedFeatures.push(produced);
   }
   data_geojson.features = processeedFeatures;
