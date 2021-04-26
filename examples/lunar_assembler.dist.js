@@ -482,15 +482,13 @@ function renderUsingD3(
 
   var geoGenerator = d3.geoPath().projection(projection);
 
-  selector = "#" + outputHolderId + " g.generated_map";
+  selector = "#" + outputHolderId + " svg";
   let generated =
     '<svg height="100%" width="100%" viewBox="0 0 ' +
     width +
     " " +
     height +
     '">' +
-    "\n" +
-    '<g class="generated_map" id="generated_map"></g>' +
     "\n" +
     "</svg>" +
     "\n" +
