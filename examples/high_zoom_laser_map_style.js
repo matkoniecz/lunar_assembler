@@ -219,7 +219,7 @@ function highZoomLaserMapStyle() {
       if (feature.properties["area:highway"] == "cycleway") {
         return "area:highway_cycleway";
       }
-      if (feature.properties["building"] != "no") {
+      if (feature.properties["building"] != null) {
         return "buildings";
       }
       return null;
