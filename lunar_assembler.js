@@ -139,7 +139,7 @@ function initilizeDownloadButton(download_trigger_id, outputHolderId) {
   d3.select("#" + download_trigger_id).on("click", function () {
     download(
       "generated.svg",
-      document.getElementById(outputHolderId).innerHTML
+      document.getElementById(idOfGeneratedMap()).outerHTML
     );
   });
 }
@@ -476,7 +476,7 @@ function renderUsingD3(
 
   selector = "#" + outputHolderId + " svg";
   let generated =
-    '<svg height="100%" width="100%" viewBox="0 0 ' +
+    '<svg id="' + idOfGeneratedMap() + '" height="100%" width="100%" viewBox="0 0 ' +
     width +
     " " +
     height +
@@ -495,6 +495,9 @@ function renderUsingD3(
   update3Map(geoGenerator, d3_data_geojson, selector, mapStyle);
 }
 
+function idOfGeneratedMap() {
+  return "mapGeneratedFromOpenStreetMap data"
+}
 function makeCompareFunctionForLayering(paintOrderFunction) {
   // paintOrderFunction takes feature as input and outputs number
   // higher number - more on top
