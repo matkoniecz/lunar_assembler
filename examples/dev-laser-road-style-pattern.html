@@ -38,7 +38,7 @@
         <p>(there is more text below map, you can also see an <a href="lunar_assembler_in_action.gif">animation</a> showing how this tool is supposed to work)</p>
         
             <center><button id="download_generated_map" href="#" style="display: none; margin: 5px auto 5px auto">Download SVG</button></center>
-            <div class="generated_svg_map_within" id="generated_svg_within"></div>
+            <div class="generated_svg_map_within" id="generated_svg_within"></div><!-- styling backround of this as white is recommended-->
             <progress id="progress_bar" value="0" max="100" style="width: 100%"></progress>
             <div id="map" class="leaflet_interactive_map_not_hiding_further_content"></div>
     
@@ -68,7 +68,7 @@
     <script src="high_zoom_laser_map_style_road_style_pattern.js"></script>
     <script>
         // must be executed after imports and once passed ids exist -->
-        initializeLunarAssembler({map_styles: [highZoomLaserMapStyle()], map_div_id: 'map', download_trigger_id: "download_generated_map", progress_bar_id: "progress_bar", lat: 50.05514, lon: 19.92824, zoom: 18});
+        initializeLunarAssembler({map_styles: [highZoomMapStyle()], map_div_id: 'map', download_trigger_id: "download_generated_map", progress_bar_id: "progress_bar", outputHolderId: "generated_svg_within", lat: 50.05514, lon: 19.92824, zoom: 18});
     </script>
 </body>
 </html>
