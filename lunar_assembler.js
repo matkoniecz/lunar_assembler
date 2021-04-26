@@ -30,12 +30,13 @@ function initializeLunarAssembler({
   map_div_id,
   download_trigger_id,
   progress_bar_id,
+  outputHolderId,
   lat,
   lon,
   zoom,
 } = {}) {
-  initializeSelectorMap(map_styles, map_div_id, lat, lon, zoom, download_trigger_id);
-  initilizeDownloadButton(download_trigger_id);
+  initializeSelectorMap(map_styles, map_div_id, lat, lon, zoom, download_trigger_id, outputHolderId);
+  initilizeDownloadButton(download_trigger_id, outputHolderId);
   progressBar = document.getElementById(progress_bar_id);
 }
 
@@ -90,7 +91,8 @@ function initializeSelectorMap(
   lat,
   lon,
   zoom,
-  download_trigger_id
+  download_trigger_id,
+  outputHolderId
 ) {
   var map = L.map(map_div_id).setView([lat, lon], zoom);
   var mapLink = '<a href="https://openstreetmap.org">OpenStreetMap</a>';
@@ -120,23 +122,20 @@ function initializeSelectorMap(
 
     drawnItems.addLayer(layer);
 
-    handleTriggerFromGUI(layer.getBounds(), download_trigger_id, mapStyles[0]); // TODO handle passing more than one map style!
+    handleTriggerFromGUI(layer.getBounds(), download_trigger_id, outputHolderId, mapStyles[0]); // TODO handle passing more than one map style!
   });
 }
 
-function initilizeDownloadButton(download_trigger_id) {
+function initilizeDownloadButton(download_trigger_id, outputHolderId) {
   d3.select("#" + download_trigger_id).on("click", function () {
     download(
       "generated.svg",
-      document.getElementById(nameOfSVGHolderId()).innerHTML
+      document.getElementById(outputHolderId).innerHTML
     );
   });
 }
 
-function nameOfSVGHolderId() {
-  return "generated_svg_within";
-}
-async function handleTriggerFromGUI(bounds, download_trigger_id, mapStyle) {
+async function handleTriggerFromGUI(bounds, download_trigger_id, outputHolderId, mapStyle) {
   startShowingProgress();
   let osmJSON = await downloadOpenStreetMapData(bounds); // https://leafletjs.com/reference-1.6.0.html#latlngbounds-getcenter
   if (osmJSON == -1) {
@@ -158,7 +157,8 @@ async function handleTriggerFromGUI(bounds, download_trigger_id, mapStyle) {
     geoJSON,
     width,
     height,
-    mapStyle
+    mapStyle,
+    outputHolderId
   );
   document.getElementById(download_trigger_id).style.display = "";
   document.getElementById(
@@ -265,7 +265,8 @@ function render(
   data_geojson,
   width,
   height,
-  mapStyle
+  mapStyle,
+  outputHolderId
 ) {
   data_geojson = clipGeometries(west, south, east, north, data_geojson);
   data_geojson = mergeAsRequestedByMapStyle(data_geojson, mapStyle);
@@ -280,7 +281,8 @@ function render(
     data_geojson,
     width,
     height,
-    mapStyle
+    mapStyle,
+    outputHolderId
   );
 }
 
@@ -444,7 +446,8 @@ function renderUsingD3(
   data_geojson,
   width,
   height,
-  mapStyle
+  mapStyle,
+  outputHolderId
 ) {
   var geoJSONRepresentingBoundaries = geoJSONPolygonRepresentingBBox(
     west,
@@ -470,7 +473,7 @@ function renderUsingD3(
 
   var geoGenerator = d3.geoPath().projection(projection);
 
-  selector = "#" + nameOfSVGHolderId() + " g.generated_map";
+  selector = "#" + outputHolderId + " g.generated_map";
   let generated =
     '<svg height="100%" width="100%" viewBox="0 0 ' +
     width +
@@ -481,7 +484,7 @@ function renderUsingD3(
     '<g class="generated_map" id="generated_map"></g>' +
     "\n" +
     "</svg>";
-  document.getElementById(nameOfSVGHolderId()).innerHTML = generated;
+  document.getElementById(outputHolderId).innerHTML = generated;
 
   // turn function returning value (layering order of function)
   // into function taking two features and ordering them
