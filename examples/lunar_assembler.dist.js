@@ -526,7 +526,7 @@ function makeCompareFunctionForLayering(paintOrderFunction) {
 
 function update3Map(geoGenerator, used_data, selector, mapStyle) {
   var u = d3
-    .select(selector) // should use selector
+    .select(selector)
     .selectAll("path")
     .data(used_data.features);
 
