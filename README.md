@@ -23,13 +23,7 @@ Code used to run mentioned example can be found in example folder.
 
 [current release and (for now only known use of it)](https://mapsaregreat.com/osm_to_svg_in_browser/)
 
-## Potential uses
-
-SVG files may be much more accessible for futher processing than alternatives formats of OSM data.
-
-SVG files may be directly usable for some purposes, for example in laser cutters.
-
-## How can you use it?
+## How can I use it on my site?
 
 This work is AGPL licensed. This means that you also can use it, with requirement to share your improvements (see license for the full info, this is a single-sentence summary).
 
@@ -41,6 +35,14 @@ This work is AGPL licensed. This means that you also can use it, with requiremen
 * `high_zoom_map_style.js` (map style used in that example)
 
 Feel fre to use it in your own projects or build on it! Pull requests with improvements are also welcomed!
+
+## How can I make own map style?
+
+## Potential uses
+
+SVG files may be much more accessible for futher processing than alternatives formats of OSM data.
+
+SVG files may be directly usable for some purposes, for example in laser cutters.
 
 ## Mentions of use are welcome
 
