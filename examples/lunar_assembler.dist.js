@@ -130,8 +130,17 @@ function initializeSelectorMap(
 
     drawnItems.addLayer(layer);
 
-    handleTriggerFromGUI(layer.getBounds(), download_trigger_id, outputHolderId, mapStyles[0]); // TODO handle passing more than one map style!
+    var bounds = layer.getBounds()
+    var readableBounds = {'west': bounds.getWest(), 'south': bounds.getSouth(), 'east': bounds.getEast(), 'north': bounds.getNorth()};
+    handleTriggerFromGUI(readableBounds, download_trigger_id, outputHolderId, mapStyles[0]); // TODO handle passing more than one map style!
   });
+
+  var queryString = location.search
+  let params = new URLSearchParams(queryString)
+  if(params.get("rerun_query") == "yes") {
+    // parameters (technically still GUI, right) requested running query immediately
+    handleTriggerFromGUI(JSON.parse(params.get("bounds")), download_trigger_id, outputHolderId, mapStyles[0]);
+  }
 }
 
 function initilizeDownloadButton(download_trigger_id, outputHolderId) {
@@ -143,9 +152,9 @@ function initilizeDownloadButton(download_trigger_id, outputHolderId) {
   });
 }
 
-async function handleTriggerFromGUI(bounds, download_trigger_id, outputHolderId, mapStyle) {
+async function handleTriggerFromGUI(readableBounds, download_trigger_id, outputHolderId, mapStyle) {
   startShowingProgress();
-  let osmJSON = await downloadOpenStreetMapData(bounds); // https://leafletjs.com/reference-1.6.0.html#latlngbounds-getcenter
+  let osmJSON = await downloadOpenStreetMapData(readableBounds); // https://leafletjs.com/reference-1.6.0.html#latlngbounds-getcenter
   if (osmJSON == -1) {
     console.log("FAILURE of download!");
     markAsFailed();
@@ -158,10 +167,7 @@ async function handleTriggerFromGUI(bounds, download_trigger_id, outputHolderId,
   const width = 800;
   const height = 600;
   render(
-    bounds.getWest(),
-    bounds.getSouth(),
-    bounds.getEast(),
-    bounds.getNorth(),
+    readableBounds,
     geoJSON,
     width,
     height,
@@ -173,10 +179,15 @@ async function handleTriggerFromGUI(bounds, download_trigger_id, outputHolderId,
     "instruction_hidden_after_first_generation"
   ).style.display = "none";
   markAsCompleted();
+  var generated='<a href="?rerun_query=yes&bounds=' + encodeURIComponent(JSON.stringify(readableBounds)) + '">link to repeat this query</a>'
+  document.getElementById("redo_link_holder").innerHTML = generated;
 }
 
-// TODO - there is a function to do this, right?
-function geoJSONPolygonRepresentingBBox(west, south, east, north) {
+function geoJSONPolygonRepresentingBBox(readableBounds) {
+  var west = readableBounds['west']
+  var south = readableBounds['south']
+  var east = readableBounds['east']
+  var north = readableBounds['north']
   return {
     type: "FeatureCollection",
     features: [
@@ -201,7 +212,7 @@ function geoJSONPolygonRepresentingBBox(west, south, east, north) {
 }
 
 // downloading OSM data
-async function downloadOpenStreetMapData(bounds) {
+async function downloadOpenStreetMapData(readableBounds) {
   // https://leafletjs.com/reference-1.6.0.html#latlngbounds-getcenter
   query = "";
   // note: extra filters will break data in case of some bad/poor/substandard tagging or where someone want this kind of data
@@ -209,13 +220,13 @@ async function downloadOpenStreetMapData(bounds) {
   var extra_filters =
     "[type!=route][type!=parking_fee][type!=waterway][type!=boundary][boundary!=administrative][boundary!=religious_administration]";
   query += "[out:json][timeout:25];nwr" + extra_filters + "(";
-  query += bounds.getSouth();
+  query += readableBounds['south'];
   query += ",";
-  query += bounds.getWest();
+  query += readableBounds['west'];
   query += ",";
-  query += bounds.getNorth();
+  query += readableBounds['north'];
   query += ",";
-  query += bounds.getEast();
+  query += readableBounds['east'];
   query += ");";
   query += "out body;>;out skel qt;";
   console.log("overpass query in the next line:");
@@ -266,26 +277,20 @@ function rewind(geojson_that_is_7946_compliant_with_right_hand_winding_order) {
 }
 
 function render(
-  west,
-  south,
-  east,
-  north,
+  readableBounds,
   data_geojson,
   width,
   height,
   mapStyle,
   outputHolderId
 ) {
-  data_geojson = clipGeometries(west, south, east, north, data_geojson);
+  data_geojson = clipGeometries(readableBounds, data_geojson);
   data_geojson = mergeAsRequestedByMapStyle(data_geojson, mapStyle);
   if ('transformGeometryAtFinalStep' in mapStyle) {
     data_geojson = mapStyle.transformGeometryAtFinalStep(data_geojson);
   }
   renderUsingD3(
-    west,
-    south,
-    east,
-    north,
+    readableBounds,
     data_geojson,
     width,
     height,
@@ -360,7 +365,11 @@ function mergeAsRequestedByMapStyle(data_geojson, mapStyle) {
   return data_geojson;
 }
 
-function clipGeometries(west, south, east, north, data_geojson) {
+function clipGeometries(readableBounds, data_geojson) {
+  var west = readableBounds['west']
+  var south = readableBounds['south']
+  var east = readableBounds['east']
+  var north = readableBounds['north']
   var bbox = [west, south, east, north];
   var i = data_geojson.features.length;
   var survivingFeatures = [];
@@ -447,22 +456,14 @@ function dropDegenerateGeometrySegments(feature) {
   return feature;
 }
 function renderUsingD3(
-  west,
-  south,
-  east,
-  north,
+  readableBounds,
   data_geojson,
   width,
   height,
   mapStyle,
   outputHolderId
 ) {
-  var geoJSONRepresentingBoundaries = geoJSONPolygonRepresentingBBox(
-    west,
-    south,
-    east,
-    north
-  );
+  var geoJSONRepresentingBoundaries = geoJSONPolygonRepresentingBBox(readableBounds);
   // rewinding is sometimes needed, sometimes not
   // rewinding is sometimes broken in my code (at least in oce case it was borked by my bug in futher processing!), sometimes not
   // see https://gis.stackexchange.com/questions/392452/why-d3-js-works-only-with-geojson-violating-right-hand-rule
@@ -491,7 +492,9 @@ function renderUsingD3(
     "\n" +
     '<g class="generated_map" id="generated_map"></g>' +
     "\n" +
-    "</svg>";
+    "</svg>" +
+    "\n" +
+    '<div id="redo_link_holder"><div/>';
   document.getElementById(outputHolderId).innerHTML = generated;
 
   // turn function returning value (layering order of function)
