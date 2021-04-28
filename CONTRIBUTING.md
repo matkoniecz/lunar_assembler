@@ -22,4 +22,4 @@ TODO: find JS linter
 
 # Automatically reformat code to follow some sane coding style
 
-`npx prettier --write .`
+`npx prettier --print-width 200 --write .`
