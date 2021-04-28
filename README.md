@@ -27,16 +27,26 @@ Code used to run mentioned example can be found in example folder.
 
 This work is AGPL licensed. This means that you also can use it, with requirement to share your improvements (see license for the full info, this is a single-sentence summary).
 
-[examples](examples) folder contains
+[examples](examples) folder contains files necessary to use that in you project:
 
 * `lunar_assembler.dist.js` (build .js file containing all necessary JS code)
 * `lunar_assembler.dist.css` (build .js file containing all necessary CSS code)
-* `dev.html` (example usage of `lunar_assembler`)
-* `high_zoom_map_style.js` (map style used in that example)
+* `high_zoom_map_style.js` (map style used in my example, you can build on it or make your own)
+* `dev.html` (example usage of `lunar_assembler`, using that map style)
 
-Feel fre to use it in your own projects or build on it! Pull requests with improvements are also welcomed!
+Feel free to use it in your own projects or build on it!
+
+Pull requests with improvements are also welcomed!
 
 ## How can I make own map style?
+
+Map style can be quite simple - just setting colors for lines/areas.
+
+In some cases one needs to somehow deals with layers. For example, what should be displayed if road in tunnel goes under building? Or under forest? What should be shown if there is a lake in a forest?
+
+The most complex part of default map style is dealing with layers.
+
+Map styles also have access to a powerful functionality allowing complete rewriting of geometries, what is necessary to implement some functionality but typically can be ignored.
 
 ## Potential uses
 
