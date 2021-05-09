@@ -180,7 +180,7 @@ function highZoomMapStyle() {
           feature.properties["area:highway"]
         ) ||
         (feature.properties["highway"] == "pedestrian" &&
-          feature.properties["area"] === "yes")
+          (feature.properties["area"] === "yes" || feature.properties["type"] === "multipolygon"))
       ) {
         return "#aaaaaa";
       }
@@ -354,7 +354,7 @@ function highZoomMapStyle() {
           feature.properties["area:highway"]
         ) ||
         (feature.properties["highway"] == "pedestrian" &&
-          feature.properties["area"] === "yes")
+        (feature.properties["area"] === "yes" || feature.properties["type"] === "multipolygon"))
       ) {
         return "area:highway_footway" + feature.properties["layer"];
       }
