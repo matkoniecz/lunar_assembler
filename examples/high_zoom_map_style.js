@@ -256,6 +256,11 @@ function highZoomMapStyle() {
     },
 
     strokeColoring(feature) {
+      if (["Point"].includes(feature.geometry.type)) {
+        //no rendering of points, for start size seems to randomly differ
+        // and leaves ugly circles - see building=* areas
+        return "none";
+      }
       if (
         ["fence", "wall", "guard_rail"].includes(feature.properties["barrier"])
       ) {
