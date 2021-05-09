@@ -276,6 +276,9 @@ function render(
   mapStyle,
   outputHolderId
 ) {
+  if ('transformGeometryAsInitialStep' in mapStyle) {
+    data_geojson = mapStyle.transformGeometryAsInitialStep(data_geojson);
+  }
   data_geojson = clipGeometries(readableBounds, data_geojson);
   data_geojson = mergeAsRequestedByMapStyle(data_geojson, mapStyle);
   if ('transformGeometryAtFinalStep' in mapStyle) {
