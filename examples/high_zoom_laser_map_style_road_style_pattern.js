@@ -510,7 +510,105 @@ function highZoomLaserMapStyle() {
           alert("UNEXPECTED GEOMETRY " + feature.geometry.type)
           return false;
       },
+
+
+      intersectGeometryWithHorizontalStripes(feature, stripeSizeInDegrees, distanceBetweenStripesInDegrees) {
+        bbox = turf.bbox(feature)
+        var minLongitude = bbox[0]
+        var minLatitude = bbox[1]
+        var maxLongitude = bbox[2]
+        var maxLatitude = bbox[3]
+        if(!mapStyle.isMultipolygonAsExpected(feature)){
+          return null;
+        }
+        var collected = []
+        // gathering horizontal stripes
+        var minLatitudeForStripe = minLatitude;
+        while(minLatitudeForStripe < maxLatitude) {
+            var maxLatitudeForStripe =  minLatitudeForStripe + stripeSizeInDegrees
+            var stripeRing = [
+                [minLongitude, minLatitudeForStripe],
+                [maxLongitude, minLatitudeForStripe],
+                [maxLongitude, maxLatitudeForStripe],
+                [minLongitude, maxLatitudeForStripe],
+                [minLongitude, minLatitudeForStripe],
+            ]
+            var stripe = [stripeRing]
+            console.warn(stripe)
+            var intersectedStripe = polygonClipping.intersection(feature.geometry.coordinates, stripe);
+            if(intersectedStripe != []) {
+              collected.push(intersectedStripe)
+            }
+            minLatitudeForStripe += stripeSizeInDegrees + distanceBetweenStripesInDegrees
+        }
+        var generated = polygonClipping.union(...collected);
+
+        var cloned = JSON.parse(JSON.stringify(feature));
+        cloned.geometry.coordinates = generated
+        return cloned
+      },
   
+      intersectGeometryWithPlaneHavingRectangularHoles(feature, holeVerticalInDegrees, holeHorizontalInDegrees, spaceVerticalInDegrees, spaceHorizontalInDegrees) {
+        bbox = turf.bbox(feature)
+        var minLongitude = bbox[0]
+        var minLatitude = bbox[1]
+        var maxLongitude = bbox[2]
+        var maxLatitude = bbox[3]
+        if(!mapStyle.isMultipolygonAsExpected(feature)){
+          return null;
+        }
+        var collected = []
+        // gathering horizontal stripes
+        var minLatitudeForStripe = minLatitude;
+        while(minLatitudeForStripe < maxLatitude) {
+            var maxLatitudeForStripe =  minLatitudeForStripe + spaceVerticalInDegrees
+            var stripeRing = [
+                [minLongitude, minLatitudeForStripe],
+                [maxLongitude, minLatitudeForStripe],
+                [maxLongitude, maxLatitudeForStripe],
+                [minLongitude, maxLatitudeForStripe],
+                [minLongitude, minLatitudeForStripe],
+            ]
+            var stripe = [stripeRing]
+            var intersectedStripe = polygonClipping.intersection(feature.geometry.coordinates, stripe);
+            if(intersectedStripe.length > 0) {
+              collected.push(intersectedStripe)
+            }
+            minLatitudeForStripe += spaceVerticalInDegrees + holeVerticalInDegrees
+        }
+        // spkit in pairs due to https://github.com/mfogel/polygon-clipping/issues/118
+        var generatedHorizontal = polygonClipping.union(...collected);
+        collected = []
+
+        // gathering vertical stripes
+        var minLongitudeForStripe = minLongitude;
+        while(minLongitudeForStripe < maxLongitude) {
+            var maxLongitudeForStripe =  minLongitudeForStripe + spaceHorizontalInDegrees
+            var stripeRing = [
+                [minLongitudeForStripe, minLatitude],
+                [maxLongitudeForStripe, minLatitude],
+                [maxLongitudeForStripe, maxLatitude],
+                [minLongitudeForStripe, maxLatitude],
+                [minLongitudeForStripe, minLatitude],
+            ]
+            var stripe = [stripeRing]
+            var intersectedStripe = polygonClipping.intersection(feature.geometry.coordinates, stripe);
+            if(intersectedStripe.length > 0) {
+              collected.push(intersectedStripe)
+            }
+            minLongitudeForStripe += spaceHorizontalInDegrees + holeHorizontalInDegrees
+        }
+        var generatedVertical = polygonClipping.union(...collected);
+        var generated = polygonClipping.union(generatedHorizontal, generatedVertical);
+        console.warn("road pattern follows")
+        console.warn(generated)
+        console.warn("road pattern above")
+
+        var cloned = JSON.parse(JSON.stringify(feature));
+        cloned.geometry.coordinates = generated
+        return cloned
+      },
+
       applyPatternsToCarriagewaysAndWater(data_geojson) {
         // applied pattern is set of square holes, regularly spaced in a grid
         // it is intended to be used in a laser cutter that will burn are outside such exempt holes, producing a clear pattern
@@ -518,6 +616,8 @@ function highZoomLaserMapStyle() {
         // in created pattern it was 1mm for hole and 1.5 mm for space between giles
 
         // Returns BBox bbox extent in [minX, minY, maxX, maxY] order
+        var kilometers = {units: 'kilometers'};
+
         bbox = turf.bbox(data_geojson)
         var minLongitude = bbox[0]
         var minLatitude = bbox[1]
@@ -525,20 +625,27 @@ function highZoomLaserMapStyle() {
         var maxLatitude = bbox[3]
         var from = turf.point([bbox[0], bbox[1]]); // turf.point(longitude, latitude, properties)
         var to = turf.point([bbox[2], bbox[3]]);
-        var options = {units: 'kilometers'};
-        var distanceInMeters = turf.distance(from, to, options) * 1000;
+        var distanceInMeters = turf.distance(from, to, kilometers) * 1000;
 
 
         var from_horizontal = turf.point([minLongitude, minLatitude]); // turf.point(longitude, latitude, properties)
         var to_horizontal = turf.point([maxLongitude, minLatitude]);
-        var options = {units: 'kilometers'};
-        var distanceHorizontalInMeters = 1000 * turf.distance(from_horizontal, to_horizontal, options);
-        var distanceHorizontalInDegrees = bbox[2] - bbox[0]
-        var metersInDegree = distanceHorizontalInMeters / distanceHorizontalInDegrees;
-        //var degreesInMeter = 1 / metersInDegree
+        var distanceHorizontalInMeters = 1000 * turf.distance(from_horizontal, to_horizontal, kilometers);
+        var distanceHorizontalInDegrees = maxLongitude - minLongitude
+        var metersInDegreeHorizontal = distanceHorizontalInMeters / distanceHorizontalInDegrees;
 
-        const roadHoleSizeInMeters = 0.4
-        const roadSpaceBetweenInMeters = 0.6
+        var from_vertical = turf.point([minLongitude, minLatitude]); // turf.point(longitude, latitude, properties)
+        var to_vertical = turf.point([minLongitude, maxLatitude]);
+        var distanceVerticalInMeters = 1000 * turf.distance(from_vertical, to_vertical, kilometers);
+        var distanceVerticalInDegrees = maxLatitude - minLatitude
+        var metersInDegreeVertical = distanceVerticalInMeters / distanceVerticalInDegrees;
+
+        const roadHoleSizeInMeters = 0.3
+        const holeVerticalInMeters = roadHoleSizeInMeters
+        const holeHorizontalInMeters = roadHoleSizeInMeters
+        const roadSpaceBetweenInMeters = 0.45
+        const spaceVerticalInMeters = roadSpaceBetweenInMeters
+        const spaceHorizontalInMeters = roadSpaceBetweenInMeters
 
         const waterSpaceBetweenRowsInMeters = 0.6
         const waterRowSizeInMeters = 0.6
@@ -549,91 +656,23 @@ function highZoomLaserMapStyle() {
         while (i--) {
           var feature = data_geojson.features[i];
           if(feature.properties['lunar_assembler_merge_group'] == "water") {
-            if (mapStyle.isMultipolygonAsExpected(feature)) {
-                var collected = []
-                // gathering horizontal stripes
-                var minLatitudeForStripe = minLatitude;
-                while(minLatitudeForStripe < maxLatitude) {
-                    var maxLatitudeForStripe =  minLatitudeForStripe + waterRowSizeInMeters / metersInDegree
-                    var stripeRing = [
-                        [minLongitude, minLatitudeForStripe],
-                        [maxLongitude, minLatitudeForStripe],
-                        [maxLongitude, maxLatitudeForStripe],
-                        [minLongitude, maxLatitudeForStripe],
-                        [minLongitude, minLatitudeForStripe],
-                    ]
-                    var stripe = [stripeRing]
-                    console.warn(stripe)
-                    var intersectedStripe = polygonClipping.intersection(feature.geometry.coordinates, stripe);
-                    if(intersectedStripe != []) {
-                      collected.push(intersectedStripe)
-                    }
-                    minLatitudeForStripe += (waterRowSizeInMeters + waterSpaceBetweenRowsInMeters) / metersInDegree
-                }
-                var generated = polygonClipping.union(...collected);
-
-                cloned = JSON.parse(JSON.stringify(feature));
-                cloned.geometry.coordinates = generated
-                cloned.properties["lunar_assembler_cloned_for_pattern_fill"] = "yes"
-                data_geojson.features.push(cloned) // added at the ned, and iterating from end to 0 so will not trigger infinite loop
+                var generated = mapStyle.intersectGeometryWithHorizontalStripes(feature, waterRowSizeInMeters / metersInDegreeHorizontal, waterSpaceBetweenRowsInMeters / metersInDegreeHorizontal)
+                generated.properties["lunar_assembler_cloned_for_pattern_fill"] = "yes"
+                data_geojson.features.push(generated) // added at the ned, and iterating from end to 0 so will not trigger infinite loop
+             }
+            console.warn(feature.properties['lunar_assembler_merge_group'])
+            if(feature.properties['lunar_assembler_merge_group'] == "area:highway_carriageway_layer") {
+                var generated = mapStyle.intersectGeometryWithPlaneHavingRectangularHoles(
+                  feature,
+                  holeVerticalInMeters / metersInDegreeVertical,
+                  holeHorizontalInMeters / metersInDegreeHorizontal,
+                  spaceVerticalInMeters / metersInDegreeVertical,
+                  spaceHorizontalInMeters / metersInDegreeHorizontal,
+                  )      
+                generated.properties["lunar_assembler_cloned_for_pattern_fill"] = "yes"
+                data_geojson.features.push(generated) // added at the ned, and iterating from end to 0 so will not trigger infinite loop
              }
           }
-          if(feature.properties['lunar_assembler_merge_group'] == "area:highway_carriageway_layer") {
-            if (mapStyle.isMultipolygonAsExpected(feature)) {
-                var collected = []
-                // gathering horizontal stripes
-                var minLatitudeForStripe = minLatitude;
-                while(minLatitudeForStripe < maxLatitude) {
-                    var maxLatitudeForStripe =  minLatitudeForStripe + waterRowSizeInMeters / metersInDegree
-                    var stripeRing = [
-                        [minLongitude, minLatitudeForStripe],
-                        [maxLongitude, minLatitudeForStripe],
-                        [maxLongitude, maxLatitudeForStripe],
-                        [minLongitude, maxLatitudeForStripe],
-                        [minLongitude, minLatitudeForStripe],
-                    ]
-                    var stripe = [stripeRing]
-                    var intersectedStripe = polygonClipping.intersection(feature.geometry.coordinates, stripe);
-                    if(intersectedStripe.length > 0) {
-                      collected.push(intersectedStripe)
-                    }
-                    minLatitudeForStripe += (waterRowSizeInMeters + waterSpaceBetweenRowsInMeters) / metersInDegree
-                }
-                // spkit in pairs due to https://github.com/mfogel/polygon-clipping/issues/118
-                var generatedHorizontal = polygonClipping.union(...collected);
-                collected = []
-
-                // gathering vertical stripes
-                var minLongitudeForStripe = minLongitude;
-                while(minLongitudeForStripe < maxLongitude) {
-                    var maxLongitudeForStripe =  minLongitudeForStripe + waterRowSizeInMeters / metersInDegree
-                    var stripeRing = [
-                        [minLongitudeForStripe, minLatitude],
-                        [maxLongitudeForStripe, minLatitude],
-                        [maxLongitudeForStripe, maxLatitude],
-                        [minLongitudeForStripe, maxLatitude],
-                        [minLongitudeForStripe, minLatitude],
-                    ]
-                    var stripe = [stripeRing]
-                    var intersectedStripe = polygonClipping.intersection(feature.geometry.coordinates, stripe);
-                    if(intersectedStripe.length > 0) {
-                      collected.push(intersectedStripe)
-                    }
-                    minLongitudeForStripe += (waterRowSizeInMeters + waterSpaceBetweenRowsInMeters) / metersInDegree
-                }
-                var generatedVertical = polygonClipping.union(...collected);
-                var generated = polygonClipping.union(generatedHorizontal, generatedVertical);
-                console.warn("road pattern follows")
-                console.warn(generated)
-                console.warn("road pattern above")
-
-                cloned = JSON.parse(JSON.stringify(feature));
-                cloned.geometry.coordinates = generated
-                cloned.properties["lunar_assembler_cloned_for_pattern_fill"] = "yes"
-                data_geojson.features.push(cloned) // added at the ned, and iterating from end to 0 so will not trigger infinite loop
-             }
-          }
-        }
         return data_geojson;
     },
   }
