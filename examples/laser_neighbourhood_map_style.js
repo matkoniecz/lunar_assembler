@@ -275,11 +275,12 @@ function highZoomLaserMapStyle() {
       var crossingArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_crossing");
       if (crossingArea === undefined) {
         alert("no crossing areas (lines with footway=crossing) in range!");
-        return;
+        return data_geojson;
       }
       if (roadArea === undefined) {
         alert("no road areas (lines tagged with a proper highway=*) in range!");
-        return;
+        crossingArea.geometry.coordinates = [];
+        return data_geojson;
       }
       crossingArea.geometry.coordinates = polygonClipping.intersection(crossingArea.geometry.coordinates, roadArea.geometry.coordinates);
       return data_geojson;
