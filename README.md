@@ -18,7 +18,6 @@ Code used to run mentioned example can be found in example folder.
 
 [dev version served from this repo](https://matkoniecz.github.io/lunar_assembler/examples/dev.html)
 
-
 dev version of a laser map styles are also served from this repo
 
 [ultra-high zoom style relying on area:highway, for showing a single crossing](https://matkoniecz.github.io/lunar_assembler/examples/dev-laser-road-style-pattern.html)
@@ -33,10 +32,10 @@ This work is AGPL licensed. This means that you also can use it, with requiremen
 
 [examples](examples) folder contains files necessary to use that in you project:
 
-* `lunar_assembler.dist.js` (build .js file containing all necessary JS code)
-* `lunar_assembler.dist.css` (build .js file containing all necessary CSS code)
-* `high_zoom_map_style.js` (map style used in my example, you can build on it or make your own)
-* `dev.html` (example usage of `lunar_assembler`, using that map style)
+- `lunar_assembler.dist.js` (build .js file containing all necessary JS code)
+- `lunar_assembler.dist.css` (build .js file containing all necessary CSS code)
+- `high_zoom_map_style.js` (map style used in my example, you can build on it or make your own)
+- `dev.html` (example usage of `lunar_assembler`, using that map style)
 
 Feel free to use it in your own projects or build on it!
 

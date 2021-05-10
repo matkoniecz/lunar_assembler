@@ -80,8 +80,7 @@ function highZoomMapStyle() {
         */
         if (
           feature.properties["building"] == null &&
-          (feature.properties["natural"] == null ||
-            feature.properties["natural"] == "water") &&
+          (feature.properties["natural"] == null || feature.properties["natural"] == "water") &&
           feature.properties["landuse"] == null &&
           feature.properties["leisure"] == null
         ) {
@@ -89,11 +88,7 @@ function highZoomMapStyle() {
         }
       }
 
-      if (
-        mapStyle
-          .railwayLinearValuesArray()
-          .includes(feature.properties["railway"])
-      ) {
+      if (mapStyle.railwayLinearValuesArray().includes(feature.properties["railway"])) {
         var priority = 0.99;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
       }
@@ -101,10 +96,7 @@ function highZoomMapStyle() {
         var priority = 0.98;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
       }
-      if (
-        feature.properties["building"] != null &&
-        feature.properties["location"] != "underground"
-      ) {
+      if (feature.properties["building"] != null && feature.properties["location"] != "underground") {
         var priority = 0.95;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
       }
@@ -129,10 +121,7 @@ function highZoomMapStyle() {
         var priority = 0.6;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
       }
-      if (
-        feature.properties["natural"] === "water" ||
-        feature.properties["waterway"] === "riverbank"
-      ) {
+      if (feature.properties["natural"] === "water" || feature.properties["waterway"] === "riverbank") {
         // render natural=wood below natural=water
         var priority = 0.1;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
@@ -168,19 +157,12 @@ function highZoomMapStyle() {
       if (feature.properties["building"] != null) {
         return "black";
       }
-      if (
-        mapStyle
-          .motorizedRoadValuesArray()
-          .includes(feature.properties["area:highway"])
-      ) {
+      if (mapStyle.motorizedRoadValuesArray().includes(feature.properties["area:highway"])) {
         return "#555555";
       }
       if (
-        mapStyle.pedestrianWaysValuesArray().includes(
-          feature.properties["area:highway"]
-        ) ||
-        (feature.properties["highway"] == "pedestrian" &&
-          (feature.properties["area"] === "yes" || feature.properties["type"] === "multipolygon"))
+        mapStyle.pedestrianWaysValuesArray().includes(feature.properties["area:highway"]) ||
+        (feature.properties["highway"] == "pedestrian" && (feature.properties["area"] === "yes" || feature.properties["type"] === "multipolygon"))
       ) {
         return "#aaaaaa";
       }
@@ -193,54 +175,29 @@ function highZoomMapStyle() {
       if (feature.properties["area:highway"] === "crossing") {
         return "#a06060";
       }
-      if (
-        feature.properties["natural"] === "water" ||
-        feature.properties["waterway"] === "riverbank"
-      ) {
+      if (feature.properties["natural"] === "water" || feature.properties["waterway"] === "riverbank") {
         return "blue";
       }
-      if (
-        feature.properties["natural"] === "wood" ||
-        feature.properties["landuse"] === "forest"
-      ) {
+      if (feature.properties["natural"] === "wood" || feature.properties["landuse"] === "forest") {
         return "green";
       }
-      if (
-        ["industrial", "railway", "quarry", "construction", "military"].includes(
-          feature.properties["landuse"]
-        ) ||
-        feature.properties["aeroway"] === "aerodrome"
-      ) {
+      if (["industrial", "railway", "quarry", "construction", "military"].includes(feature.properties["landuse"]) || feature.properties["aeroway"] === "aerodrome") {
         return "#efdfef";
       }
       if (
-        [
-          "residential",
-          "highway",
-          "retail",
-          "commercial",
-          "garages",
-          "farmyard",
-        ].includes(feature.properties["landuse"]) ||
-        ["school", "kidergarten", "university"].includes(
-          feature.properties["amenity"]
-        )
+        ["residential", "highway", "retail", "commercial", "garages", "farmyard"].includes(feature.properties["landuse"]) ||
+        ["school", "kidergarten", "university"].includes(feature.properties["amenity"])
       ) {
         return "#efefef";
       }
       if (["farmland", "vineyard"].includes(feature.properties["landuse"])) {
         return "#eef0d5";
       }
-      if (
-        ["park", "pitch", "playground"].includes(feature.properties["leisure"]) ||
-        feature.properties["landuse"] === "village_green"
-      ) {
+      if (["park", "pitch", "playground"].includes(feature.properties["leisure"]) || feature.properties["landuse"] === "village_green") {
         return "#c8facc";
       }
       if (
-        ["grass", "allotments", "orchard", "meadow"].includes(
-          feature.properties["landuse"]
-        ) ||
+        ["grass", "allotments", "orchard", "meadow"].includes(feature.properties["landuse"]) ||
         ["grassland", "scrub", "heath"].includes(feature.properties["natural"]) ||
         ["garden"].includes(feature.properties["leisure"])
       ) {
@@ -261,41 +218,24 @@ function highZoomMapStyle() {
         // and leaves ugly circles - see building=* areas
         return "none";
       }
-      if (
-        ["fence", "wall", "guard_rail"].includes(feature.properties["barrier"])
-      ) {
+      if (["fence", "wall", "guard_rail"].includes(feature.properties["barrier"])) {
         return "black";
       }
-      if (
-        mapStyle
-          .motorizedRoadValuesArray()
-          .includes(feature.properties["highway"])
-      ) {
+      if (mapStyle.motorizedRoadValuesArray().includes(feature.properties["highway"])) {
         return "#555555";
       }
-      if (
-        mapStyle.pedestrianWaysValuesArray().includes(
-          feature.properties["highway"]
-        )
-      ) {
+      if (mapStyle.pedestrianWaysValuesArray().includes(feature.properties["highway"])) {
         return "#aaaaaa";
       }
       if (feature.properties["highway"] === "cycleway") {
         return "#9595b4";
       }
 
-      if (
-        feature.properties["aeroway"] === "runway" ||
-        feature.properties["aeroway"] === "taxiway"
-      ) {
+      if (feature.properties["aeroway"] === "runway" || feature.properties["aeroway"] === "taxiway") {
         return "purple";
       }
 
-      if (
-        mapStyle
-          .railwayLinearValuesArray()
-          .includes(feature.properties["railway"])
-      ) {
+      if (mapStyle.railwayLinearValuesArray().includes(feature.properties["railway"])) {
         return "black";
       }
       if (feature.properties["waterway"] != null) {
@@ -306,11 +246,7 @@ function highZoomMapStyle() {
     },
 
     strokeWidth(feature) {
-      if (
-        mapStyle
-          .motorizedRoadValuesArray()
-          .includes(feature.properties["highway"])
-      ) {
+      if (mapStyle.motorizedRoadValuesArray().includes(feature.properties["highway"])) {
         return 2;
       }
       if (feature.properties["aeroway"] === "runway") {
@@ -331,11 +267,7 @@ function highZoomMapStyle() {
       if (feature.properties["aeroway"] === "taxiway") {
         return 2;
       }
-      if (
-        mapStyle
-          .railwayLinearValuesArray()
-          .includes(feature.properties["railway"])
-      ) {
+      if (mapStyle.railwayLinearValuesArray().includes(feature.properties["railway"])) {
         return 2;
       }
 
@@ -347,19 +279,12 @@ function highZoomMapStyle() {
       // only areas (including multipolygins) can be merged for now
       // please open an issue if you need it, it increaes chance of implementation a bit
       // or open pull request with an implementation
-      if (
-        mapStyle
-          .motorizedRoadValuesArray()
-          .includes(feature.properties["area:highway"])
-      ) {
+      if (mapStyle.motorizedRoadValuesArray().includes(feature.properties["area:highway"])) {
         return "area:highway_carriageway_layer" + feature.properties["layer"];
       }
       if (
-        mapStyle.pedestrianWaysValuesArray().includes(
-          feature.properties["area:highway"]
-        ) ||
-        (feature.properties["highway"] == "pedestrian" &&
-        (feature.properties["area"] === "yes" || feature.properties["type"] === "multipolygon"))
+        mapStyle.pedestrianWaysValuesArray().includes(feature.properties["area:highway"]) ||
+        (feature.properties["highway"] == "pedestrian" && (feature.properties["area"] === "yes" || feature.properties["type"] === "multipolygon"))
       ) {
         return "area:highway_footway" + feature.properties["layer"];
       }
