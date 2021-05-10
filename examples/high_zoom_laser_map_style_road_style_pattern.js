@@ -325,7 +325,7 @@ function highZoomLaserMapStyle() {
         const expected = 6 + 1; // +1 as a border node is repeated
         if (nodeCountOnPolygon != expected) {
           if (nodeCountOnPolygon > expected) {
-            alert("untested for large (" + nodeCountOnPolygon + " nodes) area:highway=steps geometries with more than 6 nodes. See " + link);
+            alert("untested for large (" + nodeCountOnPolygon + " nodes) area:highway=steps geometries with more than 6 nodes. See " + link + "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues");
           } else {
             alert("unexpectedly low node count ( " + nodeCountOnPolygon + "), is highway=steps attached to area:highway=steps? See " + link);
           }
@@ -335,7 +335,7 @@ function highZoomLaserMapStyle() {
       indexesOfPointsWhichAreConnectedToStepsWay(feature, pointsInSteps) {
         const link = "https://www.openstreetmap.org/" + feature.id;
         if (feature.geometry.type != "Polygon") {
-          alert("unsupported for " + feature.geometry.type + "! Skipping, see " + link);
+          alert("unsupported for " + feature.geometry.type + "! Skipping, see " + link+ "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues");
           return null;
         }
         var nodeCountOnPolygon = feature.geometry.coordinates[0].length;
@@ -355,7 +355,7 @@ function highZoomLaserMapStyle() {
             } else if (theSecondIntersection == undefined) {
               theSecondIntersection = { indexInObject: nodeIndex, indexInStepsArray: indexOfMatchingPointInSteps };
             } else {
-              alert("more than 2 intersections of area:highway=steps with highway=steps, at " + link);
+              alert("more than 2 intersections of area:highway=steps with highway=steps, at " + link + "\nOSM data needs fixing.");
             }
           }
         }
@@ -461,15 +461,13 @@ function highZoomLaserMapStyle() {
         var generatedFeatures = []
         while (i--) {
           var feature = data_geojson.features[i];
-          //alert(JSON.stringify(feature))
           const link = "https://www.openstreetmap.org/" + feature.id;
           if (feature.properties["area:highway"] != "steps") {
             continue;
           }
-          //alert(JSON.stringify(feature));
           const rings = feature.geometry.coordinates.length;
           if (rings != 1) {
-            alert("untested for polygons with holes. And it seems that it should be represented as two highway=steps and two area:highway anyway. See " + link);
+            alert("untested for polygons with holes. And it seems that it should be represented as two highway=steps and two area:highway anyway. See " + link + "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues");
           }
           var newFeaturesForAdding = mapStyle.buildAreasSplittingStepAreaIntoSymbolicSteps(feature, pointsInSteps);
           if(newFeaturesForAdding != null) {
@@ -491,18 +489,18 @@ function highZoomLaserMapStyle() {
           feature.geometry.type == "Point" ||
           feature.geometry.type === "MultiPoint"
         ) {
-          alert("UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature))
+          alert("UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature) + "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues")
           return false;
         } else if (
           feature.geometry.type == "LineString" ||
           feature.geometry.type == "MultiLineString"
         ) {
-          alert("UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature))
+          alert("UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature) + "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues")
           return false;
       } else if (
           feature.geometry.type == "Polygon"
         ) {
-          alert("UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature))
+          alert("UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature) + "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues")
           return false;
         } else if (
           feature.geometry.type == "MultiPolygon") {
@@ -625,7 +623,6 @@ function highZoomLaserMapStyle() {
                 }
                 var generatedVertical = polygonClipping.union(...collected);
                 var generated = polygonClipping.union(generatedHorizontal, generatedVertical);
-                alert(generated)
                 console.warn("road pattern follows")
                 console.warn(generated)
                 console.warn("road pattern above")
