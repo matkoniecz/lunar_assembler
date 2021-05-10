@@ -21,9 +21,9 @@ Code used to run mentioned example can be found in example folder.
 
 dev version of a laser map styles are also served from this repo
 
-[ultra-high zoom style relying on area:highway, for showing asingle crossing](https://matkoniecz.github.io/lunar_assembler/examples/dev-laser-road-style-pattern.html)
+[ultra-high zoom style relying on area:highway, for showing a single crossing](https://matkoniecz.github.io/lunar_assembler/examples/dev-laser-road-style-pattern.html)
 
-[high zoom map style for showing neighbourhood, with some attempts to automatically simplify data, no need for area:highway](https://matkoniecz.github.io/lunar_assembler/examplesdev-laser-neighbourhood.html)
+[high zoom map style for showing neighbourhood, with some attempts to automatically simplify data, no need for area:highway](https://matkoniecz.github.io/lunar_assembler/examples/dev-laser-neighbourhood.html)
 
 [current release and (for now only known use of it)](https://mapsaregreat.com/osm_to_svg_in_browser/)
 
