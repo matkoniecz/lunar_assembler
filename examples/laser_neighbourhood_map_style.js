@@ -57,7 +57,7 @@ function highZoomLaserMapStyle() {
       if (feature.properties["area:highway_extra_size"] != undefined) {
         return -1000 + Math.random();
       }
-      // orfder does not really matter, random order may help expsoe some bugs with overlapping features
+      // orfder does not really matter, random order may help expose some bugs with overlapping features
       return Math.random();
     },
 
