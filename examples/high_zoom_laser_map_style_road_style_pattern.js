@@ -153,13 +153,13 @@ function highZoomLaserMapStyle() {
             return "#400080";
         }
         if(feature.properties["lunar_assembler_step_segment"] == "1") {
-            return "#ff0000";
+            return "magenta";
         }
         if(feature.properties["lunar_assembler_step_segment"] == "2") {
-            return "orange";
+            return "#ff0000";
         }
         if(feature.properties["lunar_assembler_step_segment"] == "3") {
-            return "#FFFF00";
+            return "orange";
         }
       if (feature.properties["building"] != null) {
         return "#603006";
