@@ -192,7 +192,7 @@ function highZoomLaserMapStyle() {
         if(feature.properties["lunar_assembler_cloned_for_pattern_fill"] == "yes") {
           return "blue"
         }
-        return "afeeee";
+        return "#afeeee";
       }
       return "none";
     },
