@@ -221,7 +221,7 @@ function highZoomLaserMapStyle() {
     eraseFootwayWhereIntersectingRoad(data_geojson) {
       var complainIfMissing = false
       var complainIfMissing = false
-      var roadArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_carriageway_layer", );
+      var roadArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_carriageway_layer", complainIfMissing);
       var footwayArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_footway", complainIfMissing);
       if(roadArea == null || footwayArea == null) {
         return data_geojson;
