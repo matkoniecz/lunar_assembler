@@ -445,15 +445,15 @@ function highZoomLaserMapStyle() {
         var i = geojson.features.length;
         while (i--) {
           var feature = geojson.features[i];
+          if(mapStyle.isFeatureMakingFreePedestrianMovementPossible(feature)) {
+            featuresGivingAccess.push(feature);
+          }
           const link = "https://www.openstreetmap.org/" + feature.id;
           if(feature.geometry.type != "Polygon" && feature.geometry.type != "MultiPolygon") {
             continue
           }
           if(mapStyle.isAreaMakingFreePedestrianMovementImpossible(feature)) {
               var freelyTraversableArea = polygonClipping.difference(freelyTraversableArea, feature.geometry.coordinates);
-          }
-          if(mapStyle.isFeatureMakingFreePedestrianMovementPossible(feature)) {
-            featuresGivingAccess.push(feature);
           }
         }
         console.warn(JSON.stringify({ type: "MultiPolygon", coordinates: freelyTraversableArea }))
