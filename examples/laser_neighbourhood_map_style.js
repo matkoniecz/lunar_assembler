@@ -213,10 +213,10 @@ function highZoomLaserMapStyle() {
     eraseFootwayWhereIntersectingRoad(data_geojson) {
       var roadArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_carriageway_layer");
       var footwayArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_footway");
-      if (!mapStyle.isMultipolygonAsExpected(roadArea)) {
+      if (!isMultipolygonAsExpected(roadArea)) {
         console.log(roadArea);
       }
-      if (!mapStyle.isMultipolygonAsExpected(footwayArea)) {
+      if (!isMultipolygonAsExpected(footwayArea)) {
         console.log(footwayArea);
       }
       footwayArea.geometry.coordinates = polygonClipping.difference(footwayArea.geometry.coordinates, roadArea.geometry.coordinates);
@@ -226,10 +226,10 @@ function highZoomLaserMapStyle() {
     eraseFootwayWhereIntersectingBuilding(data_geojson) {
       var buildingArea = mapStyle.findMergeGroupObject(data_geojson, "buildings");
       var footwayArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_footway");
-      if (!mapStyle.isMultipolygonAsExpected(buildingArea)) {
+      if (!isMultipolygonAsExpected(buildingArea)) {
         console.log(buildingArea);
       }
-      if (!mapStyle.isMultipolygonAsExpected(footwayArea)) {
+      if (!isMultipolygonAsExpected(footwayArea)) {
         console.log(footwayArea);
       }
       footwayArea.geometry.coordinates = polygonClipping.difference(footwayArea.geometry.coordinates, buildingArea.geometry.coordinates);
@@ -240,10 +240,10 @@ function highZoomLaserMapStyle() {
       var extraRoadArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_carriageway_layer_extra_size");
       var footwayArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_footway");
       var extraFootwayArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_footway_extra_size");
-      if (!mapStyle.isMultipolygonAsExpected(extraRoadArea)) {
+      if (!isMultipolygonAsExpected(extraRoadArea)) {
         console.log(extraRoadArea);
       }
-      if (!mapStyle.isMultipolygonAsExpected(extraFootwayArea)) {
+      if (!isMultipolygonAsExpected(extraFootwayArea)) {
         console.log(extraFootwayArea);
       }
       var intersectedGeometry = polygonClipping.intersection(extraFootwayArea.geometry.coordinates, extraRoadArea.geometry.coordinates);
@@ -286,50 +286,6 @@ function highZoomLaserMapStyle() {
       return data_geojson;
     },
 
-    isMultipolygonAsExpected(feature) {
-      if(feature == undefined) {
-        alert(
-          "UNEXPECTED undefined" +
-            " in " +
-            JSON.stringify(feature) +
-            "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
-        )
-        return false;
-      }
-      if (feature.geometry.type == "Point" || feature.geometry.type === "MultiPoint") {
-        alert(
-          "UNEXPECTED " +
-            feature.geometry.type +
-            " in " +
-            JSON.stringify(feature) +
-            "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
-        );
-        return false;
-      } else if (feature.geometry.type == "LineString" || feature.geometry.type == "MultiLineString") {
-        alert(
-          "UNEXPECTED " +
-            feature.geometry.type +
-            " in " +
-            JSON.stringify(feature) +
-            "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
-        );
-        return false;
-      } else if (feature.geometry.type == "Polygon") {
-        alert(
-          "UNEXPECTED " +
-            feature.geometry.type +
-            " in " +
-            JSON.stringify(feature) +
-            "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
-        );
-        return false;
-      } else if (feature.geometry.type == "MultiPolygon") {
-        return true;
-      }
-      alert("UNEXPECTED GEOMETRY " + feature.geometry.type);
-      return false;
-    },
-
     applyPatternToRoadSurface(data_geojson) {
       // applied pattern is set of square holes, regularly spaced in a grid
       // it is intended to be used in a laser cutter that will burn are outside such exempt holes, producing a clear pattern
@@ -353,7 +309,7 @@ function highZoomLaserMapStyle() {
       while (i--) {
         var feature = data_geojson.features[i];
         if (feature.properties["lunar_assembler_merge_group"] == "area:highway_carriageway_layer") {
-          if (mapStyle.isMultipolygonAsExpected(feature)) {
+          if (isMultipolygonAsExpected(feature)) {
             cloned = JSON.parse(JSON.stringify(feature));
             cloned.geometry.coordinates = polygonClipping.intersection(cloned.geometry.coordinates, mapStyle.pattern().geometry.coordinates);
             cloned.properties["lunar_assembler_cloned_for_pattern_fill"] = "yes";
