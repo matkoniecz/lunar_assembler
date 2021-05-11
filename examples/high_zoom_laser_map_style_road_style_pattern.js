@@ -153,7 +153,8 @@ function highZoomLaserMapStyle() {
       if (feature.properties["building"] != null) {
         return "#603006";
       }
-      if (mapStyle.motorizedRoadValuesArray().includes(feature.properties["area:highway"]) || feature.properties["area:highway"] === "bicycle_crossing") {
+      if (mapStyle.motorizedRoadValuesArray().includes(feature.properties["area:highway"]) || feature.properties["area:highway"] === "bicycle_crossing"
+      || feature.properties["lunar_assembler_merge_group"] == "area:highway_carriageway_layer" ) {
         if (feature.properties["lunar_assembler_cloned_for_pattern_fill"] == "yes") {
           return "black";
         }
@@ -202,7 +203,8 @@ function highZoomLaserMapStyle() {
       if (
         mapStyle.motorizedRoadValuesArray().includes(feature.properties["area:highway"]) ||
         feature.properties["area:highway"] === "bicycle_crossing" ||
-        feature.properties["area:highway"] === "cycleway"
+        feature.properties["area:highway"] === "cycleway" ||
+        feature.properties["amenity"] === "parking"
       ) {
         return "area:highway_carriageway_layer";
       }
