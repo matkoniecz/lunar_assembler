@@ -287,14 +287,41 @@ function highZoomLaserMapStyle() {
     },
 
     isMultipolygonAsExpected(feature) {
+      if(feature == undefined) {
+        alert(
+          "UNEXPECTED undefined" +
+            " in " +
+            JSON.stringify(feature) +
+            "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
+        )
+        return false;
+      }
       if (feature.geometry.type == "Point" || feature.geometry.type === "MultiPoint") {
-        alert("UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature));
+        alert(
+          "UNEXPECTED " +
+            feature.geometry.type +
+            " in " +
+            JSON.stringify(feature) +
+            "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
+        );
         return false;
       } else if (feature.geometry.type == "LineString" || feature.geometry.type == "MultiLineString") {
-        alert("UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature));
+        alert(
+          "UNEXPECTED " +
+            feature.geometry.type +
+            " in " +
+            JSON.stringify(feature) +
+            "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
+        );
         return false;
       } else if (feature.geometry.type == "Polygon") {
-        alert("UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature));
+        alert(
+          "UNEXPECTED " +
+            feature.geometry.type +
+            " in " +
+            JSON.stringify(feature) +
+            "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
+        );
         return false;
       } else if (feature.geometry.type == "MultiPolygon") {
         return true;
