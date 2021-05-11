@@ -54,16 +54,11 @@ function highZoomLaserMapStyle() {
 
     paintOrder(feature) {
       // extra sizes go under to not block main data
-        if (feature.properties["area:generated_traversable_chunk"] != undefined) {
-          return -1000;
-        }
-        if (feature.properties["area:generated_blocked_chunk"] != undefined) {
-          return -1000;
-        }
-        if (feature.properties["area:native_blocked_chunk"] != undefined) {
-          return -1000;
-        }
-        return 0;
+      if (feature.properties["area:highway_extra_size"] != undefined) {
+        return -1000 + Math.random();
+      }
+      // orfder does not really matter, random order may help expose some bugs with overlapping features
+      return Math.random();
     },
 
     fillColoring(feature) {
@@ -72,7 +67,7 @@ function highZoomLaserMapStyle() {
         // and leaves ugly circles - see building=* nodes
         return "none";
       }
-      console.log(feature);
+      //console.log(feature);
       if (feature.properties["lunar_assembler_cloned_for_pattern_fill"] == "yes") {
         return "black";
       }
@@ -103,9 +98,6 @@ function highZoomLaserMapStyle() {
         ["footway", "pedestrian", "path", "steps"].includes(feature.properties["area:highway"]) ||
         (feature.properties["highway"] == "pedestrian" && (feature.properties["area"] === "yes" || feature.properties["type"] === "multipolygon"))
       ) {
-        if (feature.properties["footway"] == "crossing") {
-          return "yellow";
-        }
         return "green";
       }
 
@@ -120,13 +112,13 @@ function highZoomLaserMapStyle() {
         return "blue";
       }
       if (feature.properties["generated_barrier_area"] != null) {
-        return "#b76b80";
+        return "black";
       }
       if(feature.properties["generated_traversable_chunk"] === "yes") {
-        return "#ffcc00"
+        return "#cfffaf"
       }
       if(feature.properties["generated_blocked_chunk"] === "yes" || feature.properties["native_blocked_chunk"] === "yes") {
-        return "#808000"
+        return "#ffcc00"
       }
       return "none";
     },
@@ -221,11 +213,8 @@ function highZoomLaserMapStyle() {
     // called after areas were merged, before sorting of areas
     // gets full data and can freely edit it
     transformGeometryAtFinalStep(data_geojson, readableBounds) {
-      data_geojson = mapStyle.restrictPedestrianCrossingToRoadAreas(data_geojson);
-      data_geojson = mapStyle.floodSliversWithFootways(data_geojson);
       data_geojson = mapStyle.eraseFootwayWhereIntersectingRoad(data_geojson);
       data_geojson = mapStyle.eraseFootwayWhereIntersectingBuilding(data_geojson);
-      //TODO!!! data_geojson = mapStyle.applyPatternToRoadSurface(data_geojson);
       return data_geojson;
     },
 
@@ -233,10 +222,10 @@ function highZoomLaserMapStyle() {
       var roadArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_carriageway_layer");
       var footwayArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_footway");
       if (!isMultipolygonAsExpected(roadArea)) {
-        console.log(roadArea);
+        console.error(roadArea);
       }
       if (!isMultipolygonAsExpected(footwayArea)) {
-        console.log(footwayArea);
+        console.error(footwayArea);
       }
       footwayArea.geometry.coordinates = polygonClipping.difference(footwayArea.geometry.coordinates, roadArea.geometry.coordinates);
       return data_geojson;
@@ -246,27 +235,12 @@ function highZoomLaserMapStyle() {
       var buildingArea = mapStyle.findMergeGroupObject(data_geojson, "buildings");
       var footwayArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_footway");
       if (!isMultipolygonAsExpected(buildingArea)) {
-        console.log(buildingArea);
+        console.error(buildingArea);
       }
       if (!isMultipolygonAsExpected(footwayArea)) {
-        console.log(footwayArea);
+        console.error(footwayArea);
       }
       footwayArea.geometry.coordinates = polygonClipping.difference(footwayArea.geometry.coordinates, buildingArea.geometry.coordinates);
-      return data_geojson;
-    },
-
-    floodSliversWithFootways(data_geojson) {
-      var extraRoadArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_carriageway_layer_extra_size");
-      var footwayArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_footway");
-      var extraFootwayArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_footway_extra_size");
-      if (!isMultipolygonAsExpected(extraRoadArea)) {
-        console.log(extraRoadArea);
-      }
-      if (!isMultipolygonAsExpected(extraFootwayArea)) {
-        console.log(extraFootwayArea);
-      }
-      var intersectedGeometry = polygonClipping.intersection(extraFootwayArea.geometry.coordinates, extraRoadArea.geometry.coordinates);
-      footwayArea.geometry.coordinates = polygonClipping.union(footwayArea.geometry.coordinates, intersectedGeometry);
       return data_geojson;
     },
 
@@ -288,60 +262,6 @@ function highZoomLaserMapStyle() {
       return found;
     },
 
-    restrictPedestrianCrossingToRoadAreas(data_geojson) {
-      console.log(data_geojson);
-      var roadArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_carriageway_layer");
-      var crossingArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_crossing");
-      if (crossingArea === undefined) {
-        alert("no crossing areas (lines with footway=crossing) in range!");
-        return data_geojson;
-      }
-      if (roadArea === undefined) {
-        alert("no road areas (lines tagged with a proper highway=*) in range!");
-        crossingArea.geometry.coordinates = [];
-        return data_geojson;
-      }
-      crossingArea.geometry.coordinates = polygonClipping.intersection(crossingArea.geometry.coordinates, roadArea.geometry.coordinates);
-      return data_geojson;
-    },
-
-    applyPatternToRoadSurface(data_geojson) {
-      // applied pattern is set of square holes, regularly spaced in a grid
-      // it is intended to be used in a laser cutter that will burn are outside such exempt holes, producing a clear pattern
-      // repeating pattern on grid of size 1m seems to work well, with hole 40cm sized and burned are 60cm wide
-      // in created pattern it was 1mm for hole and 1.5 mm for space between giles
-
-      // Returns BBox bbox extent in [minX, minY, maxX, maxY] order
-      bbox = turf.bbox(data_geojson);
-      alert(JSON.stringify(bbox));
-      var from = turf.point([bbox[0], bbox[1]]); // turf.point(longitude, latitude, properties)
-      var to = turf.point([bbox[2], bbox[3]]);
-      var options = { units: "kilometers" };
-      var distance = turf.distance(from, to, options);
-      alert(disance);
-
-      const holeSizeInMeters = 0.4;
-      const spaceBetweenInMeters = 0.6;
-
-      // generate pattern for road surface by intersecting it with a prepared pattern
-      var i = data_geojson.features.length;
-      while (i--) {
-        var feature = data_geojson.features[i];
-        if (feature.properties["lunar_assembler_merge_group"] == "area:highway_carriageway_layer") {
-          if (isMultipolygonAsExpected(feature)) {
-            cloned = JSON.parse(JSON.stringify(feature));
-            cloned.geometry.coordinates = polygonClipping.intersection(cloned.geometry.coordinates, mapStyle.pattern().geometry.coordinates);
-            cloned.properties["lunar_assembler_cloned_for_pattern_fill"] = "yes";
-            console.log("cloned");
-            console.log(cloned);
-            console.log("cloned");
-            data_geojson.features.push(cloned);
-          }
-        }
-      }
-      return data_geojson;
-    },
-
     widthOfRoadGeometryInMeters(feature) {
       if (mapStyle.motorizedRoadValuesArray().includes(feature.properties["highway"])) {
         if (feature.properties["lanes"] != undefined) {
@@ -360,10 +280,10 @@ function highZoomLaserMapStyle() {
         return 5;
       }
       if (feature.properties["highway"] == "footway" || feature.properties["highway"] == "steps" || feature.properties["highway"] == "path" || feature.properties["highway"] == "steps") {
-        return 5;
+        return 3.5;
       }
       if (feature.properties["highway"] == "cycleway") {
-        return 2;
+        return 3.5;
       }
       return undefined;
     },
@@ -460,11 +380,10 @@ function highZoomLaserMapStyle() {
           if(mapStyle.isAreaMakingFreePedestrianMovementImpossible(feature)) {
               var freelyTraversableArea = polygonClipping.difference(freelyTraversableArea, feature.geometry.coordinates);
               feature.properties["native_blocked_chunk"] = "yes"
-            }
+          }
         }
-        console.warn(JSON.stringify({ type: "MultiPolygon", coordinates: freelyTraversableArea }))
-
-          var k = freelyTraversableArea.length;
+        //console.warn(JSON.stringify({ type: "MultiPolygon", coordinates: freelyTraversableArea }))
+        var k = freelyTraversableArea.length;
         while (k--) {
           const traversableChunk = {type: "Feature", geometry: { type: "Polygon", coordinates: freelyTraversableArea[k] }, properties: {}};
           var i = featuresGivingAccess.length;
@@ -523,22 +442,6 @@ function highZoomLaserMapStyle() {
             cloned.properties["area:highway"] = feature.properties["highway"];
             cloned.properties["area:highway_generated_automatically"] = "yes";
             generated.push(cloned);
-          }
-          {
-            if (feature.properties["service"] != "driveway" && feature.properties["service"] != "parking_aisle") {
-              // driveways are not allowed to produce footway halo around them
-              if (feature.properties["embankment"] != "yes") {
-                // hack, the proper solution would be to have separate groups for ones in embankment and not
-                if (feature.properties["tunnel"] != "yes") {
-                  // hack for now, likely separate matching group would be better
-                  var produced = turf.buffer(feature, (width / 2 / 1000) * 3 + 1 / 1000, { units: "kilometers" });
-                  var cloned = JSON.parse(JSON.stringify(produced));
-                  cloned.properties["area:highway_extra_size"] = feature.properties["highway"];
-                  cloned.properties["area:highway_generated_automatically"] = "yes";
-                  generated.push(cloned);
-                }
-              }
-            }
           }
         }
       }
