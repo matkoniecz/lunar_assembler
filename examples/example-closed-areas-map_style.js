@@ -219,8 +219,13 @@ function highZoomLaserMapStyle() {
     },
 
     eraseFootwayWhereIntersectingRoad(data_geojson) {
-      var roadArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_carriageway_layer");
-      var footwayArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_footway");
+      var complainIfMissing = false
+      var complainIfMissing = false
+      var roadArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_carriageway_layer", );
+      var footwayArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_footway", complainIfMissing);
+      if(roadArea == null || footwayArea == null) {
+        return data_geojson;
+      }
       if (!isMultipolygonAsExpected(roadArea)) {
         console.error(roadArea);
       }
@@ -232,8 +237,12 @@ function highZoomLaserMapStyle() {
     },
 
     eraseFootwayWhereIntersectingBuilding(data_geojson) {
-      var buildingArea = mapStyle.findMergeGroupObject(data_geojson, "buildings");
-      var footwayArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_footway");
+      var complainIfMissing = false
+      var buildingArea = mapStyle.findMergeGroupObject(data_geojson, "buildings", complainIfMissing);
+      var footwayArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_footway", complainIfMissing);
+      if(buildingArea == null || footwayArea == null) {
+        return data_geojson;
+      }
       if (!isMultipolygonAsExpected(buildingArea)) {
         console.error(buildingArea);
       }
@@ -244,7 +253,7 @@ function highZoomLaserMapStyle() {
       return data_geojson;
     },
 
-    findMergeGroupObject(data_geojson, code) {
+    findMergeGroupObject(data_geojson, code, complainIfMissing=true) {
       var i = data_geojson.features.length;
       var found = undefined;
       while (i--) {
@@ -256,8 +265,9 @@ function highZoomLaserMapStyle() {
           found = feature;
         }
       }
-      if (found == undefined) {
+      if (found == undefined && complainIfMissing) {
         alert("failed to find " + code + " - if not expected please report at https://github.com/matkoniecz/lunar_assembler/issues");
+        return null
       }
       return found;
     },
