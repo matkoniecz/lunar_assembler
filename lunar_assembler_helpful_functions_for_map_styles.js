@@ -82,7 +82,6 @@ function intersectGeometryWithHorizontalStripes(feature, stripeSizeInDegrees, di
         [minLongitude, minLatitudeForStripe],
       ];
       var stripe = [stripeRing];
-      console.warn(stripe);
       var intersectedStripe = polygonClipping.intersection(feature.geometry.coordinates, stripe);
       if (intersectedStripe != []) {
         collected.push(intersectedStripe);
@@ -148,9 +147,9 @@ function intersectGeometryWithHorizontalStripes(feature, stripeSizeInDegrees, di
     }
     var generatedVertical = polygonClipping.union(...collected);
     var generated = polygonClipping.union(generatedHorizontal, generatedVertical);
-    console.warn("road pattern follows");
-    console.warn(generated);
-    console.warn("road pattern above");
+    //console.warn("road pattern follows");
+    //console.warn(generated);
+    //console.warn("road pattern above");
 
     var cloned = JSON.parse(JSON.stringify(feature));
     cloned.geometry.coordinates = generated;

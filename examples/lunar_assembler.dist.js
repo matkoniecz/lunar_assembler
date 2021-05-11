@@ -266,12 +266,26 @@ function render(readableBounds, data_geojson, width, height, mapStyle, outputHol
   if ("transformGeometryAsInitialStep" in mapStyle) {
     data_geojson = mapStyle.transformGeometryAsInitialStep(data_geojson, readableBounds);
   }
+  validateGeometries(data_geojson)
   data_geojson = clipGeometries(readableBounds, data_geojson);
   data_geojson = mergeAsRequestedByMapStyle(data_geojson, mapStyle);
   if ("transformGeometryAtFinalStep" in mapStyle) {
     data_geojson = mapStyle.transformGeometryAtFinalStep(data_geojson, readableBounds);
   }
   renderUsingD3(readableBounds, data_geojson, width, height, mapStyle, outputHolderId);
+}
+
+function validateGeometries(data_geojson) {
+  var i = data_geojson.features.length;
+  while (i--) {
+    var feature = data_geojson.features[i];
+    if(feature.geometry == undefined) {
+      var warning = "broken feature, geometry is missing!"
+      alert(warning + JSON.stringify(feature))
+      console.warn(warning)
+      console.warn(feature)
+    }
+  }
 }
 
 function mergeAsRequestedByMapStyle(data_geojson, mapStyle) {
@@ -595,7 +609,6 @@ function intersectGeometryWithHorizontalStripes(feature, stripeSizeInDegrees, di
         [minLongitude, minLatitudeForStripe],
       ];
       var stripe = [stripeRing];
-      console.warn(stripe);
       var intersectedStripe = polygonClipping.intersection(feature.geometry.coordinates, stripe);
       if (intersectedStripe != []) {
         collected.push(intersectedStripe);
@@ -661,9 +674,9 @@ function intersectGeometryWithHorizontalStripes(feature, stripeSizeInDegrees, di
     }
     var generatedVertical = polygonClipping.union(...collected);
     var generated = polygonClipping.union(generatedHorizontal, generatedVertical);
-    console.warn("road pattern follows");
-    console.warn(generated);
-    console.warn("road pattern above");
+    //console.warn("road pattern follows");
+    //console.warn(generated);
+    //console.warn("road pattern above");
 
     var cloned = JSON.parse(JSON.stringify(feature));
     cloned.geometry.coordinates = generated;

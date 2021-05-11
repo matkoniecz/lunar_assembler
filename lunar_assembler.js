@@ -258,12 +258,26 @@ function render(readableBounds, data_geojson, width, height, mapStyle, outputHol
   if ("transformGeometryAsInitialStep" in mapStyle) {
     data_geojson = mapStyle.transformGeometryAsInitialStep(data_geojson);
   }
+  validateGeometries(data_geojson)
   data_geojson = clipGeometries(readableBounds, data_geojson);
   data_geojson = mergeAsRequestedByMapStyle(data_geojson, mapStyle);
   if ("transformGeometryAtFinalStep" in mapStyle) {
     data_geojson = mapStyle.transformGeometryAtFinalStep(data_geojson);
   }
   renderUsingD3(readableBounds, data_geojson, width, height, mapStyle, outputHolderId);
+}
+
+function validateGeometries(data_geojson) {
+  var i = data_geojson.features.length;
+  while (i--) {
+    var feature = data_geojson.features[i];
+    if(feature.geometry == undefined) {
+      var warning = "broken feature, geometry is missing!"
+      alert(warning + JSON.stringify(feature))
+      console.warn(warning)
+      console.warn(feature)
+    }
+  }
 }
 
 function mergeAsRequestedByMapStyle(data_geojson, mapStyle) {
