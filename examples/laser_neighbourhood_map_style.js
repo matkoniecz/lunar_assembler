@@ -114,6 +114,15 @@ function highZoomLaserMapStyle() {
       if (feature.properties["natural"] === "water" || feature.properties["waterway"] === "riverbank") {
         return "blue";
       }
+      if (feature.properties["generated_barrier_area"] != null) {
+        return "#b76b80";
+      }
+      if(feature.properties["generated_traversable_chunk"] === "yes") {
+        return "#ffcc00"
+      }
+      if(feature.properties["generated_blocked_chunk"] === "yes") {
+        return "#808000"
+      }
       return "none";
     },
 
@@ -185,6 +194,9 @@ function highZoomLaserMapStyle() {
       if (feature.properties["natural"] === "water" || feature.properties["waterway"] === "riverbank") {
         return "water";
       }
+      if (feature.properties["generated_barrier_area"] != null) {
+        return "generated_barrier_area";
+      }
       return null;
     },
 
@@ -192,16 +204,18 @@ function highZoomLaserMapStyle() {
       return feature.properties.name;
     },
 
-    // called after areas were merged, before sorting of areas
+    // called before merges
     // gets full data and can freely edit it
-    transformGeometryAsInitialStep(data_geojson) {
+    transformGeometryAsInitialStep(data_geojson, readableBounds) {
+      data_geojson = mapStyle.generateAreasFromBarriers(data_geojson);
       data_geojson = mapStyle.generateAreasFromRoadLines(data_geojson);
+      data_geojson = mapStyle.generateRestrictedAcccessArea(data_geojson, readableBounds);
       return data_geojson;
     },
 
     // called after areas were merged, before sorting of areas
     // gets full data and can freely edit it
-    transformGeometryAtFinalStep(data_geojson) {
+    transformGeometryAtFinalStep(data_geojson, readableBounds) {
       data_geojson = mapStyle.restrictPedestrianCrossingToRoadAreas(data_geojson);
       data_geojson = mapStyle.floodSliversWithFootways(data_geojson);
       data_geojson = mapStyle.eraseFootwayWhereIntersectingRoad(data_geojson);
@@ -347,6 +361,133 @@ function highZoomLaserMapStyle() {
         return 2;
       }
       return undefined;
+    },
+
+    isAccessValueRestrictive(value) {
+      if(value == "no") {
+        return true;
+      }
+      if(value == "private") {
+        return true;
+      }
+      if(value == "customers") {
+        return true;
+      }
+      return false;
+    },
+
+    isAreaMakingFreePedestrianMovementImpossible(feature) {
+      if(feature.properties["generated_barrier_area"] != null) {
+        return true;
+      }
+      if(feature.properties["natural"] == "water" || feature.properties["waterway"] == "riverbank") {
+        return true;
+      }
+      if(feature.properties["building"] != null) {
+        return true;
+      }
+      if(feature.properties["area:highway"] && feature.properties["foot"] == "no") {
+        return true;
+      }
+      if(mapStyle.isAccessValueRestrictive(feature.properties["access"]) && feature.properties["amenity"] != "parking") {
+        if(feature.properties["foot"]==null || mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
+          return true;
+        }
+      }
+      return false;
+    },
+
+    isFeatureMakingFreePedestrianMovementPossible(feature) {
+      if(mapStyle.motorizedRoadValuesArray().includes(feature.properties["highway"]) || ["footway", "pedestrian", "path", "steps", "cycleway"].includes(feature.properties["highway"])) {
+        if(mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
+          return false;
+        }
+        if(feature.properties["highway"] == "motorway" && feature.properties["foot"] == null) {
+          // assume no for motorways, but do not discard them completely: some can be walked on foot (yes really)
+          return false;
+        }
+        if(!mapStyle.isAccessValueRestrictive(feature.properties["access"]) && !mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
+          return true;
+        }
+        if(mapStyle.isAccessValueRestrictive(feature.properties["access"])) {
+          if(feature.properties["foot"]!=null && !mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+        alert("Should be impossible [isFeatureMakingFreePedestrianMovementPossible for " + JSON.stringify(feature) + "], please report bug to https://github.com/matkoniecz/lunar_assembler")
+      }
+    },
+
+    generateRestrictedAcccessArea(geojson, readableBounds) {
+        var entreAreaRing = [
+          [readableBounds["east"], readableBounds["south"]],
+          [readableBounds["west"], readableBounds["south"]],
+          [readableBounds["west"], readableBounds["north"]],
+          [readableBounds["east"], readableBounds["north"]],
+          [readableBounds["east"], readableBounds["south"]],
+        ];
+        var entireArea = [entreAreaRing];
+        var freelyTraversableArea = entireArea
+        generated = [];
+        featuresGivingAccess = []
+        var i = geojson.features.length;
+        while (i--) {
+          var feature = geojson.features[i];
+          const link = "https://www.openstreetmap.org/" + feature.id;
+          if(feature.geometry.type != "Polygon" && feature.geometry.type != "MultiPolygon") {
+            continue
+          }
+          if(mapStyle.isAreaMakingFreePedestrianMovementImpossible(feature)) {
+              var freelyTraversableArea = polygonClipping.difference(freelyTraversableArea, feature.geometry.coordinates);
+          }
+          if(mapStyle.isFeatureMakingFreePedestrianMovementPossible(feature)) {
+            featuresGivingAccess.push(feature);
+          }
+        }
+        console.warn(JSON.stringify({ type: "MultiPolygon", coordinates: freelyTraversableArea }))
+        var k = freelyTraversableArea.length;
+        while (k--) {
+          const traversableChunk = {type: "Feature", geometry: { type: "Polygon", coordinates: freelyTraversableArea[k] }, properties: {}};
+          var i = featuresGivingAccess.length;
+          while (i--) {
+            const accessGivingFeature = featuresGivingAccess[i]
+
+           if(turf.lineIntersect(traversableChunk, accessGivingFeature).features.length != 0) {
+            traversableChunk.properties["generated_traversable_chunk"] = "yes"
+             break;
+           }
+          }
+          if(traversableChunk.properties["generated_traversable_chunk"] != "yes") {
+            traversableChunk.properties["generated_blocked_chunk"] = "yes"
+          }
+          //alert(JSON.stringify(traversableChunk))
+          geojson.features.push(traversableChunk);
+        }
+        return geojson;
+    },
+
+    generateAreasFromBarriers(geojson) {
+      generated = [];
+      var i = geojson.features.length;
+      while (i--) {
+        var feature = geojson.features[i];
+        const link = "https://www.openstreetmap.org/" + feature.id;
+
+        if(["fence", "wall", "hedge", "retaining_wall", "hedge_bank", "wire_fence"].includes(feature.properties["barrier"])) {
+          var produced = turf.buffer(feature, 0.1 / 1000, { units: "kilometers" });
+          var cloned = JSON.parse(JSON.stringify(produced));
+          cloned.properties["generated_barrier_area"] = feature.properties["barrier"];
+          generated.push(cloned);
+        }
+      }
+
+      var k = generated.length;
+      while (k--) {
+        geojson.features.push(generated[k]);
+      }
+      return geojson;
     },
 
     generateAreasFromRoadLines(geojson) {

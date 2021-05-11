@@ -256,13 +256,13 @@ function rewind(geojson_that_is_7946_compliant_with_right_hand_winding_order) {
 
 function render(readableBounds, data_geojson, width, height, mapStyle, outputHolderId) {
   if ("transformGeometryAsInitialStep" in mapStyle) {
-    data_geojson = mapStyle.transformGeometryAsInitialStep(data_geojson);
+    data_geojson = mapStyle.transformGeometryAsInitialStep(data_geojson, readableBounds);
   }
   validateGeometries(data_geojson)
   data_geojson = clipGeometries(readableBounds, data_geojson);
   data_geojson = mergeAsRequestedByMapStyle(data_geojson, mapStyle);
   if ("transformGeometryAtFinalStep" in mapStyle) {
-    data_geojson = mapStyle.transformGeometryAtFinalStep(data_geojson);
+    data_geojson = mapStyle.transformGeometryAtFinalStep(data_geojson, readableBounds);
   }
   renderUsingD3(readableBounds, data_geojson, width, height, mapStyle, outputHolderId);
 }

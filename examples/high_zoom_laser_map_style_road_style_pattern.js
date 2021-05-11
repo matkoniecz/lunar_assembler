@@ -235,14 +235,14 @@ function highZoomLaserMapStyle() {
       return feature.properties.name;
     },
 
-    transformGeometryAsInitialStep(data_geojson) {
+    transformGeometryAsInitialStep(data_geojson, readableBounds) {
       data_geojson = mapStyle.programaticallyGenerateSymbolicStepParts(data_geojson);
       return data_geojson;
     },
 
     // called after areas were merged, before sorting of areas
     // gets full data and can freely edit it
-    transformGeometryAtFinalStep(data_geojson) {
+    transformGeometryAtFinalStep(data_geojson, readableBounds) {
       data_geojson = mapStyle.applyPatternsToCarriagewaysAndWater(data_geojson);
       return data_geojson;
     },
