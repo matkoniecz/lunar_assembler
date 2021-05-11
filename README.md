@@ -16,13 +16,17 @@ Code used to run mentioned example can be found in example folder.
 
 ## Published
 
-[dev version served from this repo](https://matkoniecz.github.io/lunar_assembler/examples/dev.html)
+[dev version pf basic high-zoom map style](https://matkoniecz.github.io/lunar_assembler/examples/dev.html)
 
-dev version of a laser map styles are also served from this repo
+[map with classification for public and private areas, using mapped fences, walls, footways and roads](https://matkoniecz.github.io/lunar_assembler/examples/example-closed-areas.html)
+
+### For making 3D tactile maps for blind
 
 [ultra-high zoom style relying on area:highway, for showing a single crossing](https://matkoniecz.github.io/lunar_assembler/examples/dev-laser-road-style-pattern.html)
 
 [high zoom map style for showing neighbourhood, with some attempts to automatically simplify data, no need for area:highway](https://matkoniecz.github.io/lunar_assembler/examples/dev-laser-neighbourhood.html)
+
+### Use on other sites
 
 [current release and (for now only known use of it)](https://mapsaregreat.com/osm_to_svg_in_browser/)
 
