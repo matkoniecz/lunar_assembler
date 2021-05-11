@@ -406,6 +406,16 @@ function highZoomLaserMapStyle() {
           // assume no for motorways, but do not discard them completely: some can be walked on foot (yes really)
           return false;
         }
+        if(feature.properties["highway"] == "service" && feature.properties["service"] == "driveway") {
+          if(feature.properties["foot"] != null  && !mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
+            return true;
+          }
+          if(feature.properties["access"] != null  && !mapStyle.isAccessValueRestrictive(feature.properties["access"])) {
+            return true;
+          }
+          return false; // assume false for driveways
+        }
+        
         if(!mapStyle.isAccessValueRestrictive(feature.properties["access"]) && !mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
           return true;
         }
