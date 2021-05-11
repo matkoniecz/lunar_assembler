@@ -58,10 +58,13 @@ function highZoomLaserMapStyle() {
           return -1000;
         }
         if (feature.properties["area:generated_blocked_chunk"] != undefined) {
-          return -1000;
+          return -900;
         }
         if (feature.properties["area:native_blocked_chunk"] != undefined) {
-          return -1000;
+          return -900;
+        }
+        if (feature.properties["area:highway_extra_size"] != undefined || feature.properties["lunar_assembler_merge_group"] == "highway_carriageway_layer") {
+          return -800
         }
         return 0;
     },
@@ -72,7 +75,7 @@ function highZoomLaserMapStyle() {
         // and leaves ugly circles - see building=* nodes
         return "none";
       }
-      console.log(feature);
+      //console.log(feature);
       if (feature.properties["lunar_assembler_cloned_for_pattern_fill"] == "yes") {
         return "black";
       }
@@ -91,7 +94,8 @@ function highZoomLaserMapStyle() {
       if (feature.properties["building"] != null) {
         return "#603006";
       }
-      if (mapStyle.motorizedRoadValuesArray().includes(feature.properties["area:highway"]) || feature.properties["area:highway"] === "bicycle_crossing") {
+      if (mapStyle.motorizedRoadValuesArray().includes(feature.properties["area:highway"]) || feature.properties["area:highway"] === "bicycle_crossing"
+      || feature.properties["lunar_assembler_merge_group"] == "highway_carriageway_layer") {
         return "gray";
       }
 
@@ -123,7 +127,7 @@ function highZoomLaserMapStyle() {
         return "#b76b80";
       }
       if(feature.properties["generated_traversable_chunk"] === "yes") {
-        return "#ffcc00"
+        //return "#ffcc00"
       }
       if(feature.properties["generated_blocked_chunk"] === "yes" || feature.properties["native_blocked_chunk"] === "yes") {
         return "#808000"
