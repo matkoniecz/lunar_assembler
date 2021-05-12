@@ -207,6 +207,14 @@ function highZoomLaserMapStyle() {
       if (feature.properties["generated_barrier_area"] != null) {
         return "generated_barrier_area";
       }
+      if (feature.properties["generated_blocked_chunk"] != null) {
+        return "generated_blocked_chunk";
+      }
+      if (feature.properties["generated_traversable_chunk"] != null) {
+        return "generated_traversable_chunk";
+      }
+      
+      
       return null;
     },
 
@@ -227,10 +235,42 @@ function highZoomLaserMapStyle() {
     // gets full data and can freely edit it
     transformGeometryAtFinalStep(data_geojson, readableBounds) {
       data_geojson = mapStyle.restrictPedestrianCrossingToRoadAreas(data_geojson);
+      data_geojson = mapStyle.eraseCrossingAreasFromRoads(data_geojson);
       data_geojson = mapStyle.floodSliversWithFootways(data_geojson);
       data_geojson = mapStyle.eraseFootwayWhereIntersectingRoad(data_geojson);
       data_geojson = mapStyle.eraseFootwayWhereIntersectingBuilding(data_geojson);
+      data_geojson = mapStyle.eraseFootwayWhereIntersectingPrivateArea(data_geojson);
       data_geojson = mapStyle.applyPatternsToCarriagewaysAndWater(data_geojson);
+      return data_geojson;
+    },
+
+    restrictPedestrianCrossingToRoadAreas(data_geojson) {
+      console.log(data_geojson);
+      var roadArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_carriageway_layer");
+      var crossingArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_crossing");
+      if (crossingArea === undefined) {
+        alert("no crossing areas (lines with footway=crossing) in range!");
+        return data_geojson;
+      }
+      if (roadArea === undefined) {
+        alert("no road areas (lines tagged with a proper highway=*) in range!");
+        crossingArea.geometry.coordinates = [];
+        return data_geojson;
+      }
+      crossingArea.geometry.coordinates = polygonClipping.intersection(crossingArea.geometry.coordinates, roadArea.geometry.coordinates);
+      return data_geojson;
+    },
+
+    eraseCrossingAreasFromRoads(data_geojson) {
+      var roadArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_carriageway_layer");
+      var crossingArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_crossing");
+      if (!isMultipolygonAsExpected(roadArea)) {
+        console.log(roadArea);
+      }
+      if (!isMultipolygonAsExpected(crossingArea)) {
+        console.log(crossingArea);
+      }
+      roadArea.geometry.coordinates = polygonClipping.difference(roadArea.geometry.coordinates, crossingArea.geometry.coordinates);
       return data_geojson;
     },
 
@@ -257,6 +297,19 @@ function highZoomLaserMapStyle() {
         console.log(footwayArea);
       }
       footwayArea.geometry.coordinates = polygonClipping.difference(footwayArea.geometry.coordinates, buildingArea.geometry.coordinates);
+      return data_geojson;
+    },
+
+    eraseFootwayWhereIntersectingPrivateArea(data_geojson) {
+      var blockedArea = mapStyle.findMergeGroupObject(data_geojson, "generated_blocked_chunk");
+      var footwayArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_footway");
+      if (!isMultipolygonAsExpected(blockedArea)) {
+        console.log(blockedArea);
+      }
+      if (!isMultipolygonAsExpected(footwayArea)) {
+        console.log(footwayArea);
+      }
+      footwayArea.geometry.coordinates = polygonClipping.difference(footwayArea.geometry.coordinates, blockedArea.geometry.coordinates);
       return data_geojson;
     },
 
@@ -293,28 +346,11 @@ function highZoomLaserMapStyle() {
       return found;
     },
 
-    restrictPedestrianCrossingToRoadAreas(data_geojson) {
-      console.log(data_geojson);
-      var roadArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_carriageway_layer");
-      var crossingArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_crossing");
-      if (crossingArea === undefined) {
-        alert("no crossing areas (lines with footway=crossing) in range!");
-        return data_geojson;
-      }
-      if (roadArea === undefined) {
-        alert("no road areas (lines tagged with a proper highway=*) in range!");
-        crossingArea.geometry.coordinates = [];
-        return data_geojson;
-      }
-      crossingArea.geometry.coordinates = polygonClipping.intersection(crossingArea.geometry.coordinates, roadArea.geometry.coordinates);
-      return data_geojson;
-    },
-
     widthOfRoadGeometryInMeters(feature) {
       if (mapStyle.motorizedRoadValuesArray().includes(feature.properties["highway"])) {
         if (feature.properties["lanes"] != undefined) {
           // in case of lanes==1 it is likely that it is wide anyway due to parking lanes
-          // sypporting rhem would allow to drop this exception
+          // supporting them would allow to drop this exception
           if (feature.properties["lanes"] != 1) {
             return feature.properties["lanes"] * 2.5;
           }
