@@ -230,7 +230,7 @@ function highZoomLaserMapStyle() {
       data_geojson = mapStyle.floodSliversWithFootways(data_geojson);
       data_geojson = mapStyle.eraseFootwayWhereIntersectingRoad(data_geojson);
       data_geojson = mapStyle.eraseFootwayWhereIntersectingBuilding(data_geojson);
-      //TODO!!! data_geojson = mapStyle.applyPatternToRoadSurface(data_geojson);
+      data_geojson = mapStyle.applyPatternsToCarriagewaysAndWater(data_geojson);
       return data_geojson;
     },
 
@@ -307,43 +307,6 @@ function highZoomLaserMapStyle() {
         return data_geojson;
       }
       crossingArea.geometry.coordinates = polygonClipping.intersection(crossingArea.geometry.coordinates, roadArea.geometry.coordinates);
-      return data_geojson;
-    },
-
-    applyPatternToRoadSurface(data_geojson) {
-      // applied pattern is set of square holes, regularly spaced in a grid
-      // it is intended to be used in a laser cutter that will burn are outside such exempt holes, producing a clear pattern
-      // repeating pattern on grid of size 1m seems to work well, with hole 40cm sized and burned are 60cm wide
-      // in created pattern it was 1mm for hole and 1.5 mm for space between giles
-
-      // Returns BBox bbox extent in [minX, minY, maxX, maxY] order
-      bbox = turf.bbox(data_geojson);
-      alert(JSON.stringify(bbox));
-      var from = turf.point([bbox[0], bbox[1]]); // turf.point(longitude, latitude, properties)
-      var to = turf.point([bbox[2], bbox[3]]);
-      var options = { units: "kilometers" };
-      var distance = turf.distance(from, to, options);
-      alert(disance);
-
-      const holeSizeInMeters = 0.4;
-      const spaceBetweenInMeters = 0.6;
-
-      // generate pattern for road surface by intersecting it with a prepared pattern
-      var i = data_geojson.features.length;
-      while (i--) {
-        var feature = data_geojson.features[i];
-        if (feature.properties["lunar_assembler_merge_group"] == "area:highway_carriageway_layer") {
-          if (isMultipolygonAsExpected(feature)) {
-            cloned = JSON.parse(JSON.stringify(feature));
-            cloned.geometry.coordinates = polygonClipping.intersection(cloned.geometry.coordinates, mapStyle.pattern().geometry.coordinates);
-            cloned.properties["lunar_assembler_cloned_for_pattern_fill"] = "yes";
-            console.log("cloned");
-            console.log(cloned);
-            console.log("cloned");
-            data_geojson.features.push(cloned);
-          }
-        }
-      }
       return data_geojson;
     },
 
@@ -554,6 +517,73 @@ function highZoomLaserMapStyle() {
       }
       return geojson;
     },
+
+
+    applyPatternsToCarriagewaysAndWater(data_geojson) {
+      // applied pattern is set of square holes, regularly spaced in a grid
+      // it is intended to be used in a laser cutter that will burn are outside such exempt holes, producing a clear pattern
+      // repeating pattern on grid of size 1m seems to work well, with hole 40cm sized and burned are 60cm wide
+      // in created pattern it was 1mm for hole and 1.5 mm for space between giles
+
+      // Returns BBox bbox extent in [minX, minY, maxX, maxY] order
+      var kilometers = { units: "kilometers" };
+
+      bbox = turf.bbox(data_geojson);
+      var minLongitude = bbox[0];
+      var minLatitude = bbox[1];
+      var maxLongitude = bbox[2];
+      var maxLatitude = bbox[3];
+      var from = turf.point([bbox[0], bbox[1]]); // turf.point(longitude, latitude, properties)
+      var to = turf.point([bbox[2], bbox[3]]);
+      var distanceInMeters = turf.distance(from, to, kilometers) * 1000;
+
+      var from_horizontal = turf.point([minLongitude, minLatitude]); // turf.point(longitude, latitude, properties)
+      var to_horizontal = turf.point([maxLongitude, minLatitude]);
+      var distanceHorizontalInMeters = 1000 * turf.distance(from_horizontal, to_horizontal, kilometers);
+      var distanceHorizontalInDegrees = maxLongitude - minLongitude;
+      var metersInDegreeHorizontal = distanceHorizontalInMeters / distanceHorizontalInDegrees;
+
+      var from_vertical = turf.point([minLongitude, minLatitude]); // turf.point(longitude, latitude, properties)
+      var to_vertical = turf.point([minLongitude, maxLatitude]);
+      var distanceVerticalInMeters = 1000 * turf.distance(from_vertical, to_vertical, kilometers);
+      var distanceVerticalInDegrees = maxLatitude - minLatitude;
+      var metersInDegreeVertical = distanceVerticalInMeters / distanceVerticalInDegrees;
+
+      const roadHoleSizeInMeters = 0.5;
+      const holeVerticalInMeters = roadHoleSizeInMeters;
+      const holeHorizontalInMeters = roadHoleSizeInMeters;
+      const roadSpaceBetweenInMeters = 0.75;
+      const spaceVerticalInMeters = roadSpaceBetweenInMeters;
+      const spaceHorizontalInMeters = roadSpaceBetweenInMeters;
+
+      const waterSpaceBetweenRowsInMeters = 0.9;
+      const waterRowSizeInMeters = 0.9;
+
+      // generate pattern for road surface by intersecting it with a prepared pattern
+      var i = data_geojson.features.length;
+      while (i--) {
+        var feature = data_geojson.features[i];
+        if (feature.properties["lunar_assembler_merge_group"] == "water") {
+          var generated = intersectGeometryWithHorizontalStripes(feature, waterRowSizeInMeters / metersInDegreeHorizontal, waterSpaceBetweenRowsInMeters / metersInDegreeHorizontal);
+          generated.properties["lunar_assembler_cloned_for_pattern_fill"] = "yes";
+          data_geojson.features.push(generated); // added at the ned, and iterating from end to 0 so will not trigger infinite loop
+        }
+        console.warn(feature.properties["lunar_assembler_merge_group"]);
+        if (feature.properties["lunar_assembler_merge_group"] == "area:highway_carriageway_layer") {
+          var generated = intersectGeometryWithPlaneHavingRectangularHoles(
+            feature,
+            holeVerticalInMeters / metersInDegreeVertical,
+            holeHorizontalInMeters / metersInDegreeHorizontal,
+            spaceVerticalInMeters / metersInDegreeVertical,
+            spaceHorizontalInMeters / metersInDegreeHorizontal
+          );
+          generated.properties["lunar_assembler_cloned_for_pattern_fill"] = "yes";
+          data_geojson.features.push(generated); // added at the ned, and iterating from end to 0 so will not trigger infinite loop
+        }
+      }
+      return data_geojson;
+    },
+
   };
   return mapStyle;
 }
