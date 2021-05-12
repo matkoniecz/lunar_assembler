@@ -160,7 +160,8 @@ function highZoomLaserMapStyle() {
       if (
         mapStyle.motorizedRoadValuesArray().includes(feature.properties["area:highway"]) ||
         feature.properties["area:highway"] === "bicycle_crossing" ||
-        feature.properties["area:highway"] === "cycleway"
+        feature.properties["area:highway"] === "cycleway" ||
+        feature.properties["amenity"] === "parking_space"
       ) {
         return "area:highway_carriageway_layer";
       }
