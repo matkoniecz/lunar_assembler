@@ -320,7 +320,7 @@ function highZoomLaserMapStyle() {
           }
         }
         if (feature.properties["highway"] == "service" && ["driveway", "parking_aisle"].includes(feature.properties["service"])) {
-          return 2.0;
+          return undefined;
         }
         if (feature.properties["highway"] == "service") {
           return 2.0;
