@@ -16,13 +16,15 @@ Code used to run mentioned example can be found in example folder.
 
 ## Published
 
-[dev version pf basic high-zoom map style](https://matkoniecz.github.io/lunar_assembler/examples/dev.html)
+Demonstration of [basic high-zoom map style](https://matkoniecz.github.io/lunar_assembler/examples/dev.html)
 
-[map with classification for public and private areas, using mapped fences, walls, footways and roads](https://matkoniecz.github.io/lunar_assembler/examples/example-closed-areas.html)
+[Map style classifying areas into public and private](https://matkoniecz.github.io/lunar_assembler/examples/example-closed-areas.html). Done using mapped fences, walls, footways and roads.
 
 ### For making 3D tactile maps for blind
 
-[ultra-high zoom style relying on area:highway, for showing a single crossing](https://matkoniecz.github.io/lunar_assembler/examples/dev-laser-road-style-pattern.html)
+This map styles were used to produce maps for blind.
+
+[Ultra-high zoom map for showing a single crossing](https://matkoniecz.github.io/lunar_assembler/examples/dev-laser-road-style-pattern.html), relying on area:highway
 
 [high zoom map style for showing neighbourhood, with some attempts to automatically simplify data, no need for area:highway](https://matkoniecz.github.io/lunar_assembler/examples/dev-laser-neighbourhood.html)
 
