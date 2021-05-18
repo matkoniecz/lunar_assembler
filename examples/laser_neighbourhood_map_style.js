@@ -76,9 +76,6 @@ function highZoomLaserMapStyle() {
         return "none";
       }
       //console.log(feature);
-      if (feature.properties["lunar_assembler_cloned_for_pattern_fill"] == "yes") {
-        return "black";
-      }
       if (feature.properties["lunar_assembler_step_segment"] == "0") {
         return "#400080";
       }
@@ -96,7 +93,10 @@ function highZoomLaserMapStyle() {
       }
       if (mapStyle.motorizedRoadValuesArray().includes(feature.properties["area:highway"]) || feature.properties["area:highway"] === "bicycle_crossing"
       || feature.properties["lunar_assembler_merge_group"] == "highway_carriageway_layer") {
-        return "gray";
+        if (feature.properties["lunar_assembler_cloned_for_pattern_fill"] == "yes") {
+          return "gray";
+        }
+        return "black";
       }
 
       if (mapStyle.motorizedRoadValuesArray().includes(feature.properties["area:highway_extra_size"]) || feature.properties["area:highway_extra_size"] === "bicycle_crossing") {
@@ -121,8 +121,12 @@ function highZoomLaserMapStyle() {
       }
 
       if (feature.properties["natural"] === "water" || feature.properties["waterway"] === "riverbank") {
+        if (feature.properties["lunar_assembler_cloned_for_pattern_fill"] == "yes") {
+          return "#00FFFF";
+        }
         return "blue";
       }
+      
       if (feature.properties["generated_barrier_area"] != null) {
         return "#b76b80";
       }

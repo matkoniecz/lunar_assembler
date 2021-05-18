@@ -156,9 +156,9 @@ function highZoomLaserMapStyle() {
       if (mapStyle.motorizedRoadValuesArray().includes(feature.properties["area:highway"]) || feature.properties["area:highway"] === "bicycle_crossing"
       || feature.properties["lunar_assembler_merge_group"] == "area:highway_carriageway_layer" ) {
         if (feature.properties["lunar_assembler_cloned_for_pattern_fill"] == "yes") {
-          return "black";
+          return "gray";
         }
-        return "gray";
+        return "black";
       }
       if (
         ["footway", "pedestrian", "path"].includes(feature.properties["area:highway"]) ||
@@ -171,9 +171,9 @@ function highZoomLaserMapStyle() {
       }
       if (feature.properties["natural"] === "water" || feature.properties["waterway"] === "riverbank") {
         if (feature.properties["lunar_assembler_cloned_for_pattern_fill"] == "yes") {
-          return "blue";
+          return "#00FFFF";
         }
-        return "#afeeee";
+        return "blue";
       }
       return "none";
     },
