@@ -513,8 +513,8 @@ function highZoomLaserMapStyle() {
       const spaceVerticalInMeters = roadSpaceBetweenInMeters;
       const spaceHorizontalInMeters = roadSpaceBetweenInMeters;
 
-      const waterSpaceBetweenRowsInMeters = 0.6;
-      const waterRowSizeInMeters = 0.6;
+      const waterSpaceBetweenRowsInMeters = 0.3;
+      const waterRowSizeInMeters = 0.3;
 
       // generate pattern for road surface by intersecting it with a prepared pattern
       var i = data_geojson.features.length;
