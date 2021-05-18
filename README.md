@@ -22,7 +22,7 @@ Demonstration of [basic high-zoom map style](https://matkoniecz.github.io/lunar_
 
 ### For making 3D tactile maps for blind
 
-This map styles were used to produce maps for blind.
+This map styles are designed for used in a laser cutter, to produce maps for blind.
 
 [Ultra-high zoom map for showing a single crossing](https://matkoniecz.github.io/lunar_assembler/examples/dev-laser-road-style-pattern.html), relying on area:highway
 
