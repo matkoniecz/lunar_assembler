@@ -73,6 +73,14 @@ function highZoomLaserMapStyle() {
         }
       }
 
+      if (feature.properties["lunar_assembler_step_segment"] != null) {
+        var priority = 0.999;
+        return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
+      }
+
+      // further standard layering, even if most is not applicable
+      // TODO: prune it? delete it? put water/buildings on top to
+      // make mistakes more noticeable?
       if (mapStyle.railwayLinearValuesArray().includes(feature.properties["railway"])) {
         var priority = 0.99;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
@@ -148,6 +156,10 @@ function highZoomLaserMapStyle() {
         return "#ff0000";
       }
       if (feature.properties["lunar_assembler_step_segment"] == "3") {
+        return "#D33F6A";
+      }
+      if (feature.properties["area:highway"] == "steps") {
+        // entire area of steps
         return "orange";
       }
       if (feature.properties["building"] != null) {
