@@ -54,13 +54,13 @@ function highZoomLaserMapStyle() {
 
     paintOrder(feature) {
       // extra sizes go under to not block main data
-        if (feature.properties["area:generated_traversable_chunk"] != undefined) {
+        if (feature.properties["generated_traversable_chunk"] != undefined) {
           return -1000;
         }
-        if (feature.properties["area:generated_blocked_chunk"] != undefined) {
+        if (feature.properties["generated_blocked_chunk"] != undefined) {
           return -900;
         }
-        if (feature.properties["area:native_blocked_chunk"] != undefined) {
+        if (feature.properties["native_blocked_chunk"] != undefined) {
           return -900;
         }
         if (feature.properties["area:highway_extra_size"] != undefined || feature.properties["lunar_assembler_merge_group"] == "highway_carriageway_layer") {
