@@ -163,7 +163,7 @@ function highZoomLaserMapStyle() {
         return "orange";
       }
       if (feature.properties["building"] != null) {
-        return "#603006";
+        return "#B45A00";
       }
       if (mapStyle.motorizedRoadValuesArray().includes(feature.properties["area:highway"]) || feature.properties["area:highway"] === "bicycle_crossing"
       || feature.properties["lunar_assembler_merge_group"] == "area:highway_carriageway_layer" ) {

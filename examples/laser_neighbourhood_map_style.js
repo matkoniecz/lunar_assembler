@@ -89,7 +89,7 @@ function highZoomLaserMapStyle() {
         return "#FFFF00";
       }
       if (feature.properties["building"] != null) {
-        return "#603006";
+        return "#B45A00";
       }
       if (mapStyle.motorizedRoadValuesArray().includes(feature.properties["area:highway"]) || feature.properties["area:highway"] === "bicycle_crossing"
       || feature.properties["lunar_assembler_merge_group"] == "highway_carriageway_layer") {
