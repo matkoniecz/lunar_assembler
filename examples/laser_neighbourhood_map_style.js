@@ -211,7 +211,7 @@ function highZoomLaserMapStyle() {
       if (feature.properties["generated_barrier_area"] != null) {
         return "generated_barrier_area";
       }
-      if (feature.properties["generated_blocked_chunk"] != null) {
+      if (feature.properties["generated_blocked_chunk"] != null || feature.properties["native_blocked_chunk"] != null) {
         return "generated_blocked_chunk";
       }
       if (feature.properties["generated_traversable_chunk"] != null) {
@@ -511,7 +511,12 @@ function highZoomLaserMapStyle() {
           }
           if(mapStyle.isAreaMakingFreePedestrianMovementImpossible(feature)) {
               var freelyTraversableArea = polygonClipping.difference(freelyTraversableArea, feature.geometry.coordinates);
-              feature.properties["native_blocked_chunk"] = "yes"
+              if (feature.properties["natural"] != "water" && feature.properties["waterway"] != "riverbank") {
+                // water has its own special rendering and does not need this
+                var cloned = JSON.parse(JSON.stringify(feature));
+                cloned.properties = {"native_blocked_chunk": "yes"}
+                generated.push(cloned);
+              }
             }
         }
         console.warn(JSON.stringify({ type: "MultiPolygon", coordinates: freelyTraversableArea }))
@@ -533,6 +538,10 @@ function highZoomLaserMapStyle() {
           }
           //alert(JSON.stringify(traversableChunk))
           geojson.features.push(traversableChunk);
+        }
+        var k = generated.length;
+        while (k--) {
+          geojson.features.push(generated[k]);
         }
         return geojson;
     },
