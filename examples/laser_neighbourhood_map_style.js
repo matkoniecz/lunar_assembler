@@ -100,7 +100,7 @@ function highZoomLaserMapStyle() {
       }
 
       if (mapStyle.motorizedRoadValuesArray().includes(feature.properties["area:highway_extra_size"]) || feature.properties["area:highway_extra_size"] === "bicycle_crossing") {
-        return "#d3d3d3";
+        //return "#d3d3d3"; // useful for debugging code, confusing in produced map 
       }
 
       if (
@@ -115,9 +115,9 @@ function highZoomLaserMapStyle() {
 
       if (["footway", "pedestrian", "path", "steps"].includes(feature.properties["area:highway_extra_size"])) {
         if (feature.properties["footway"] == "crossing") {
-          return "#eee8aa";
+          //return "#eee8aa";  // useful for debugging code, confusing in produced map 
         }
-        return "#adff2f";
+        //return "#adff2f";  // useful for debugging code, confusing in produced map
       }
 
       if (feature.properties["natural"] === "water" || feature.properties["waterway"] === "riverbank") {
