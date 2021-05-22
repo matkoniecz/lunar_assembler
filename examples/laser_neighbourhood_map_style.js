@@ -94,9 +94,9 @@ function highZoomLaserMapStyle() {
       if (mapStyle.motorizedRoadValuesArray().includes(feature.properties["area:highway"]) || feature.properties["area:highway"] === "bicycle_crossing"
       || feature.properties["lunar_assembler_merge_group"] == "highway_carriageway_layer") {
         if (feature.properties["lunar_assembler_cloned_for_pattern_fill"] == "yes") {
-          return "gray";
+          return "#808080";
         }
-        return "black";
+        return "#B4B4B4";
       }
 
       if (mapStyle.motorizedRoadValuesArray().includes(feature.properties["area:highway_extra_size"]) || feature.properties["area:highway_extra_size"] === "bicycle_crossing") {
