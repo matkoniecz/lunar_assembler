@@ -14,6 +14,13 @@ Code used to run mentioned example can be found in example folder.
 
 ![examples/lunar_assembler_in_action.gif](examples/lunar_assembler_in_action.gif)
 
+3D tactile map for blind children. Teaching aid for orientation lessons - special subject where children learn how to move on their own across the city. This is a map of a specific crossing, nearby their school. Made using this project, this propotype was donated to the school.
+
+<a href=""><img src="images_for_description/prototype_delivered_cropped.jpg" width="100%"/></a><br/>
+
+
+
+
 ## Published
 
 Demonstration of [basic high-zoom map style](https://matkoniecz.github.io/lunar_assembler/examples/dev.html)
