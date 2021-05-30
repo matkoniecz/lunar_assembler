@@ -621,6 +621,9 @@ function highZoomLaserMapStyle() {
                 // hack, the proper solution would be to have separate groups for ones in embankment and not
                 if (feature.properties["tunnel"] != "yes") {
                   // hack for now, likely separate matching group would be better
+                  if(["footway", "pedestrian", "path", "steps", "cycleway"].includes(feature.properties["highway"])) {
+                    width = width * 0.7;
+                  }
                   var produced = turf.buffer(feature, (width / 2 / 1000) * 3 + 1 / 1000, { units: "kilometers" });
                   var cloned = JSON.parse(JSON.stringify(produced));
                   cloned.properties["area:highway_extra_size"] = feature.properties["highway"];
