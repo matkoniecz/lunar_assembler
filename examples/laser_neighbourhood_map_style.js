@@ -439,11 +439,12 @@ function highZoomLaserMapStyle() {
         }
         return 5;
       }
-      if (feature.properties["highway"] == "footway" || feature.properties["highway"] == "steps" || feature.properties["highway"] == "path" || feature.properties["highway"] == "steps") {
+      if(["footway", "pedestrian", "path", "steps", "cycleway"].includes(feature.properties["highway"])) {
+        if(mapStyle.isAreaMakingFreePedestrianMovementImpossible(feature)) {
+          // closed footway for example - highway=footway access=no
+          return undefined;
+        }
         return 5;
-      }
-      if (feature.properties["highway"] == "cycleway") {
-        return 2;
       }
       return undefined;
     },
