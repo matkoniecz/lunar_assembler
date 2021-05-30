@@ -294,7 +294,8 @@ function highZoomLaserMapStyle() {
         return data_geojson;
       }
       if (roadArea === undefined) {
-        alert("no road areas (lines tagged with a proper highway=*) in range!");
+        //alert("no road areas (lines tagged with a proper highway=*) in range!");
+        //will be warned in other cases
         return data_geojson;
       }
       if (!isMultipolygonAsExpected(roadArea)) {
@@ -311,7 +312,8 @@ function highZoomLaserMapStyle() {
       var buildingArea = mapStyle.findMergeGroupObject(data_geojson, "buildings");
       var footwayArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_footway");
       if (footwayArea === undefined) {
-        alert("no footwayArea (highway=footway lines without footway=crossing) in range!");
+        //will be warned in other cases
+        //alert("no footwayArea (highway=footway lines without footway=crossing) in range!");
         return data_geojson;
       }
       if (buildingArea === undefined) {
