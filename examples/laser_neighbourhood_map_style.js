@@ -243,6 +243,7 @@ function highZoomLaserMapStyle() {
       data_geojson = mapStyle.eraseFootwayWhereIntersectingRoad(data_geojson);
       data_geojson = mapStyle.eraseFootwayWhereIntersectingBuilding(data_geojson);
       data_geojson = mapStyle.eraseFootwayWhereIntersectingPrivateArea(data_geojson);
+      data_geojson = mapStyle.eraseFootwayWhereIntersectingCrossings(data_geojson);
       data_geojson = mapStyle.applyPatternsToCarriagewaysAndWater(data_geojson);
       return data_geojson;
     },
@@ -347,6 +348,29 @@ function highZoomLaserMapStyle() {
       footwayArea.geometry.coordinates = polygonClipping.difference(footwayArea.geometry.coordinates, blockedArea.geometry.coordinates);
       return data_geojson;
     },
+
+    eraseFootwayWhereIntersectingCrossings(data_geojson) {
+      var crossingArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_crossing");
+      if (crossingArea === undefined) {
+        //alert("no crossing areas (lines with footway=crossing) in range!");
+        //will be warned in other cases
+        return data_geojson;
+      }
+      var footwayArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_footway");
+      if (footwayArea === undefined) {
+        alert("no footwayArea (highway=footway lines without footway=crossing) in range!");
+        return data_geojson;
+      }
+      if (!isMultipolygonAsExpected(crossingArea)) {
+        console.log(blockedArea);
+      }
+      if (!isMultipolygonAsExpected(footwayArea)) {
+        console.log(footwayArea);
+      }
+      footwayArea.geometry.coordinates = polygonClipping.difference(footwayArea.geometry.coordinates, crossingArea.geometry.coordinates);
+      return data_geojson;
+    },
+    
 
     floodSliversWithFootways(data_geojson) {
       var extraRoadArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_carriageway_layer_extra_size");
