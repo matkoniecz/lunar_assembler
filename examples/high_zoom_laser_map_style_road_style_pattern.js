@@ -165,8 +165,11 @@ function highZoomLaserMapStyle() {
       if (feature.properties["building"] != null) {
         return "#B45A00";
       }
-      if (mapStyle.motorizedRoadValuesArray().includes(feature.properties["area:highway"]) || feature.properties["area:highway"] === "bicycle_crossing"
-      || feature.properties["lunar_assembler_merge_group"] == "area:highway_carriageway_layer" ) {
+      if (
+        mapStyle.motorizedRoadValuesArray().includes(feature.properties["area:highway"]) ||
+        feature.properties["area:highway"] === "bicycle_crossing" ||
+        feature.properties["lunar_assembler_merge_group"] == "area:highway_carriageway_layer"
+      ) {
         if (feature.properties["lunar_assembler_cloned_for_pattern_fill"] == "yes") {
           return "#808080";
         }

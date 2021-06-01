@@ -54,22 +54,22 @@ function highZoomLaserMapStyle() {
 
     paintOrder(feature) {
       // extra sizes go under to not block main data
-        if (feature.properties["generated_traversable_chunk"] != undefined) {
-          return -1000;
-        }
-        if (feature.properties["generated_blocked_chunk"] != undefined) {
-          return -900;
-        }
-        if (feature.properties["native_blocked_chunk"] != undefined) {
-          return -900;
-        }
-        if (feature.properties["area:highway_extra_size"] != undefined || feature.properties["lunar_assembler_merge_group"] == "highway_carriageway_layer") {
-          return -800
-        }
-        if (feature.properties["lunar_assembler_cloned_for_pattern_fill"] != undefined) {
-          return 100; // patterns goes on top of unpatterned fill
-        }
-        return 0;
+      if (feature.properties["generated_traversable_chunk"] != undefined) {
+        return -1000;
+      }
+      if (feature.properties["generated_blocked_chunk"] != undefined) {
+        return -900;
+      }
+      if (feature.properties["native_blocked_chunk"] != undefined) {
+        return -900;
+      }
+      if (feature.properties["area:highway_extra_size"] != undefined || feature.properties["lunar_assembler_merge_group"] == "highway_carriageway_layer") {
+        return -800;
+      }
+      if (feature.properties["lunar_assembler_cloned_for_pattern_fill"] != undefined) {
+        return 100; // patterns goes on top of unpatterned fill
+      }
+      return 0;
     },
 
     fillColoring(feature) {
@@ -102,10 +102,10 @@ function highZoomLaserMapStyle() {
       }
 
       if (mapStyle.motorizedRoadValuesArray().includes(feature.properties["area:highway_extra_size"]) || feature.properties["area:highway_extra_size"] === "bicycle_crossing") {
-        //return "#d3d3d3"; // useful for debugging code, confusing in produced map 
+        //return "#d3d3d3"; // useful for debugging code, confusing in produced map
       }
 
-      if(feature.properties["area:highway_extra_size"] == null) {
+      if (feature.properties["area:highway_extra_size"] == null) {
         if (
           ["footway", "pedestrian", "path", "steps"].includes(feature.properties["area:highway"]) ||
           (feature.properties["highway"] == "pedestrian" && (feature.properties["area"] === "yes" || feature.properties["type"] === "multipolygon"))
@@ -114,12 +114,12 @@ function highZoomLaserMapStyle() {
             return "yellow";
           }
           return "green";
-        }  
+        }
       }
 
       if (["footway", "pedestrian", "path", "steps"].includes(feature.properties["area:highway_extra_size"])) {
         if (feature.properties["footway"] == "crossing") {
-          //return "#eee8aa";  // useful for debugging code, confusing in produced map 
+          //return "#eee8aa";  // useful for debugging code, confusing in produced map
         }
         //return "#adff2f";  // useful for debugging code, confusing in produced map
       }
@@ -130,15 +130,15 @@ function highZoomLaserMapStyle() {
         }
         return "blue";
       }
-      
+
       if (feature.properties["generated_barrier_area"] != null) {
         return "#b76b80";
       }
-      if(feature.properties["generated_traversable_chunk"] === "yes") {
+      if (feature.properties["generated_traversable_chunk"] === "yes") {
         //return "#ffcc00"
       }
-      if(feature.properties["generated_blocked_chunk"] === "yes" || feature.properties["native_blocked_chunk"] === "yes") {
-        return "#808000"
+      if (feature.properties["generated_blocked_chunk"] === "yes" || feature.properties["native_blocked_chunk"] === "yes") {
+        return "#808000";
       }
       return "none";
     },
@@ -187,14 +187,14 @@ function highZoomLaserMapStyle() {
         return "area:highway_undeground_passage";
       }
 
-      if(feature.properties["area:highway_extra_size"] == null) {
+      if (feature.properties["area:highway_extra_size"] == null) {
         if (["footway", "pedestrian", "path", "steps"].includes(feature.properties["area:highway"]) || (feature.properties["highway"] == "pedestrian" && feature.properties["area"] === "yes")) {
           // hack for https://www.openstreetmap.org/?mlat=50.05267&mlon=19.92927#map=19/50.05267/19.92927
           if (feature.properties["footway"] == "crossing") {
             return "area:highway_crossing";
           }
           return "area:highway_footway";
-        }  
+        }
       }
       if (["footway", "pedestrian", "path", "steps"].includes(feature.properties["area:highway_extra_size"])) {
         // hack for https://www.openstreetmap.org/?mlat=50.05267&mlon=19.92927#map=19/50.05267/19.92927
@@ -222,8 +222,7 @@ function highZoomLaserMapStyle() {
       if (feature.properties["generated_traversable_chunk"] != null) {
         return "generated_traversable_chunk";
       }
-      
-      
+
       return null;
     },
 

@@ -114,11 +114,11 @@ function highZoomLaserMapStyle() {
       if (feature.properties["generated_barrier_area"] != null) {
         return "black";
       }
-      if(feature.properties["generated_traversable_chunk"] === "yes") {
-        return "#cfffaf"
+      if (feature.properties["generated_traversable_chunk"] === "yes") {
+        return "#cfffaf";
       }
-      if(feature.properties["generated_blocked_chunk"] === "yes" || feature.properties["native_blocked_chunk"] === "yes") {
-        return "#ffcc00"
+      if (feature.properties["generated_blocked_chunk"] === "yes" || feature.properties["native_blocked_chunk"] === "yes") {
+        return "#ffcc00";
       }
       return "none";
     },
@@ -219,11 +219,11 @@ function highZoomLaserMapStyle() {
     },
 
     eraseFootwayWhereIntersectingRoad(data_geojson) {
-      var complainIfMissing = false
-      var complainIfMissing = false
+      var complainIfMissing = false;
+      var complainIfMissing = false;
       var roadArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_carriageway_layer", complainIfMissing);
       var footwayArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_footway", complainIfMissing);
-      if(roadArea == null || footwayArea == null) {
+      if (roadArea == null || footwayArea == null) {
         return data_geojson;
       }
       if (!isMultipolygonAsExpected(roadArea)) {
@@ -237,10 +237,10 @@ function highZoomLaserMapStyle() {
     },
 
     eraseFootwayWhereIntersectingBuilding(data_geojson) {
-      var complainIfMissing = false
+      var complainIfMissing = false;
       var buildingArea = mapStyle.findMergeGroupObject(data_geojson, "buildings", complainIfMissing);
       var footwayArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_footway", complainIfMissing);
-      if(buildingArea == null || footwayArea == null) {
+      if (buildingArea == null || footwayArea == null) {
         return data_geojson;
       }
       if (!isMultipolygonAsExpected(buildingArea)) {
@@ -253,7 +253,7 @@ function highZoomLaserMapStyle() {
       return data_geojson;
     },
 
-    findMergeGroupObject(data_geojson, code, complainIfMissing=true) {
+    findMergeGroupObject(data_geojson, code, complainIfMissing = true) {
       var i = data_geojson.features.length;
       var found = undefined;
       while (i--) {
@@ -267,7 +267,7 @@ function highZoomLaserMapStyle() {
       }
       if (found == undefined && complainIfMissing) {
         alert("failed to find " + code + " - if not expected please report at https://github.com/matkoniecz/lunar_assembler/issues");
-        return null
+        return null;
       }
       return found;
     },
@@ -299,33 +299,33 @@ function highZoomLaserMapStyle() {
     },
 
     isAccessValueRestrictive(value) {
-      if(value == "no") {
+      if (value == "no") {
         return true;
       }
-      if(value == "private") {
+      if (value == "private") {
         return true;
       }
-      if(value == "customers") {
+      if (value == "customers") {
         return true;
       }
       return false;
     },
 
     isAreaMakingFreePedestrianMovementImpossible(feature) {
-      if(feature.properties["generated_barrier_area"] != null) {
+      if (feature.properties["generated_barrier_area"] != null) {
         return true;
       }
-      if(feature.properties["natural"] == "water" || feature.properties["waterway"] == "riverbank") {
+      if (feature.properties["natural"] == "water" || feature.properties["waterway"] == "riverbank") {
         return true;
       }
-      if(feature.properties["building"] != null) {
+      if (feature.properties["building"] != null) {
         return true;
       }
-      if(feature.properties["area:highway"] && feature.properties["foot"] == "no") {
+      if (feature.properties["area:highway"] && feature.properties["foot"] == "no") {
         return true;
       }
-      if(mapStyle.isAccessValueRestrictive(feature.properties["access"]) && feature.properties["amenity"] != "parking") {
-        if(feature.properties["foot"]==null || mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
+      if (mapStyle.isAccessValueRestrictive(feature.properties["access"]) && feature.properties["amenity"] != "parking") {
+        if (feature.properties["foot"] == null || mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
           return true;
         }
       }
@@ -421,7 +421,7 @@ function highZoomLaserMapStyle() {
         var feature = geojson.features[i];
         const link = "https://www.openstreetmap.org/" + feature.id;
 
-        if(["fence", "wall", "hedge", "retaining_wall", "hedge_bank", "wire_fence"].includes(feature.properties["barrier"])) {
+        if (["fence", "wall", "hedge", "retaining_wall", "hedge_bank", "wire_fence"].includes(feature.properties["barrier"])) {
           var produced = turf.buffer(feature, 0.1 / 1000, { units: "kilometers" });
           var cloned = JSON.parse(JSON.stringify(produced));
           cloned.properties["generated_barrier_area"] = feature.properties["barrier"];
