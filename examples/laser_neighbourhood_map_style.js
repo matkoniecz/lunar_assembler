@@ -300,8 +300,9 @@ function highZoomLaserMapStyle() {
     addToFootwayGeometry(data_geojson, new_geometry, identifier) {
       var footwayArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_footway");
       if (footwayArea === undefined) {
-        footwayArea.geometry.coordinates = new_geometry;
-        // TODO: is it clipped properly later?
+        // if no footway is defined in the first place it will not be added
+        // but it is a manaual hack for manually tweaked area, so...
+        //footwayArea.geometry.coordinates = new_geometry; // TODO: this WILL crash!
       } else {
         footwayArea.geometry.coordinates = polygonClipping.union(footwayArea.geometry.coordinates, new_geometry);
       }
@@ -368,7 +369,6 @@ function highZoomLaserMapStyle() {
     },
 
     restrictPedestrianCrossingToRoadAreas(data_geojson) {
-      console.log(data_geojson);
       var roadArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_carriageway_layer");
       var crossingArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_crossing");
       if (crossingArea === undefined) {
@@ -532,7 +532,7 @@ function highZoomLaserMapStyle() {
         }
       }
       if (found == undefined) {
-        alert("failed to find " + code + " - if not expected please report at https://github.com/matkoniecz/lunar_assembler/issues");
+        alert("findMergeGroupObject failed to find " + code + " - if not expected please report at https://github.com/matkoniecz/lunar_assembler/issues");
       }
       return found;
     },
