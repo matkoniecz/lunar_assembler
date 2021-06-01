@@ -331,6 +331,7 @@ function mergeAsRequestedByMapStyle(data_geojson, mapStyle) {
   return data_geojson;
 }
 
+// for searching: crop
 function clipGeometries(readableBounds, data_geojson) {
   var west = readableBounds["west"];
   var south = readableBounds["south"];
