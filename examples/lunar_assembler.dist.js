@@ -266,7 +266,7 @@ function render(readableBounds, data_geojson, width, height, mapStyle, outputHol
   if ("transformGeometryAsInitialStep" in mapStyle) {
     data_geojson = mapStyle.transformGeometryAsInitialStep(data_geojson, readableBounds);
   }
-  validateGeometries(data_geojson)
+  validateGeometries(data_geojson);
   data_geojson = mergeAsRequestedByMapStyle(data_geojson, mapStyle);
   if ("transformGeometryAtFinalStep" in mapStyle) {
     data_geojson = mapStyle.transformGeometryAtFinalStep(data_geojson, readableBounds);
@@ -339,6 +339,7 @@ function mergeAsRequestedByMapStyle(data_geojson, mapStyle) {
   return data_geojson;
 }
 
+// for searching: crop
 function clipGeometries(readableBounds, data_geojson) {
   var west = readableBounds["west"];
   var south = readableBounds["south"];
@@ -468,7 +469,7 @@ function renderUsingD3(readableBounds, data_geojson, width, height, mapStyle, ou
 }
 
 function idOfGeneratedMap() {
-  return "mapGeneratedFromOpenStreetMap data"
+  return "mapGeneratedFromOpenStreetMap data";
 }
 function makeCompareFunctionForLayering(paintOrderFunction) {
   // paintOrderFunction takes feature as input and outputs number
