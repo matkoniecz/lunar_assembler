@@ -66,6 +66,9 @@ function highZoomLaserMapStyle() {
         if (feature.properties["area:highway_extra_size"] != undefined || feature.properties["lunar_assembler_merge_group"] == "highway_carriageway_layer") {
           return -800
         }
+        if (feature.properties["lunar_assembler_cloned_for_pattern_fill"] != undefined) {
+          return 100; // patterns goes on top of unpatterned fill
+        }
         return 0;
     },
 
