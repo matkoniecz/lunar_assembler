@@ -243,14 +243,161 @@ function highZoomLaserMapStyle() {
     // called after areas were merged, before sorting of areas
     // gets full data and can freely edit it
     transformGeometryAtFinalStep(data_geojson, readableBounds) {
+      data_geojson = mapStyle.applyManualPatchesBeforeGeometryErasings(data_geojson);
+
       data_geojson = mapStyle.restrictPedestrianCrossingToRoadAreas(data_geojson);
       data_geojson = mapStyle.eraseCrossingAreasFromRoads(data_geojson);
-      data_geojson = mapStyle.floodSliversWithFootways(data_geojson);
+      data_geojson = mapStyle.fillAreaNearRoadAndFootwayWithFootway(data_geojson);
       data_geojson = mapStyle.eraseFootwayWhereIntersectingRoad(data_geojson);
       data_geojson = mapStyle.eraseFootwayWhereIntersectingBuilding(data_geojson);
       data_geojson = mapStyle.eraseFootwayWhereIntersectingPrivateArea(data_geojson);
       data_geojson = mapStyle.eraseFootwayWhereIntersectingCrossings(data_geojson);
+
+      data_geojson = mapStyle.applyManualPatchesAfterGeometryErasings(data_geojson);
+
       data_geojson = mapStyle.applyPatternsToCarriagewaysAndWater(data_geojson);
+
+      var footwayArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_footway");
+      console.log("dumping footway area")
+      console.log(footwayArea)
+      return data_geojson;
+    },
+
+    applyManualPatchesBeforeGeometryErasings(data_geojson) {
+      data_geojson = mapStyle.addToFootwayGeometry(data_geojson, [
+        [
+          [
+            19.92633730173111,
+            50.05211704223168
+          ],
+          [
+            19.926462024450302,
+            50.05116981131536
+          ],
+          [
+            19.92675974965095,
+            50.05114483861099
+          ],
+          [
+            19.92772400379181,
+            50.05176054115375
+          ],
+          [
+            19.927577823400497,
+            50.05215320885973
+          ],
+          [
+            19.92633730173111,
+            50.05211704223168
+          ]
+        ]
+      ], "Rynek Dębnicki");
+
+      data_geojson = mapStyle.addToFootwayGeometry(data_geojson, [
+        [
+            [19.928049, 50.052813],
+            [19.927858, 50.052472],
+            [19.928142, 50.052304],
+            [19.927998, 50.052141],
+            [19.928545, 50.051435],
+            [19.928867, 50.051545],
+            [19.928395, 50.052685],
+            [19.928049, 50.052813]
+        ]
+    ], "Barska i Madalińskiego");
+      
+      return data_geojson;
+    },
+
+    addToFootwayGeometry(data_geojson, new_geometry, identifier) {
+      var footwayArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_footway");
+      if (footwayArea === undefined) {
+        footwayArea.geometry.coordinates = new_geometry;
+        // TODO: is it clipped properly later?
+      } else {
+        footwayArea.geometry.coordinates = polygonClipping.union(footwayArea.geometry.coordinates, new_geometry);
+      }
+      return data_geojson;
+    },
+
+    applyManualPatchesAfterGeometryErasings(data_geojson) {
+      data_geojson = mapStyle.replaceRoadAndBuildingsByFootwayHere(data_geojson, [
+        [
+          [
+            19.92954656481743,
+            50.0522685974432
+          ],
+          [
+            19.929537177085876,
+            50.05229012513329
+          ],
+          [
+            19.928470999002457,
+            50.05197237544687
+          ],
+          [
+            19.92848441004753,
+            50.05196118097512
+          ],
+          [
+            19.92954656481743,
+            50.0522685974432
+          ]
+        ]
+      ], "Powroźnicza, północna strona")
+      data_geojson = mapStyle.replaceRoadAndBuildingsByFootwayHere(data_geojson, [
+        [
+          [
+            19.928487092256542,
+            50.05197668101224
+          ],
+          [
+            19.928496479988098,
+            50.05195429206813
+          ],
+          [
+            19.929559975862503,
+            50.05226601411975
+          ],
+          [
+            19.929534494876858,
+            50.052295291777476
+          ],
+          [
+            19.928487092256542,
+            50.05197668101224
+          ]
+        ]
+      ], "Powroźnicza, południowa strona")
+      return data_geojson;
+    },
+
+    replaceRoadAndBuildingsByFootwayHere(data_geojson, target_geometry, identifier){
+      var buildingArea = mapStyle.findMergeGroupObject(data_geojson, "buildings");
+      if (buildingArea === undefined) {
+        //alert("no building areas (areas tagged with a building=*) in range!");
+        // no need to repeat warning
+      } else {
+        buildingArea.geometry.coordinates = polygonClipping.difference(buildingArea.geometry.coordinates, target_geometry);
+      }
+
+      var blockedArea = mapStyle.findMergeGroupObject(data_geojson, "generated_blocked_chunk");
+      if (blockedArea === undefined) {
+        //alert("no building areas (areas tagged with a building=*) in range!");
+        // no need to repeat warning
+      } else {
+        blockedArea.geometry.coordinates = polygonClipping.difference(blockedArea.geometry.coordinates, target_geometry);
+      }
+
+      var roadArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_carriageway_layer");
+      if (roadArea === undefined) {
+        // alert("no road areas (lines tagged with a proper highway=*) in range!");
+        // no need to repeat warning
+      } else {
+        roadArea.geometry.coordinates = polygonClipping.difference(roadArea.geometry.coordinates, target_geometry);
+      }
+
+      data_geojson = mapStyle.addToFootwayGeometry(data_geojson, target_geometry, identifier);
       return data_geojson;
     },
 
@@ -380,7 +527,7 @@ function highZoomLaserMapStyle() {
     },
     
 
-    floodSliversWithFootways(data_geojson) {
+    fillAreaNearRoadAndFootwayWithFootway(data_geojson) {
       var extraRoadArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_carriageway_layer_extra_size");
       var footwayArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_footway");
       var extraFootwayArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_footway_extra_size");
