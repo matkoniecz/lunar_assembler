@@ -256,9 +256,6 @@ function highZoomLaserMapStyle() {
 
       data_geojson = mapStyle.applyPatternsToCarriagewaysAndWater(data_geojson);
 
-      var footwayArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_footway");
-      console.log("dumping footway area")
-      console.log(footwayArea)
       return data_geojson;
     },
 
