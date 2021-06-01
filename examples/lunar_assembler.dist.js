@@ -267,11 +267,11 @@ function render(readableBounds, data_geojson, width, height, mapStyle, outputHol
     data_geojson = mapStyle.transformGeometryAsInitialStep(data_geojson, readableBounds);
   }
   validateGeometries(data_geojson)
-  data_geojson = clipGeometries(readableBounds, data_geojson);
   data_geojson = mergeAsRequestedByMapStyle(data_geojson, mapStyle);
   if ("transformGeometryAtFinalStep" in mapStyle) {
     data_geojson = mapStyle.transformGeometryAtFinalStep(data_geojson, readableBounds);
   }
+  data_geojson = clipGeometries(readableBounds, data_geojson);
   renderUsingD3(readableBounds, data_geojson, width, height, mapStyle, outputHolderId);
 }
 
