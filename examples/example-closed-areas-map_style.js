@@ -333,85 +333,89 @@ function highZoomLaserMapStyle() {
     },
 
     isFeatureMakingFreePedestrianMovementPossible(feature) {
-      if(mapStyle.motorizedRoadValuesArray().includes(feature.properties["highway"]) || ["footway", "pedestrian", "path", "steps", "cycleway"].includes(feature.properties["highway"])) {
-        if(mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
+      if (mapStyle.motorizedRoadValuesArray().includes(feature.properties["highway"]) || ["footway", "pedestrian", "path", "steps", "cycleway"].includes(feature.properties["highway"])) {
+        if (mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
           return false;
         }
-        if(feature.properties["highway"] == "motorway" && feature.properties["foot"] == null) {
+        if (feature.properties["highway"] == "motorway" && feature.properties["foot"] == null) {
           // assume no for motorways, but do not discard them completely: some can be walked on foot (yes really)
           return false;
         }
-        if(feature.properties["highway"] == "service" && feature.properties["service"] == "driveway") {
-          if(feature.properties["foot"] != null  && !mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
+        if (feature.properties["highway"] == "service" && feature.properties["service"] == "driveway") {
+          if (feature.properties["foot"] != null && !mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
             return true;
           }
-          if(feature.properties["access"] != null  && !mapStyle.isAccessValueRestrictive(feature.properties["access"])) {
+          if (feature.properties["access"] != null && !mapStyle.isAccessValueRestrictive(feature.properties["access"])) {
             return true;
           }
           return false; // assume false for driveways
         }
-        
-        if(!mapStyle.isAccessValueRestrictive(feature.properties["access"]) && !mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
+
+        if (!mapStyle.isAccessValueRestrictive(feature.properties["access"]) && !mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
           return true;
         }
-        if(mapStyle.isAccessValueRestrictive(feature.properties["access"])) {
-          if(feature.properties["foot"]!=null && !mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
+        if (mapStyle.isAccessValueRestrictive(feature.properties["access"])) {
+          if (feature.properties["foot"] != null && !mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
             return true;
           } else {
             return false;
           }
         }
-        alert("Should be impossible [isFeatureMakingFreePedestrianMovementPossible for " + JSON.stringify(feature) + "], please report bug to https://github.com/matkoniecz/lunar_assembler")
+        alert("Should be impossible [isFeatureMakingFreePedestrianMovementPossible for " + JSON.stringify(feature) + "], please report bug to https://github.com/matkoniecz/lunar_assembler");
       }
     },
 
     generateRestrictedAcccessArea(geojson, readableBounds) {
-        var entreAreaRing = [
-          [readableBounds["east"], readableBounds["south"]],
-          [readableBounds["west"], readableBounds["south"]],
-          [readableBounds["west"], readableBounds["north"]],
-          [readableBounds["east"], readableBounds["north"]],
-          [readableBounds["east"], readableBounds["south"]],
-        ];
-        var entireArea = [entreAreaRing];
-        var freelyTraversableArea = entireArea
-        generated = [];
-        featuresGivingAccess = []
-        var i = geojson.features.length;
+      var entreAreaRing = [
+        [readableBounds["east"], readableBounds["south"]],
+        [readableBounds["west"], readableBounds["south"]],
+        [readableBounds["west"], readableBounds["north"]],
+        [readableBounds["east"], readableBounds["north"]],
+        [readableBounds["east"], readableBounds["south"]],
+      ];
+      var entireArea = [entreAreaRing];
+      var freelyTraversableArea = entireArea;
+      generated = [];
+      featuresGivingAccess = [];
+      var i = geojson.features.length;
+      while (i--) {
+        var feature = geojson.features[i];
+        if (mapStyle.isFeatureMakingFreePedestrianMovementPossible(feature)) {
+          featuresGivingAccess.push(feature);
+        }
+        const link = "https://www.openstreetmap.org/" + feature.id;
+        if (feature.geometry.type != "Polygon" && feature.geometry.type != "MultiPolygon") {
+          continue;
+        }
+        if (mapStyle.isAreaMakingFreePedestrianMovementImpossible(feature)) {
+          var freelyTraversableArea = polygonClipping.difference(freelyTraversableArea, feature.geometry.coordinates);
+          feature.properties["native_blocked_chunk"] = "yes";
+        }
+      }
+      //console.warn(JSON.stringify({ type: "MultiPolygon", coordinates: freelyTraversableArea }))
+      var k = freelyTraversableArea.length;
+      while (k--) {
+        const traversableChunk = {
+          type: "Feature",
+          geometry: { type: "Polygon", coordinates: freelyTraversableArea[k] },
+          properties: {},
+        };
+        var i = featuresGivingAccess.length;
         while (i--) {
-          var feature = geojson.features[i];
-          if(mapStyle.isFeatureMakingFreePedestrianMovementPossible(feature)) {
-            featuresGivingAccess.push(feature);
-          }
-          const link = "https://www.openstreetmap.org/" + feature.id;
-          if(feature.geometry.type != "Polygon" && feature.geometry.type != "MultiPolygon") {
-            continue
-          }
-          if(mapStyle.isAreaMakingFreePedestrianMovementImpossible(feature)) {
-              var freelyTraversableArea = polygonClipping.difference(freelyTraversableArea, feature.geometry.coordinates);
-              feature.properties["native_blocked_chunk"] = "yes"
-          }
-        }
-        //console.warn(JSON.stringify({ type: "MultiPolygon", coordinates: freelyTraversableArea }))
-        var k = freelyTraversableArea.length;
-        while (k--) {
-          const traversableChunk = {type: "Feature", geometry: { type: "Polygon", coordinates: freelyTraversableArea[k] }, properties: {}};
-          var i = featuresGivingAccess.length;
-          while (i--) {
-            const accessGivingFeature = featuresGivingAccess[i]
+          const accessGivingFeature = featuresGivingAccess[i];
 
-           if(turf.lineIntersect(traversableChunk, accessGivingFeature).features.length != 0) {
-            traversableChunk.properties["generated_traversable_chunk"] = "yes"
-             break;
-           }
+          if (turf.lineIntersect(traversableChunk, accessGivingFeature).features.length != 0) {
+            traversableChunk.properties["generated_traversable_chunk"] = "yes";
+            break;
           }
-          if(traversableChunk.properties["generated_traversable_chunk"] != "yes") {
-            traversableChunk.properties["generated_blocked_chunk"] = "yes"
-          }
-          //alert(JSON.stringify(traversableChunk))
-          geojson.features.push(traversableChunk);
         }
-        return geojson;
+        if (traversableChunk.properties["generated_traversable_chunk"] != "yes") {
+          traversableChunk.properties["generated_blocked_chunk"] = "yes";
+        }
+        //alert(JSON.stringify(traversableChunk))
+        geojson.features.push(traversableChunk);
+      }
+      return geojson;
     },
 
     generateAreasFromBarriers(geojson) {
