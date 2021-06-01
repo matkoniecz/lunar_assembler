@@ -260,37 +260,25 @@ function highZoomLaserMapStyle() {
     },
 
     applyManualPatchesBeforeGeometryErasings(data_geojson) {
-      data_geojson = mapStyle.addToFootwayGeometry(data_geojson, [
+      data_geojson = mapStyle.addToFootwayGeometry(
+        data_geojson,
         [
           [
-            19.92633730173111,
-            50.05211704223168
+            [19.92633730173111, 50.05211704223168],
+            [19.926462024450302, 50.05116981131536],
+            [19.92675974965095, 50.05114483861099],
+            [19.92772400379181, 50.05176054115375],
+            [19.927577823400497, 50.05215320885973],
+            [19.92633730173111, 50.05211704223168],
           ],
-          [
-            19.926462024450302,
-            50.05116981131536
-          ],
-          [
-            19.92675974965095,
-            50.05114483861099
-          ],
-          [
-            19.92772400379181,
-            50.05176054115375
-          ],
-          [
-            19.927577823400497,
-            50.05215320885973
-          ],
-          [
-            19.92633730173111,
-            50.05211704223168
-          ]
-        ]
-      ], "Rynek Dębnicki");
+        ],
+        "Rynek Dębnicki"
+      );
 
-      data_geojson = mapStyle.addToFootwayGeometry(data_geojson, [
+      data_geojson = mapStyle.addToFootwayGeometry(
+        data_geojson,
         [
+          [
             [19.928049, 50.052813],
             [19.927858, 50.052472],
             [19.928142, 50.052304],
@@ -298,10 +286,12 @@ function highZoomLaserMapStyle() {
             [19.928545, 50.051435],
             [19.928867, 50.051545],
             [19.928395, 50.052685],
-            [19.928049, 50.052813]
-        ]
-    ], "Barska i Madalińskiego");
-      
+            [19.928049, 50.052813],
+          ],
+        ],
+        "Barska i Madalińskiego"
+      );
+
       return data_geojson;
     },
 
@@ -317,58 +307,36 @@ function highZoomLaserMapStyle() {
     },
 
     applyManualPatchesAfterGeometryErasings(data_geojson) {
-      data_geojson = mapStyle.replaceRoadAndBuildingsByFootwayHere(data_geojson, [
+      data_geojson = mapStyle.replaceRoadAndBuildingsByFootwayHere(
+        data_geojson,
         [
           [
-            19.92954656481743,
-            50.0522685974432
+            [19.92954656481743, 50.0522685974432],
+            [19.929537177085876, 50.05229012513329],
+            [19.928470999002457, 50.05197237544687],
+            [19.92848441004753, 50.05196118097512],
+            [19.92954656481743, 50.0522685974432],
           ],
-          [
-            19.929537177085876,
-            50.05229012513329
-          ],
-          [
-            19.928470999002457,
-            50.05197237544687
-          ],
-          [
-            19.92848441004753,
-            50.05196118097512
-          ],
-          [
-            19.92954656481743,
-            50.0522685974432
-          ]
-        ]
-      ], "Powroźnicza, północna strona")
-      data_geojson = mapStyle.replaceRoadAndBuildingsByFootwayHere(data_geojson, [
+        ],
+        "Powroźnicza, północna strona"
+      );
+      data_geojson = mapStyle.replaceRoadAndBuildingsByFootwayHere(
+        data_geojson,
         [
           [
-            19.928487092256542,
-            50.05197668101224
+            [19.928487092256542, 50.05197668101224],
+            [19.928496479988098, 50.05195429206813],
+            [19.929559975862503, 50.05226601411975],
+            [19.929534494876858, 50.052295291777476],
+            [19.928487092256542, 50.05197668101224],
           ],
-          [
-            19.928496479988098,
-            50.05195429206813
-          ],
-          [
-            19.929559975862503,
-            50.05226601411975
-          ],
-          [
-            19.929534494876858,
-            50.052295291777476
-          ],
-          [
-            19.928487092256542,
-            50.05197668101224
-          ]
-        ]
-      ], "Powroźnicza, południowa strona")
+        ],
+        "Powroźnicza, południowa strona"
+      );
       return data_geojson;
     },
 
-    replaceRoadAndBuildingsByFootwayHere(data_geojson, target_geometry, identifier){
+    replaceRoadAndBuildingsByFootwayHere(data_geojson, target_geometry, identifier) {
       var buildingArea = mapStyle.findMergeGroupObject(data_geojson, "buildings");
       if (buildingArea === undefined) {
         //alert("no building areas (areas tagged with a building=*) in range!");
@@ -521,7 +489,6 @@ function highZoomLaserMapStyle() {
       footwayArea.geometry.coordinates = polygonClipping.difference(footwayArea.geometry.coordinates, crossingArea.geometry.coordinates);
       return data_geojson;
     },
-    
 
     fillAreaNearRoadAndFootwayWithFootway(data_geojson) {
       var extraRoadArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_carriageway_layer_extra_size");
@@ -585,8 +552,8 @@ function highZoomLaserMapStyle() {
         }
         return 5;
       }
-      if(["footway", "pedestrian", "path", "steps", "cycleway"].includes(feature.properties["highway"])) {
-        if(mapStyle.isAreaMakingFreePedestrianMovementImpossible(feature)) {
+      if (["footway", "pedestrian", "path", "steps", "cycleway"].includes(feature.properties["highway"])) {
+        if (mapStyle.isAreaMakingFreePedestrianMovementImpossible(feature)) {
           // closed footway for example - highway=footway access=no
           return undefined;
         }
@@ -596,33 +563,33 @@ function highZoomLaserMapStyle() {
     },
 
     isAccessValueRestrictive(value) {
-      if(value == "no") {
+      if (value == "no") {
         return true;
       }
-      if(value == "private") {
+      if (value == "private") {
         return true;
       }
-      if(value == "customers") {
+      if (value == "customers") {
         return true;
       }
       return false;
     },
 
     isAreaMakingFreePedestrianMovementImpossible(feature) {
-      if(feature.properties["generated_barrier_area"] != null) {
+      if (feature.properties["generated_barrier_area"] != null) {
         return true;
       }
-      if(feature.properties["natural"] == "water" || feature.properties["waterway"] == "riverbank") {
+      if (feature.properties["natural"] == "water" || feature.properties["waterway"] == "riverbank") {
         return true;
       }
-      if(feature.properties["building"] != null) {
+      if (feature.properties["building"] != null) {
         return true;
       }
-      if(feature.properties["area:highway"] && feature.properties["foot"] == "no") {
+      if (feature.properties["area:highway"] && feature.properties["foot"] == "no") {
         return true;
       }
-      if(mapStyle.isAccessValueRestrictive(feature.properties["access"]) && feature.properties["amenity"] != "parking") {
-        if(feature.properties["foot"]==null || mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
+      if (mapStyle.isAccessValueRestrictive(feature.properties["access"]) && feature.properties["amenity"] != "parking") {
+        if (feature.properties["foot"] == null || mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
           return true;
         }
       }
@@ -630,35 +597,35 @@ function highZoomLaserMapStyle() {
     },
 
     isFeatureMakingFreePedestrianMovementPossible(feature) {
-      if(mapStyle.motorizedRoadValuesArray().includes(feature.properties["highway"]) || ["footway", "pedestrian", "path", "steps", "cycleway"].includes(feature.properties["highway"])) {
-        if(mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
+      if (mapStyle.motorizedRoadValuesArray().includes(feature.properties["highway"]) || ["footway", "pedestrian", "path", "steps", "cycleway"].includes(feature.properties["highway"])) {
+        if (mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
           return false;
         }
-        if(feature.properties["highway"] == "motorway" && feature.properties["foot"] == null) {
+        if (feature.properties["highway"] == "motorway" && feature.properties["foot"] == null) {
           // assume no for motorways, but do not discard them completely: some can be walked on foot (yes really)
           return false;
         }
-        if(feature.properties["highway"] == "service" && feature.properties["service"] == "driveway") {
-          if(feature.properties["foot"] != null  && !mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
+        if (feature.properties["highway"] == "service" && feature.properties["service"] == "driveway") {
+          if (feature.properties["foot"] != null && !mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
             return true;
           }
-          if(feature.properties["access"] != null  && !mapStyle.isAccessValueRestrictive(feature.properties["access"])) {
+          if (feature.properties["access"] != null && !mapStyle.isAccessValueRestrictive(feature.properties["access"])) {
             return true;
           }
           return false; // assume false for driveways
         }
-        
-        if(!mapStyle.isAccessValueRestrictive(feature.properties["access"]) && !mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
+
+        if (!mapStyle.isAccessValueRestrictive(feature.properties["access"]) && !mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
           return true;
         }
-        if(mapStyle.isAccessValueRestrictive(feature.properties["access"])) {
-          if(feature.properties["foot"]!=null && !mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
+        if (mapStyle.isAccessValueRestrictive(feature.properties["access"])) {
+          if (feature.properties["foot"] != null && !mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
             return true;
           } else {
             return false;
           }
         }
-        alert("Should be impossible [isFeatureMakingFreePedestrianMovementPossible for " + JSON.stringify(feature) + "], please report bug to https://github.com/matkoniecz/lunar_assembler")
+        alert("Should be impossible [isFeatureMakingFreePedestrianMovementPossible for " + JSON.stringify(feature) + "], please report bug to https://github.com/matkoniecz/lunar_assembler");
       }
     },
 
