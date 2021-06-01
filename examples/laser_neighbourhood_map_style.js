@@ -254,6 +254,8 @@ function highZoomLaserMapStyle() {
 
       data_geojson = mapStyle.applyManualPatchesAfterGeometryErasings(data_geojson);
 
+      data_geojson = mapStyle.fillSliversAroundFootways(data_geojson, readableBounds);
+
       data_geojson = mapStyle.applyPatternsToCarriagewaysAndWater(data_geojson);
 
       return data_geojson;
@@ -638,6 +640,70 @@ function highZoomLaserMapStyle() {
         [readableBounds["east"], readableBounds["south"]],
       ];
       return [entireAreaRing];
+    },
+
+    fillSliversAroundFootways(data_geojson, readableBounds) {
+      var emptyArea = mapStyle.boundsToGeojsonGeometry(readableBounds);
+      var footwayArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_footway");
+      if (footwayArea === undefined) {
+        return data_geojson;
+      }
+      emptyArea = polygonClipping.difference(emptyArea, footwayArea.geometry.coordinates);
+
+      var roadArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_carriageway_layer");
+      if (roadArea === undefined) {
+        // alert("no road areas (lines tagged with a proper highway=*) in range!");
+        // no need to repeat warning
+      } else {
+        console.log(roadArea);
+        console.log(roadArea.geometry.coordinates);
+        console.log(emptyArea);
+        emptyArea = polygonClipping.difference(emptyArea, roadArea.geometry.coordinates);
+      }
+
+      var buildingArea = mapStyle.findMergeGroupObject(data_geojson, "buildings");
+      if (buildingArea === undefined) {
+        //alert("no building areas (areas tagged with a building=*) in range!");
+        // no need to repeat warning
+      } else {
+        emptyArea = polygonClipping.difference(emptyArea, buildingArea.geometry.coordinates);
+      }
+
+      var crossingArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_crossing");
+      if (crossingArea === undefined) {
+        // no need to repeat warning
+      } else {
+        emptyArea = polygonClipping.difference(emptyArea, crossingArea.geometry.coordinates);
+      }
+
+      var blockedArea = mapStyle.findMergeGroupObject(data_geojson, "generated_blocked_chunk");
+      if (blockedArea === undefined) {
+        //alert("no building areas (areas tagged with a building=*) in range!");
+        // no need to repeat warning
+      } else {
+        emptyArea = polygonClipping.difference(emptyArea, blockedArea.geometry.coordinates);
+      }
+      console.log("EMPTY AREA follows:");
+      console.log(emptyArea);
+
+      var k = emptyArea.length;
+      while (k--) {
+        const chunk = {
+          type: "Feature",
+          geometry: { type: "Polygon", coordinates: emptyArea[k] },
+          properties: {},
+        };
+        console.log("JJJJJJ");
+        if (turf.area(chunk) < 5) {
+          // TODO: use
+          // turf.lineOverlap(chunk, footwayArea)
+          // or similar to merge in only actually adjoining
+          // (lineOverlap seemed weird a bit and actual unions would likely should be done later)
+          footwayArea.geometry.coordinates = polygonClipping.union(chunk.geometry.coordinates, footwayArea.geometry.coordinates);
+        }
+      }
+
+      return data_geojson;
     },
 
     generateRestrictedAcccessArea(geojson, readableBounds) {
