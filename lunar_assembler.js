@@ -197,7 +197,7 @@ async function downloadOpenStreetMapData(readableBounds) {
   query = "";
   // note: extra filters will break data in case of some bad/poor/substandard tagging or where someone want this kind of data
   // extra filters are useful to reduce data overload during debugging, often bug is reproducible in their presence
-  var extra_filters = "[type!=route][type!=parking_fee][type!=waterway][type!=boundary][boundary!=administrative][boundary!=religious_administration]";
+  var extra_filters = "[type!=site][type!=route][type!=parking_fee][type!=waterway][type!=boundary][boundary!=administrative][boundary!=religious_administration]";
   query += "[out:json][timeout:25];nwr" + extra_filters + "(";
   query += readableBounds["south"];
   query += ",";
