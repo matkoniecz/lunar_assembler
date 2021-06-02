@@ -582,7 +582,7 @@ function highZoomLaserMapStyle() {
         return data_geojson;
       }
       if (!isMultipolygonAsExpected(crossingArea)) {
-        console.log(blockedArea);
+        console.log(crossingArea);
       }
       if (!isMultipolygonAsExpected(footwayArea)) {
         console.log(footwayArea);
