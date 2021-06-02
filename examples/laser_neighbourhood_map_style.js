@@ -223,6 +223,10 @@ function highZoomLaserMapStyle() {
         return "generated_traversable_chunk";
       }
 
+      if (feature.properties["man_made"] === "bridge") {
+        return "bridge_outline";
+      }
+
       return null;
     },
 
@@ -253,6 +257,7 @@ function highZoomLaserMapStyle() {
       data_geojson = mapStyle.eraseFootwayWhereIntersectingBuilding(data_geojson);
       data_geojson = mapStyle.eraseFootwayWhereIntersectingPrivateArea(data_geojson);
       data_geojson = mapStyle.eraseFootwayWhereIntersectingCrossings(data_geojson);
+      data_geojson = mapStyle.eraseWaterWhereIntersectingBridge(data_geojson);
 
       data_geojson = mapStyle.applyManualPatchesAfterGeometryErasings(data_geojson);
 
@@ -583,6 +588,40 @@ function highZoomLaserMapStyle() {
         console.log(footwayArea);
       }
       footwayArea.geometry.coordinates = polygonClipping.difference(footwayArea.geometry.coordinates, crossingArea.geometry.coordinates);
+      return data_geojson;
+    },
+
+    eraseWaterWhereIntersectingBridge(data_geojson) {
+      var water = mapStyle.findMergeGroupObject(data_geojson, "water");
+      if (water === undefined) {
+        // no reason to suspect issues
+        // nothing to remove
+        return data_geojson;
+      }
+      if (!isMultipolygonAsExpected(water)) {
+        console.log(water);
+      }
+
+      var bridgeArea = mapStyle.findMergeGroupObject(data_geojson, "bridge_outline");
+      if (bridgeArea === undefined) {
+        // no reason to suspect issues
+      } else {
+        if (!isMultipolygonAsExpected(bridgeArea)) {
+          console.log(bridgeArea);
+        }
+        water.geometry.coordinates = polygonClipping.difference(water.geometry.coordinates, bridgeArea.geometry.coordinates);
+      }
+
+      var footwayArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_footway");
+      if (footwayArea === undefined) {
+        // no reason to suspect issues
+      } else {
+          if (!isMultipolygonAsExpected(footwayArea)) {
+            console.log(footwayArea);
+          }
+          water.geometry.coordinates = polygonClipping.difference(water.geometry.coordinates, footwayArea.geometry.coordinates);
+      }
+
       return data_geojson;
     },
 
