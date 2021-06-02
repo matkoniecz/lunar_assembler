@@ -233,6 +233,8 @@ function highZoomLaserMapStyle() {
     // called before merges
     // gets full data and can freely edit it
     transformGeometryAsInitialStep(data_geojson, readableBounds) {
+      data_geojson = mapStyle.applyManualPatchesAtStart(data_geojson);
+
       data_geojson = mapStyle.generateAreasFromBarriers(data_geojson);
       data_geojson = mapStyle.generateRestrictedAcccessArea(data_geojson, readableBounds);
       data_geojson = mapStyle.generateAreasFromRoadLines(data_geojson);
@@ -258,6 +260,18 @@ function highZoomLaserMapStyle() {
 
       data_geojson = mapStyle.applyPatternsToCarriagewaysAndWater(data_geojson);
 
+      return data_geojson;
+    },
+
+    applyManualPatchesAtStart(data_geojson) {
+      var i = data_geojson.features.length;
+      var found = undefined;
+      while (i--) {
+        var feature = data_geojson.features[i];
+        if (["way/940940433", "way/947218894"].includes(feature.id)) {
+          data_geojson.features.splice(i, 1); // remove matching element
+        }
+      }
       return data_geojson;
     },
 
