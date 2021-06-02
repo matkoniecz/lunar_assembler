@@ -74,7 +74,7 @@ function highZoomLaserMapStyle() {
       }
 
       if (feature.properties["lunar_assembler_step_segment"] != null) {
-        var priority = 0.999;
+        var priority = 0.44;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
       }
 
@@ -82,47 +82,47 @@ function highZoomLaserMapStyle() {
       // TODO: prune it? delete it? put water/buildings on top to
       // make mistakes more noticeable?
       if (mapStyle.railwayLinearValuesArray().includes(feature.properties["railway"])) {
-        var priority = 0.99;
+        var priority = 0.40;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
       }
       if (feature.properties["area:highway"] != null) {
-        var priority = 0.98;
+        var priority = 0.36;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
       }
       if (feature.properties["building"] != null && feature.properties["location"] != "underground") {
-        var priority = 0.95;
+        var priority = 0.32;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
       }
       if (feature.properties["barrier"] != null) {
-        var priority = 0.9;
+        var priority = 0.28;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
       }
       if (feature.properties["highway"] != null) {
-        var priority = 0.85;
+        var priority = 0.24;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
       }
       if (feature.properties["barrier"] != null) {
-        var priority = 0.7;
+        var priority = 0.20;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
       }
       if (feature.properties["man_made"] === "bridge") {
-        var priority = 0.65;
+        var priority = 0.16;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
       }
       if (feature.properties["waterway"] != null) {
         /* render waterway lines under bridge areas */
-        var priority = 0.6;
+        var priority = 0.12;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
       }
       if (feature.properties["natural"] === "water" || feature.properties["waterway"] === "riverbank") {
         // render natural=wood below natural=water
-        var priority = 0.1;
+        var priority = 0.08;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
       }
       if (feature.properties["natural"] === "bare_rock") {
         // render natural=wood below natural=bare_rock
         // render water rather than underwater rocks
-        var priority = 0.05;
+        var priority = 0.04;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
       }
       if (feature.properties["leisure"] != null) {
