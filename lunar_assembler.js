@@ -271,11 +271,11 @@ function validateGeometries(data_geojson) {
   var i = data_geojson.features.length;
   while (i--) {
     var feature = data_geojson.features[i];
-    if(feature.geometry == undefined) {
-      var warning = "broken feature, geometry is missing!"
-      alert(warning + JSON.stringify(feature))
-      console.warn(warning)
-      console.warn(feature)
+    if (feature.geometry == undefined) {
+      var warning = "broken feature, geometry is missing!";
+      alert(warning + JSON.stringify(feature));
+      console.warn(warning);
+      console.warn(feature);
     }
   }
 }
@@ -499,10 +499,7 @@ function update3Map(geoGenerator, used_data, selector, mapStyle) {
 
 function download(filename, text) {
   var element = document.createElement("a");
-  element.setAttribute(
-    "href",
-    "data:text/plain;charset=utf-8," + encodeURIComponent(text)
-  );
+  element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(text));
   element.setAttribute("download", filename);
 
   element.style.display = "none";
