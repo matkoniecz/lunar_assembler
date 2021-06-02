@@ -80,6 +80,9 @@ The most complex part of default map style is dealing with layers.
 
 Map styles also have access to a powerful functionality allowing complete rewriting of geometries, what is necessary to implement some functionality but typically can be ignored.
 
+### Help!
+Note: especially this part of documentation is incomplete and would benefit from better info. Please open an issue and mention what is confusing and where you are stuck. Right now I am not entirely sure what kind of knowledge people using it will have and what and how should be explained.
+
 ## Potential uses
 
 SVG files may be much more accessible for futher processing than alternatives formats of OSM data.
