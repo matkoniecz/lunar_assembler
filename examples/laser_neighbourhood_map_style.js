@@ -294,6 +294,57 @@ function highZoomLaserMapStyle() {
         "Barska i Madalińskiego"
       );
 
+      data_geojson = mapStyle.addToFootwayGeometry(
+        data_geojson,
+
+        [
+          [
+            [19.92504581809044, 50.05122018724847],
+            [19.925078004598614, 50.05122879851378],
+            [19.924890249967575, 50.05147034387654],
+            [19.924878850579262, 50.05148971912033],
+            [19.924845322966576, 50.05148283014564],
+            [19.92504581809044, 50.05122018724847],
+          ],
+        ],
+        "Chodnik przy szkole"
+      );
+
+      data_geojson = mapStyle.addToCarriagewayGeometry(
+        data_geojson,
+
+        [
+          [
+            [19.92472730576992, 50.05165677645352],
+            [19.924654886126515, 50.05163481791973],
+            [19.924951270222664, 50.051229659640235],
+            [19.924699813127518, 50.05113235225392],
+            [19.92478497326374, 50.05102600280515],
+            [19.924528822302815, 50.050946348205365],
+            [19.92455095052719, 50.05091491689447],
+            [19.925147742033005, 50.05108542074485],
+            [19.924845993518826, 50.051479816218915],
+            [19.925072640180584, 50.0515465531237],
+            [19.92501564323902, 50.051633095681346],
+            [19.924803748726845, 50.05156635889692],
+            [19.92472730576992, 50.05165677645352],
+          ],
+        ],
+        "parking przy szkole"
+      );
+
+      return data_geojson;
+    },
+
+    addToCarriagewayGeometry(data_geojson, new_geometry, identifier) {
+      var roadArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_carriageway_layer");
+      if (roadArea === undefined) {
+        // if no footway is defined in the first place it will not be added
+        // but it is a manaual hack for manually tweaked area, so...
+        //footwayArea.geometry.coordinates = new_geometry; // TODO: this WILL crash!
+      } else {
+        roadArea.geometry.coordinates = polygonClipping.union(roadArea.geometry.coordinates, new_geometry);
+      }
       return data_geojson;
     },
 
