@@ -23,3 +23,10 @@ TODO: find JS linter
 # Automatically reformat code to follow some sane coding style
 
 `npx prettier --print-width 200 --write .`
+
+Sadly, it is necessary to treat it as suggestions.
+
+I failed to find for now to:
+
+- allow multiline array definition, with one element per line
+- avoid pointless splitting if statements into multiple lines just because limit of 80 characters was reached
