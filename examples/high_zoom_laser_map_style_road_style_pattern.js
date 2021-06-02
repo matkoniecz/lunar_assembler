@@ -248,6 +248,9 @@ function highZoomLaserMapStyle() {
       if (feature.properties["natural"] === "water" || feature.properties["waterway"] === "riverbank") {
         return "water";
       }
+      if (feature.properties["man_made"] == "bridge") {
+        return "bridge_outline";
+      }
       return null;
     },
 
@@ -263,7 +266,42 @@ function highZoomLaserMapStyle() {
     // called after areas were merged, before sorting of areas
     // gets full data and can freely edit it
     transformGeometryAtFinalStep(data_geojson, readableBounds) {
+      data_geojson = mapStyle.eraseWaterWhereIntersectingBridge(data_geojson);
       data_geojson = mapStyle.applyPatternsToCarriagewaysAndWater(data_geojson);
+      return data_geojson;
+    },
+
+    eraseWaterWhereIntersectingBridge(data_geojson) {
+      var water = findMergeGroupObject(data_geojson, "water");
+      if (water === undefined) {
+        // no reason to suspect issues
+        // nothing to remove
+        return data_geojson;
+      }
+      if (!isMultipolygonAsExpected(water)) {
+        console.log(water);
+      }
+
+      var bridgeArea = findMergeGroupObject(data_geojson, "bridge_outline");
+      if (bridgeArea === undefined) {
+        // no reason to suspect issues
+      } else {
+        if (!isMultipolygonAsExpected(bridgeArea)) {
+          console.log(bridgeArea);
+        }
+        water.geometry.coordinates = polygonClipping.difference(water.geometry.coordinates, bridgeArea.geometry.coordinates);
+      }
+
+      var footwayArea = findMergeGroupObject(data_geojson, "area:highway_footway");
+      if (footwayArea === undefined) {
+        // no reason to suspect issues
+      } else {
+          if (!isMultipolygonAsExpected(footwayArea)) {
+            console.log(footwayArea);
+          }
+          water.geometry.coordinates = polygonClipping.difference(water.geometry.coordinates, footwayArea.geometry.coordinates);
+      }
+
       return data_geojson;
     },
 
