@@ -73,6 +73,11 @@ function highZoomLaserMapStyle() {
         }
       }
 
+      if (feature.properties["lunar_assembler_cloned_for_pattern_fill"] != undefined) {
+        var priority = 0.48;
+        return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
+      }
+
       if (feature.properties["lunar_assembler_step_segment"] != null) {
         var priority = 0.44;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
