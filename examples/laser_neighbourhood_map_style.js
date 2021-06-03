@@ -415,8 +415,6 @@ function highZoomLaserMapStyle() {
         // https://www.openstreetmap.org/way/950087102
         // https://www.openstreetmap.org/way/950050122
         if (mapStyle.isSpecialAreaErasingFootway(feature)) {
-          alert("erasing")
-          console.error("erasing")
           dataGeojson = mapStyle.eraseToFootwayGeometry(dataGeojson, feature.geometry.coordinates, "make space for display of stairs into crossing below road")
         }
       }
