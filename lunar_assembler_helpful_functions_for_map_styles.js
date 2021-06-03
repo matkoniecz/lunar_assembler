@@ -152,7 +152,7 @@ function findMergeGroupObject(dataGeojson, code) {
     }
   }
   if (found == undefined) {
-    alert("findMergeGroupObject failed to find " + code + " - if not expected please report at https://github.com/matkoniecz/lunar_assembler/issues");
+    console.warn("findMergeGroupObject failed to find " + code + " - if not expected please report at https://github.com/matkoniecz/lunar_assembler/issues");
   }
   return found;
 }
