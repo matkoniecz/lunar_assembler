@@ -266,8 +266,29 @@ function highZoomLaserMapStyle() {
     // called after areas were merged, before sorting of areas
     // gets full data and can freely edit it
     transformGeometryAtFinalStep(dataGeojson, readableBounds) {
+      dataGeojson = mapStyle.eraseCrossingAreasFromRoads(dataGeojson);
       dataGeojson = mapStyle.eraseWaterWhereIntersectingBridge(dataGeojson);
       dataGeojson = mapStyle.applyPatternsToCarriagewaysAndWater(dataGeojson);
+      return dataGeojson;
+    },
+
+    eraseCrossingAreasFromRoads(dataGeojson) {
+      var roadArea = findMergeGroupObject(dataGeojson, "area:highway_carriageway_layer");
+      if (roadArea === undefined) {
+        console.warn("eraseCrossingAreasFromRoads - no road areas");
+        return dataGeojson;
+      }
+      if (!isMultipolygonAsExpected(roadArea)) {
+        console.error("following geometry was expected to be multipolygon but was not:");
+        console.error(roadArea);
+      }
+      var i = dataGeojson.features.length;
+      while (i--) {
+        var feature = dataGeojson.features[i];
+        if (feature.properties["area:highway"] === "crossing") {
+          roadArea.geometry.coordinates = polygonClipping.difference(roadArea.geometry.coordinates, feature.geometry.coordinates);
+        }
+      }
       return dataGeojson;
     },
 
