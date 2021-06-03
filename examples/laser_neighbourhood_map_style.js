@@ -91,6 +91,11 @@ function highZoomLaserMapStyle() {
       if (feature.properties["lunar_assembler_step_segment"] == "3") {
         return "#FFFF00";
       }
+      if (feature.properties["area:highway"] == "steps") {
+        // entire area of steps
+        return "orange";
+      }
+
       if (feature.properties["building"] != null) {
         return "#B45A00";
       }
@@ -187,7 +192,7 @@ function highZoomLaserMapStyle() {
         return "area:highway_undeground_passage";
       }
 
-      if (feature.properties["area:highway_extra_size"] == null) {
+      if (feature.properties["area:highway_extra_size"] == null && mapStyle.isSpecialAreaErasingFootway(feature) == false) {
         if (["footway", "pedestrian", "path", "steps"].includes(feature.properties["area:highway"]) || (feature.properties["highway"] == "pedestrian" && feature.properties["area"] === "yes")) {
           // hack for https://www.openstreetmap.org/?mlat=50.05267&mlon=19.92927#map=19/50.05267/19.92927
           if (feature.properties["footway"] == "crossing") {
@@ -239,6 +244,7 @@ function highZoomLaserMapStyle() {
     transformGeometryAsInitialStep(dataGeojson, readableBounds) {
       dataGeojson = mapStyle.applyManualPatchesAtStart(dataGeojson);
 
+      dataGeojson = programaticallyGenerateSymbolicStepParts(dataGeojson);
       dataGeojson = mapStyle.generateAreasFromBarriers(dataGeojson);
       dataGeojson = mapStyle.generateRestrictedAcccessArea(dataGeojson, readableBounds);
       dataGeojson = mapStyle.generateAreasFromRoadLines(dataGeojson);
@@ -394,7 +400,27 @@ function highZoomLaserMapStyle() {
       return dataGeojson;
     },
 
+    isSpecialAreaErasingFootway(feature){
+      if (["way/950050124", "way/950087102", "way/950050122"].includes(feature.id)) {
+        return true;
+      }
+      return false;
+    },
+
     applyManualPatchesAfterGeometryErasings(dataGeojson) {
+      var i = dataGeojson.features.length;
+      while (i--) {
+        var feature = dataGeojson.features[i];
+        // https://www.openstreetmap.org/way/950050124
+        // https://www.openstreetmap.org/way/950087102
+        // https://www.openstreetmap.org/way/950050122
+        if (mapStyle.isSpecialAreaErasingFootway(feature)) {
+          alert("erasing")
+          console.error("erasing")
+          dataGeojson = mapStyle.eraseToFootwayGeometry(dataGeojson, feature.geometry.coordinates, "make space for display of stairs into crossing below road")
+        }
+      }
+
       dataGeojson = mapStyle.eraseToFootwayGeometry(
         dataGeojson,
         [
