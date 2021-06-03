@@ -209,28 +209,28 @@ function highZoomLaserMapStyle() {
 
     // called before merges
     // gets full data and can freely edit it
-    transformGeometryAsInitialStep(data_geojson, readableBounds) {
-      data_geojson = mapStyle.generateAreasFromBarriers(data_geojson);
-      data_geojson = mapStyle.generateRestrictedAcccessArea(data_geojson, readableBounds);
-      data_geojson = mapStyle.generateAreasFromRoadLines(data_geojson);
-      return data_geojson;
+    transformGeometryAsInitialStep(dataGeojson, readableBounds) {
+      dataGeojson = mapStyle.generateAreasFromBarriers(dataGeojson);
+      dataGeojson = mapStyle.generateRestrictedAcccessArea(dataGeojson, readableBounds);
+      dataGeojson = mapStyle.generateAreasFromRoadLines(dataGeojson);
+      return dataGeojson;
     },
 
     // called after areas were merged, before sorting of areas
     // gets full data and can freely edit it
-    transformGeometryAtFinalStep(data_geojson, readableBounds) {
-      data_geojson = mapStyle.eraseFootwayWhereIntersectingRoad(data_geojson);
-      data_geojson = mapStyle.eraseFootwayWhereIntersectingBuilding(data_geojson);
-      return data_geojson;
+    transformGeometryAtFinalStep(dataGeojson, readableBounds) {
+      dataGeojson = mapStyle.eraseFootwayWhereIntersectingRoad(dataGeojson);
+      dataGeojson = mapStyle.eraseFootwayWhereIntersectingBuilding(dataGeojson);
+      return dataGeojson;
     },
 
-    eraseFootwayWhereIntersectingRoad(data_geojson) {
+    eraseFootwayWhereIntersectingRoad(dataGeojson) {
       var complainIfMissing = false;
       var complainIfMissing = false;
-      var roadArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_carriageway_layer", complainIfMissing);
-      var footwayArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_footway", complainIfMissing);
+      var roadArea = mapStyle.findMergeGroupObject(dataGeojson, "area:highway_carriageway_layer", complainIfMissing);
+      var footwayArea = mapStyle.findMergeGroupObject(dataGeojson, "area:highway_footway", complainIfMissing);
       if (roadArea == null || footwayArea == null) {
-        return data_geojson;
+        return dataGeojson;
       }
       if (!isMultipolygonAsExpected(roadArea)) {
         console.error(roadArea);
@@ -239,15 +239,15 @@ function highZoomLaserMapStyle() {
         console.error(footwayArea);
       }
       footwayArea.geometry.coordinates = polygonClipping.difference(footwayArea.geometry.coordinates, roadArea.geometry.coordinates);
-      return data_geojson;
+      return dataGeojson;
     },
 
-    eraseFootwayWhereIntersectingBuilding(data_geojson) {
+    eraseFootwayWhereIntersectingBuilding(dataGeojson) {
       var complainIfMissing = false;
-      var buildingArea = mapStyle.findMergeGroupObject(data_geojson, "buildings", complainIfMissing);
-      var footwayArea = mapStyle.findMergeGroupObject(data_geojson, "area:highway_footway", complainIfMissing);
+      var buildingArea = mapStyle.findMergeGroupObject(dataGeojson, "buildings", complainIfMissing);
+      var footwayArea = mapStyle.findMergeGroupObject(dataGeojson, "area:highway_footway", complainIfMissing);
       if (buildingArea == null || footwayArea == null) {
-        return data_geojson;
+        return dataGeojson;
       }
       if (!isMultipolygonAsExpected(buildingArea)) {
         console.error(buildingArea);
@@ -256,14 +256,14 @@ function highZoomLaserMapStyle() {
         console.error(footwayArea);
       }
       footwayArea.geometry.coordinates = polygonClipping.difference(footwayArea.geometry.coordinates, buildingArea.geometry.coordinates);
-      return data_geojson;
+      return dataGeojson;
     },
 
-    findMergeGroupObject(data_geojson, code, complainIfMissing = true) {
-      var i = data_geojson.features.length;
+    findMergeGroupObject(dataGeojson, code, complainIfMissing = true) {
+      var i = dataGeojson.features.length;
       var found = undefined;
       while (i--) {
-        var feature = data_geojson.features[i];
+        var feature = dataGeojson.features[i];
         if (feature.properties["lunar_assembler_merge_group"] == code) {
           if (found != undefined) {
             alert("more than one area of " + code + "type what is unexpected, things may break. This is a bug, please report it on https://github.com/matkoniecz/lunar_assembler/issues");

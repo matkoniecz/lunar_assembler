@@ -254,23 +254,23 @@ function rewind(geojson_that_is_7946_compliant_with_right_hand_winding_order) {
   return d3_geojson;
 }
 
-function render(readableBounds, data_geojson, width, height, mapStyle, outputHolderId) {
+function render(readableBounds, dataGeojson, width, height, mapStyle, outputHolderId) {
   if ("transformGeometryAsInitialStep" in mapStyle) {
-    data_geojson = mapStyle.transformGeometryAsInitialStep(data_geojson, readableBounds);
+    dataGeojson = mapStyle.transformGeometryAsInitialStep(dataGeojson, readableBounds);
   }
-  validateGeometries(data_geojson);
-  data_geojson = mergeAsRequestedByMapStyle(data_geojson, mapStyle);
+  validateGeometries(dataGeojson);
+  dataGeojson = mergeAsRequestedByMapStyle(dataGeojson, mapStyle);
   if ("transformGeometryAtFinalStep" in mapStyle) {
-    data_geojson = mapStyle.transformGeometryAtFinalStep(data_geojson, readableBounds);
+    dataGeojson = mapStyle.transformGeometryAtFinalStep(dataGeojson, readableBounds);
   }
-  data_geojson = clipGeometries(readableBounds, data_geojson);
-  renderUsingD3(readableBounds, data_geojson, width, height, mapStyle, outputHolderId);
+  dataGeojson = clipGeometries(readableBounds, dataGeojson);
+  renderUsingD3(readableBounds, dataGeojson, width, height, mapStyle, outputHolderId);
 }
 
-function validateGeometries(data_geojson) {
-  var i = data_geojson.features.length;
+function validateGeometries(dataGeojson) {
+  var i = dataGeojson.features.length;
   while (i--) {
-    var feature = data_geojson.features[i];
+    var feature = dataGeojson.features[i];
     if (feature.geometry == undefined) {
       var warning = "broken feature, geometry is missing!";
       alert(warning + JSON.stringify(feature));
@@ -280,12 +280,12 @@ function validateGeometries(data_geojson) {
   }
 }
 
-function mergeAsRequestedByMapStyle(data_geojson, mapStyle) {
-  var i = data_geojson.features.length;
+function mergeAsRequestedByMapStyle(dataGeojson, mapStyle) {
+  var i = dataGeojson.features.length;
   var processeedFeatures = [];
   var mergingGroups = {};
   while (i--) {
-    var feature = data_geojson.features[i];
+    var feature = dataGeojson.features[i];
     if (feature.geometry.type == "Point" || feature.geometry.type === "MultiPoint") {
       // skipping handling them for now
       // once point rendering will appear something will need to be done with it
@@ -327,24 +327,24 @@ function mergeAsRequestedByMapStyle(data_geojson, mapStyle) {
     produced.properties["lunar_assembler_merge_group"] = key;
     processeedFeatures.push(produced);
   }
-  data_geojson.features = processeedFeatures;
-  return data_geojson;
+  dataGeojson.features = processeedFeatures;
+  return dataGeojson;
 }
 
 // for searching: crop
-function clipGeometries(readableBounds, data_geojson) {
+function clipGeometries(readableBounds, dataGeojson) {
   var west = readableBounds["west"];
   var south = readableBounds["south"];
   var east = readableBounds["east"];
   var north = readableBounds["north"];
   var bbox = [west, south, east, north];
-  var i = data_geojson.features.length;
+  var i = dataGeojson.features.length;
   var survivingFeatures = [];
   while (i--) {
     // once point rendering will appear something
     // like https://www.npmjs.com/package/@turf/boolean-point-in-polygon
     // will need to be used
-    var feature = data_geojson.features[i];
+    var feature = dataGeojson.features[i];
     if (feature.geometry.type != "Point" && feature.geometry.type != "MultiPoint") {
       feature.geometry = turf.bboxClip(feature.geometry, bbox).geometry;
     }
@@ -353,8 +353,8 @@ function clipGeometries(readableBounds, data_geojson) {
       survivingFeatures.push(feature);
     }
   }
-  data_geojson.features = survivingFeatures;
-  return data_geojson;
+  dataGeojson.features = survivingFeatures;
+  return dataGeojson;
 }
 
 function dropDegenerateGeometrySegments(feature) {
@@ -419,19 +419,19 @@ function dropDegenerateGeometrySegments(feature) {
   console.log(feature);
   return feature;
 }
-function renderUsingD3(readableBounds, data_geojson, width, height, mapStyle, outputHolderId) {
+function renderUsingD3(readableBounds, dataGeojson, width, height, mapStyle, outputHolderId) {
   var geoJSONRepresentingBoundaries = geoJSONPolygonRepresentingBBox(readableBounds);
   // rewinding is sometimes needed, sometimes not
   // rewinding is sometimes broken in my code (at least in oce case it was borked by my bug in futher processing!), sometimes not
   // see https://gis.stackexchange.com/questions/392452/why-d3-js-works-only-with-geojson-violating-right-hand-rule
   // not sure what is going on here
 
-  console.log("data_geojson in the next line (before d3 rewind):");
-  console.log(JSON.stringify(data_geojson));
-  var d3_data_geojson = rewind(data_geojson);
+  console.log("dataGeojson in the next line (before d3 rewind):");
+  console.log(JSON.stringify(dataGeojson));
+  var d3_dataGeojson = rewind(dataGeojson);
   var d3_geoJSONRepresentingBoundaries = rewind(geoJSONRepresentingBoundaries);
-  console.log("data_geojson in the next line (after d3 rewind):");
-  console.log(JSON.stringify(d3_data_geojson));
+  console.log("dataGeojson in the next line (after d3 rewind):");
+  console.log(JSON.stringify(d3_dataGeojson));
 
   var projection = d3
     .geoMercator()
@@ -455,9 +455,9 @@ function renderUsingD3(readableBounds, data_geojson, width, height, mapStyle, ou
   // turn function returning value (layering order of function)
   // into function taking two features and ordering them
   var compareFunction = makeCompareFunctionForLayering(mapStyle.paintOrder);
-  d3_data_geojson.features.sort(compareFunction);
-  console.log(d3_data_geojson.features);
-  update3Map(geoGenerator, d3_data_geojson, selector, mapStyle);
+  d3_dataGeojson.features.sort(compareFunction);
+  console.log(d3_dataGeojson.features);
+  update3Map(geoGenerator, d3_dataGeojson, selector, mapStyle);
 }
 
 function idOfGeneratedMap() {

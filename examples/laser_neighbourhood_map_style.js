@@ -236,53 +236,53 @@ function highZoomLaserMapStyle() {
 
     // called before merges
     // gets full data and can freely edit it
-    transformGeometryAsInitialStep(data_geojson, readableBounds) {
-      data_geojson = mapStyle.applyManualPatchesAtStart(data_geojson);
+    transformGeometryAsInitialStep(dataGeojson, readableBounds) {
+      dataGeojson = mapStyle.applyManualPatchesAtStart(dataGeojson);
 
-      data_geojson = mapStyle.generateAreasFromBarriers(data_geojson);
-      data_geojson = mapStyle.generateRestrictedAcccessArea(data_geojson, readableBounds);
-      data_geojson = mapStyle.generateAreasFromRoadLines(data_geojson);
-      return data_geojson;
+      dataGeojson = mapStyle.generateAreasFromBarriers(dataGeojson);
+      dataGeojson = mapStyle.generateRestrictedAcccessArea(dataGeojson, readableBounds);
+      dataGeojson = mapStyle.generateAreasFromRoadLines(dataGeojson);
+      return dataGeojson;
     },
 
     // called after areas were merged, before sorting of areas
     // gets full data and can freely edit it
-    transformGeometryAtFinalStep(data_geojson, readableBounds) {
-      data_geojson = mapStyle.applyManualPatchesBeforeGeometryErasings(data_geojson);
+    transformGeometryAtFinalStep(dataGeojson, readableBounds) {
+      dataGeojson = mapStyle.applyManualPatchesBeforeGeometryErasings(dataGeojson);
 
-      data_geojson = mapStyle.restrictPedestrianCrossingToRoadAreas(data_geojson);
-      data_geojson = mapStyle.eraseCrossingAreasFromRoads(data_geojson);
-      data_geojson = mapStyle.fillAreaNearRoadAndFootwayWithFootway(data_geojson);
-      data_geojson = mapStyle.eraseFootwayWhereIntersectingRoad(data_geojson);
-      data_geojson = mapStyle.eraseFootwayWhereIntersectingBuilding(data_geojson);
-      data_geojson = mapStyle.eraseFootwayWhereIntersectingPrivateArea(data_geojson);
-      data_geojson = mapStyle.eraseFootwayWhereIntersectingCrossings(data_geojson);
-      data_geojson = mapStyle.eraseWaterWhereIntersectingBridge(data_geojson);
+      dataGeojson = mapStyle.restrictPedestrianCrossingToRoadAreas(dataGeojson);
+      dataGeojson = mapStyle.eraseCrossingAreasFromRoads(dataGeojson);
+      dataGeojson = mapStyle.fillAreaNearRoadAndFootwayWithFootway(dataGeojson);
+      dataGeojson = mapStyle.eraseFootwayWhereIntersectingRoad(dataGeojson);
+      dataGeojson = mapStyle.eraseFootwayWhereIntersectingBuilding(dataGeojson);
+      dataGeojson = mapStyle.eraseFootwayWhereIntersectingPrivateArea(dataGeojson);
+      dataGeojson = mapStyle.eraseFootwayWhereIntersectingCrossings(dataGeojson);
+      dataGeojson = mapStyle.eraseWaterWhereIntersectingBridge(dataGeojson);
 
-      data_geojson = mapStyle.applyManualPatchesAfterGeometryErasings(data_geojson);
+      dataGeojson = mapStyle.applyManualPatchesAfterGeometryErasings(dataGeojson);
 
-      data_geojson = mapStyle.fillSliversAroundFootways(data_geojson, readableBounds);
+      dataGeojson = mapStyle.fillSliversAroundFootways(dataGeojson, readableBounds);
 
-      data_geojson = mapStyle.applyPatternsToCarriagewaysAndWater(data_geojson);
+      dataGeojson = mapStyle.applyPatternsToCarriagewaysAndWater(dataGeojson);
 
-      return data_geojson;
+      return dataGeojson;
     },
 
-    applyManualPatchesAtStart(data_geojson) {
-      var i = data_geojson.features.length;
+    applyManualPatchesAtStart(dataGeojson) {
+      var i = dataGeojson.features.length;
       var found = undefined;
       while (i--) {
-        var feature = data_geojson.features[i];
+        var feature = dataGeojson.features[i];
         if (["way/940940433", "way/947218894"].includes(feature.id)) {
-          data_geojson.features.splice(i, 1); // remove matching element
+          dataGeojson.features.splice(i, 1); // remove matching element
         }
       }
-      return data_geojson;
+      return dataGeojson;
     },
 
-    applyManualPatchesBeforeGeometryErasings(data_geojson) {
-      data_geojson = mapStyle.addToFootwayGeometry(
-        data_geojson,
+    applyManualPatchesBeforeGeometryErasings(dataGeojson) {
+      dataGeojson = mapStyle.addToFootwayGeometry(
+        dataGeojson,
         [
           [
             [19.92633730173111, 50.05211704223168],
@@ -296,8 +296,8 @@ function highZoomLaserMapStyle() {
         "Rynek Dębnicki"
       );
 
-      data_geojson = mapStyle.addToFootwayGeometry(
-        data_geojson,
+      dataGeojson = mapStyle.addToFootwayGeometry(
+        dataGeojson,
         [
           [
             [19.928049, 50.052813],
@@ -313,8 +313,8 @@ function highZoomLaserMapStyle() {
         "Barska i Madalińskiego"
       );
 
-      data_geojson = mapStyle.addToFootwayGeometry(
-        data_geojson,
+      dataGeojson = mapStyle.addToFootwayGeometry(
+        dataGeojson,
 
         [
           [
@@ -329,8 +329,8 @@ function highZoomLaserMapStyle() {
         "Chodnik przy szkole (przewidziany do przycięcia przez drogę)"
       );
 
-      data_geojson = mapStyle.addToCarriagewayGeometry(
-        data_geojson,
+      dataGeojson = mapStyle.addToCarriagewayGeometry(
+        dataGeojson,
 
         [
           [
@@ -355,11 +355,11 @@ function highZoomLaserMapStyle() {
         "parking przy szkole"
       );
 
-      return data_geojson;
+      return dataGeojson;
     },
 
-    addToCarriagewayGeometry(data_geojson, new_geometry, identifier) {
-      var roadArea = findMergeGroupObject(data_geojson, "area:highway_carriageway_layer");
+    addToCarriagewayGeometry(dataGeojson, new_geometry, identifier) {
+      var roadArea = findMergeGroupObject(dataGeojson, "area:highway_carriageway_layer");
       if (roadArea === undefined) {
         // if no footway is defined in the first place it will not be added
         // but it is a manaual hack for manually tweaked area, so...
@@ -367,11 +367,11 @@ function highZoomLaserMapStyle() {
       } else {
         roadArea.geometry.coordinates = polygonClipping.union(roadArea.geometry.coordinates, new_geometry);
       }
-      return data_geojson;
+      return dataGeojson;
     },
 
-    addToFootwayGeometry(data_geojson, new_geometry, identifier) {
-      var footwayArea = findMergeGroupObject(data_geojson, "area:highway_footway");
+    addToFootwayGeometry(dataGeojson, new_geometry, identifier) {
+      var footwayArea = findMergeGroupObject(dataGeojson, "area:highway_footway");
       if (footwayArea === undefined) {
         // if no footway is defined in the first place it will not be added
         // but it is a manaual hack for manually tweaked area, so...
@@ -379,12 +379,12 @@ function highZoomLaserMapStyle() {
       } else {
         footwayArea.geometry.coordinates = polygonClipping.union(footwayArea.geometry.coordinates, new_geometry);
       }
-      return data_geojson;
+      return dataGeojson;
     },
 
-    applyManualPatchesAfterGeometryErasings(data_geojson) {
-      data_geojson = mapStyle.replaceRoadAndBuildingsByFootwayHere(
-        data_geojson,
+    applyManualPatchesAfterGeometryErasings(dataGeojson) {
+      dataGeojson = mapStyle.replaceRoadAndBuildingsByFootwayHere(
+        dataGeojson,
         [
           [
             [19.92846697568893, 50.05204384778197],
@@ -396,8 +396,8 @@ function highZoomLaserMapStyle() {
         ],
         "Powroźnicza, północna strona"
       );
-      data_geojson = mapStyle.replaceRoadAndBuildingsByFootwayHere(
-        data_geojson,
+      dataGeojson = mapStyle.replaceRoadAndBuildingsByFootwayHere(
+        dataGeojson,
         [
           [
             [19.92953583598137, 50.05228840291845],
@@ -409,8 +409,8 @@ function highZoomLaserMapStyle() {
         ],
         "Powroźnicza, południowa strona"
       );
-      data_geojson = mapStyle.replaceRoadAndBuildingsByFootwayHere(
-        data_geojson,
+      dataGeojson = mapStyle.replaceRoadAndBuildingsByFootwayHere(
+        dataGeojson,
         [
           [
             [19.92882639169693, 50.050331065787766],
@@ -422,8 +422,8 @@ function highZoomLaserMapStyle() {
         ],
         "Różana, północna strona"
       );
-      data_geojson = mapStyle.replaceRoadAndBuildingsByFootwayHere(
-        data_geojson,
+      dataGeojson = mapStyle.replaceRoadAndBuildingsByFootwayHere(
+        dataGeojson,
         [
           [
             [19.928745925426483, 50.05028198063654],
@@ -435,11 +435,11 @@ function highZoomLaserMapStyle() {
         ],
         "Różana, południowa strona"
       );
-      return data_geojson;
+      return dataGeojson;
     },
 
-    replaceRoadAndBuildingsByFootwayHere(data_geojson, target_geometry, identifier) {
-      var buildingArea = findMergeGroupObject(data_geojson, "buildings");
+    replaceRoadAndBuildingsByFootwayHere(dataGeojson, target_geometry, identifier) {
+      var buildingArea = findMergeGroupObject(dataGeojson, "buildings");
       if (buildingArea === undefined) {
         //alert("no building areas (areas tagged with a building=*) in range!");
         // no need to repeat warning
@@ -447,7 +447,7 @@ function highZoomLaserMapStyle() {
         buildingArea.geometry.coordinates = polygonClipping.difference(buildingArea.geometry.coordinates, target_geometry);
       }
 
-      var blockedArea = findMergeGroupObject(data_geojson, "generated_blocked_chunk");
+      var blockedArea = findMergeGroupObject(dataGeojson, "generated_blocked_chunk");
       if (blockedArea === undefined) {
         //alert("no building areas (areas tagged with a building=*) in range!");
         // no need to repeat warning
@@ -455,7 +455,7 @@ function highZoomLaserMapStyle() {
         blockedArea.geometry.coordinates = polygonClipping.difference(blockedArea.geometry.coordinates, target_geometry);
       }
 
-      var roadArea = findMergeGroupObject(data_geojson, "area:highway_carriageway_layer");
+      var roadArea = findMergeGroupObject(dataGeojson, "area:highway_carriageway_layer");
       if (roadArea === undefined) {
         // alert("no road areas (lines tagged with a proper highway=*) in range!");
         // no need to repeat warning
@@ -463,36 +463,36 @@ function highZoomLaserMapStyle() {
         roadArea.geometry.coordinates = polygonClipping.difference(roadArea.geometry.coordinates, target_geometry);
       }
 
-      data_geojson = mapStyle.addToFootwayGeometry(data_geojson, target_geometry, identifier);
-      return data_geojson;
+      dataGeojson = mapStyle.addToFootwayGeometry(dataGeojson, target_geometry, identifier);
+      return dataGeojson;
     },
 
-    restrictPedestrianCrossingToRoadAreas(data_geojson) {
-      var roadArea = findMergeGroupObject(data_geojson, "area:highway_carriageway_layer");
-      var crossingArea = findMergeGroupObject(data_geojson, "area:highway_crossing");
+    restrictPedestrianCrossingToRoadAreas(dataGeojson) {
+      var roadArea = findMergeGroupObject(dataGeojson, "area:highway_carriageway_layer");
+      var crossingArea = findMergeGroupObject(dataGeojson, "area:highway_crossing");
       if (crossingArea === undefined) {
         alert("no crossing areas (lines with footway=crossing) in range!");
-        return data_geojson;
+        return dataGeojson;
       }
       if (roadArea === undefined) {
         alert("no road areas (lines tagged with a proper highway=*) in range!");
         crossingArea.geometry.coordinates = [];
-        return data_geojson;
+        return dataGeojson;
       }
       crossingArea.geometry.coordinates = polygonClipping.intersection(crossingArea.geometry.coordinates, roadArea.geometry.coordinates);
-      return data_geojson;
+      return dataGeojson;
     },
 
-    eraseCrossingAreasFromRoads(data_geojson) {
-      var roadArea = findMergeGroupObject(data_geojson, "area:highway_carriageway_layer");
-      var crossingArea = findMergeGroupObject(data_geojson, "area:highway_crossing");
+    eraseCrossingAreasFromRoads(dataGeojson) {
+      var roadArea = findMergeGroupObject(dataGeojson, "area:highway_carriageway_layer");
+      var crossingArea = findMergeGroupObject(dataGeojson, "area:highway_crossing");
       if (crossingArea === undefined) {
         alert("no crossing areas (lines with footway=crossing) in range!");
-        return data_geojson;
+        return dataGeojson;
       }
       if (roadArea === undefined) {
         alert("no road areas (lines tagged with a proper highway=*) in range!");
-        return data_geojson;
+        return dataGeojson;
       }
       if (!isMultipolygonAsExpected(roadArea)) {
         console.error("following geometry was expected to be multipolygon but was not:")
@@ -503,20 +503,20 @@ function highZoomLaserMapStyle() {
         console.error(crossingArea);
       }
       roadArea.geometry.coordinates = polygonClipping.difference(roadArea.geometry.coordinates, crossingArea.geometry.coordinates);
-      return data_geojson;
+      return dataGeojson;
     },
 
-    eraseFootwayWhereIntersectingRoad(data_geojson) {
-      var roadArea = findMergeGroupObject(data_geojson, "area:highway_carriageway_layer");
-      var footwayArea = findMergeGroupObject(data_geojson, "area:highway_footway");
+    eraseFootwayWhereIntersectingRoad(dataGeojson) {
+      var roadArea = findMergeGroupObject(dataGeojson, "area:highway_carriageway_layer");
+      var footwayArea = findMergeGroupObject(dataGeojson, "area:highway_footway");
       if (footwayArea === undefined) {
         alert("no footwayArea (highway=footway lines without footway=crossing) in range!");
-        return data_geojson;
+        return dataGeojson;
       }
       if (roadArea === undefined) {
         //alert("no road areas (lines tagged with a proper highway=*) in range!");
         //will be warned in other cases
-        return data_geojson;
+        return dataGeojson;
       }
       if (!isMultipolygonAsExpected(roadArea)) {
         console.error("following geometry was expected to be multipolygon but was not:")
@@ -527,20 +527,20 @@ function highZoomLaserMapStyle() {
         console.error(footwayArea);
       }
       footwayArea.geometry.coordinates = polygonClipping.difference(footwayArea.geometry.coordinates, roadArea.geometry.coordinates);
-      return data_geojson;
+      return dataGeojson;
     },
 
-    eraseFootwayWhereIntersectingBuilding(data_geojson) {
-      var buildingArea = findMergeGroupObject(data_geojson, "buildings");
-      var footwayArea = findMergeGroupObject(data_geojson, "area:highway_footway");
+    eraseFootwayWhereIntersectingBuilding(dataGeojson) {
+      var buildingArea = findMergeGroupObject(dataGeojson, "buildings");
+      var footwayArea = findMergeGroupObject(dataGeojson, "area:highway_footway");
       if (footwayArea === undefined) {
         //will be warned in other cases
         //alert("no footwayArea (highway=footway lines without footway=crossing) in range!");
-        return data_geojson;
+        return dataGeojson;
       }
       if (buildingArea === undefined) {
         alert("no building areas (areas tagged with a building=*) in range!");
-        return data_geojson;
+        return dataGeojson;
       }
       if (!isMultipolygonAsExpected(buildingArea)) {
         console.error("following geometry was expected to be multipolygon but was not:")
@@ -551,19 +551,19 @@ function highZoomLaserMapStyle() {
         console.error(footwayArea);
       }
       footwayArea.geometry.coordinates = polygonClipping.difference(footwayArea.geometry.coordinates, buildingArea.geometry.coordinates);
-      return data_geojson;
+      return dataGeojson;
     },
 
-    eraseFootwayWhereIntersectingPrivateArea(data_geojson) {
-      var blockedArea = findMergeGroupObject(data_geojson, "generated_blocked_chunk");
-      var footwayArea = findMergeGroupObject(data_geojson, "area:highway_footway");
+    eraseFootwayWhereIntersectingPrivateArea(dataGeojson) {
+      var blockedArea = findMergeGroupObject(dataGeojson, "generated_blocked_chunk");
+      var footwayArea = findMergeGroupObject(dataGeojson, "area:highway_footway");
       if (blockedArea === undefined) {
         alert("no blocked areas at all! Is everything really accessible in range? Report error at https://github.com/matkoniecz/lunar_assembler/issues if not ");
-        return data_geojson;
+        return dataGeojson;
       }
       if (footwayArea === undefined) {
         alert("no footwayArea (highway=footway lines without footway=crossing) in range!");
-        return data_geojson;
+        return dataGeojson;
       }
       if (!isMultipolygonAsExpected(blockedArea)) {
         console.error("following geometry was expected to be multipolygon but was not:")
@@ -574,20 +574,20 @@ function highZoomLaserMapStyle() {
         console.error(footwayArea);
       }
       footwayArea.geometry.coordinates = polygonClipping.difference(footwayArea.geometry.coordinates, blockedArea.geometry.coordinates);
-      return data_geojson;
+      return dataGeojson;
     },
 
-    eraseFootwayWhereIntersectingCrossings(data_geojson) {
-      var crossingArea = findMergeGroupObject(data_geojson, "area:highway_crossing");
+    eraseFootwayWhereIntersectingCrossings(dataGeojson) {
+      var crossingArea = findMergeGroupObject(dataGeojson, "area:highway_crossing");
       if (crossingArea === undefined) {
         //alert("no crossing areas (lines with footway=crossing) in range!");
         //will be warned in other cases
-        return data_geojson;
+        return dataGeojson;
       }
-      var footwayArea = findMergeGroupObject(data_geojson, "area:highway_footway");
+      var footwayArea = findMergeGroupObject(dataGeojson, "area:highway_footway");
       if (footwayArea === undefined) {
         alert("no footwayArea (highway=footway lines without footway=crossing) in range!");
-        return data_geojson;
+        return dataGeojson;
       }
       if (!isMultipolygonAsExpected(crossingArea)) {
         console.error("following geometry was expected to be multipolygon but was not:")
@@ -598,22 +598,22 @@ function highZoomLaserMapStyle() {
         console.error(footwayArea);
       }
       footwayArea.geometry.coordinates = polygonClipping.difference(footwayArea.geometry.coordinates, crossingArea.geometry.coordinates);
-      return data_geojson;
+      return dataGeojson;
     },
 
-    eraseWaterWhereIntersectingBridge(data_geojson) {
-      var water = findMergeGroupObject(data_geojson, "water");
+    eraseWaterWhereIntersectingBridge(dataGeojson) {
+      var water = findMergeGroupObject(dataGeojson, "water");
       if (water === undefined) {
         // no reason to suspect issues
         // nothing to remove
-        return data_geojson;
+        return dataGeojson;
       }
       if (!isMultipolygonAsExpected(water)) {
         console.error("following geometry was expected to be multipolygon but was not:")
         console.error(water);
       }
 
-      var bridgeArea = findMergeGroupObject(data_geojson, "bridge_outline");
+      var bridgeArea = findMergeGroupObject(dataGeojson, "bridge_outline");
       if (bridgeArea === undefined) {
         // no reason to suspect issues
       } else {
@@ -624,7 +624,7 @@ function highZoomLaserMapStyle() {
         water.geometry.coordinates = polygonClipping.difference(water.geometry.coordinates, bridgeArea.geometry.coordinates);
       }
 
-      var footwayArea = findMergeGroupObject(data_geojson, "area:highway_footway");
+      var footwayArea = findMergeGroupObject(dataGeojson, "area:highway_footway");
       if (footwayArea === undefined) {
         // no reason to suspect issues
       } else {
@@ -635,24 +635,24 @@ function highZoomLaserMapStyle() {
           water.geometry.coordinates = polygonClipping.difference(water.geometry.coordinates, footwayArea.geometry.coordinates);
       }
 
-      return data_geojson;
+      return dataGeojson;
     },
 
-    fillAreaNearRoadAndFootwayWithFootway(data_geojson) {
-      var extraRoadArea = findMergeGroupObject(data_geojson, "area:highway_carriageway_layer_extra_size");
-      var footwayArea = findMergeGroupObject(data_geojson, "area:highway_footway");
-      var extraFootwayArea = findMergeGroupObject(data_geojson, "area:highway_footway_extra_size");
+    fillAreaNearRoadAndFootwayWithFootway(dataGeojson) {
+      var extraRoadArea = findMergeGroupObject(dataGeojson, "area:highway_carriageway_layer_extra_size");
+      var footwayArea = findMergeGroupObject(dataGeojson, "area:highway_footway");
+      var extraFootwayArea = findMergeGroupObject(dataGeojson, "area:highway_footway_extra_size");
       if (footwayArea === undefined) {
         alert("no footwayArea (highway=footway lines without footway=crossing) in range!");
-        return data_geojson;
+        return dataGeojson;
       }
       if (extraRoadArea === undefined) {
         alert("no extraRoadArea in range!");
-        return data_geojson;
+        return dataGeojson;
       }
       if (extraFootwayArea === undefined) {
         alert("no extraFootwayArea in range!");
-        return data_geojson;
+        return dataGeojson;
       }
       if (!isMultipolygonAsExpected(extraRoadArea)) {
         console.error("following geometry was expected to be multipolygon but was not:")
@@ -664,7 +664,7 @@ function highZoomLaserMapStyle() {
       }
       var intersectedGeometry = polygonClipping.intersection(extraFootwayArea.geometry.coordinates, extraRoadArea.geometry.coordinates);
       footwayArea.geometry.coordinates = polygonClipping.union(footwayArea.geometry.coordinates, intersectedGeometry);
-      return data_geojson;
+      return dataGeojson;
     },
 
     widthOfRoadGeometryInMeters(feature) {
@@ -772,15 +772,15 @@ function highZoomLaserMapStyle() {
       return [entireAreaRing];
     },
 
-    fillSliversAroundFootways(data_geojson, readableBounds) {
+    fillSliversAroundFootways(dataGeojson, readableBounds) {
       var emptyArea = mapStyle.boundsToGeojsonGeometry(readableBounds);
-      var footwayArea = findMergeGroupObject(data_geojson, "area:highway_footway");
+      var footwayArea = findMergeGroupObject(dataGeojson, "area:highway_footway");
       if (footwayArea === undefined) {
-        return data_geojson;
+        return dataGeojson;
       }
       emptyArea = polygonClipping.difference(emptyArea, footwayArea.geometry.coordinates);
 
-      var roadArea = findMergeGroupObject(data_geojson, "area:highway_carriageway_layer");
+      var roadArea = findMergeGroupObject(dataGeojson, "area:highway_carriageway_layer");
       if (roadArea === undefined) {
         // alert("no road areas (lines tagged with a proper highway=*) in range!");
         // no need to repeat warning
@@ -788,7 +788,7 @@ function highZoomLaserMapStyle() {
         emptyArea = polygonClipping.difference(emptyArea, roadArea.geometry.coordinates);
       }
 
-      var buildingArea = findMergeGroupObject(data_geojson, "buildings");
+      var buildingArea = findMergeGroupObject(dataGeojson, "buildings");
       if (buildingArea === undefined) {
         //alert("no building areas (areas tagged with a building=*) in range!");
         // no need to repeat warning
@@ -796,14 +796,14 @@ function highZoomLaserMapStyle() {
         emptyArea = polygonClipping.difference(emptyArea, buildingArea.geometry.coordinates);
       }
 
-      var crossingArea = findMergeGroupObject(data_geojson, "area:highway_crossing");
+      var crossingArea = findMergeGroupObject(dataGeojson, "area:highway_crossing");
       if (crossingArea === undefined) {
         // no need to repeat warning
       } else {
         emptyArea = polygonClipping.difference(emptyArea, crossingArea.geometry.coordinates);
       }
 
-      var blockedArea = findMergeGroupObject(data_geojson, "generated_blocked_chunk");
+      var blockedArea = findMergeGroupObject(dataGeojson, "generated_blocked_chunk");
       if (blockedArea === undefined) {
         //alert("no building areas (areas tagged with a building=*) in range!");
         // no need to repeat warning
@@ -831,7 +831,7 @@ function highZoomLaserMapStyle() {
         }
       }
 
-      return data_geojson;
+      return dataGeojson;
     },
 
     generateRestrictedAcccessArea(geojson, readableBounds) {
@@ -958,7 +958,7 @@ function highZoomLaserMapStyle() {
       return geojson;
     },
 
-    applyPatternsToCarriagewaysAndWater(data_geojson) {
+    applyPatternsToCarriagewaysAndWater(dataGeojson) {
       // applied pattern is set of square holes, regularly spaced in a grid
       // it is intended to be used in a laser cutter that will burn are outside such exempt holes, producing a clear pattern
       // repeating pattern on grid of size 1m seems to work well, with hole 40cm sized and burned are 60cm wide
@@ -967,7 +967,7 @@ function highZoomLaserMapStyle() {
       // Returns BBox bbox extent in [minX, minY, maxX, maxY] order
       var kilometers = { units: "kilometers" };
 
-      bbox = turf.bbox(data_geojson);
+      bbox = turf.bbox(dataGeojson);
       var minLongitude = bbox[0];
       var minLatitude = bbox[1];
       var maxLongitude = bbox[2];
@@ -999,13 +999,13 @@ function highZoomLaserMapStyle() {
       const waterRowSizeInMeters = 0.9;
 
       // generate pattern for road surface by intersecting it with a prepared pattern
-      var i = data_geojson.features.length;
+      var i = dataGeojson.features.length;
       while (i--) {
-        var feature = data_geojson.features[i];
+        var feature = dataGeojson.features[i];
         if (feature.properties["lunar_assembler_merge_group"] == "water") {
           var generated = intersectGeometryWithHorizontalStripes(feature, waterRowSizeInMeters / metersInDegreeHorizontal, waterSpaceBetweenRowsInMeters / metersInDegreeHorizontal);
           generated.properties["lunar_assembler_cloned_for_pattern_fill"] = "yes";
-          data_geojson.features.push(generated); // added at the ned, and iterating from end to 0 so will not trigger infinite loop
+          dataGeojson.features.push(generated); // added at the ned, and iterating from end to 0 so will not trigger infinite loop
         }
         if (feature.properties["lunar_assembler_merge_group"] == "area:highway_carriageway_layer") {
           var generated = intersectGeometryWithPlaneHavingRectangularHoles(
@@ -1016,10 +1016,10 @@ function highZoomLaserMapStyle() {
             spaceHorizontalInMeters / metersInDegreeHorizontal
           );
           generated.properties["lunar_assembler_cloned_for_pattern_fill"] = "yes";
-          data_geojson.features.push(generated); // added at the ned, and iterating from end to 0 so will not trigger infinite loop
+          dataGeojson.features.push(generated); // added at the ned, and iterating from end to 0 so will not trigger infinite loop
         }
       }
-      return data_geojson;
+      return dataGeojson;
     },
   };
   return mapStyle;

@@ -139,11 +139,11 @@ function intersectGeometryWithPlaneHavingRectangularHoles(feature, holeVerticalI
   return cloned;
 }
 
-function findMergeGroupObject(data_geojson, code) {
-  var i = data_geojson.features.length;
+function findMergeGroupObject(dataGeojson, code) {
+  var i = dataGeojson.features.length;
   var found = undefined;
   while (i--) {
-    var feature = data_geojson.features[i];
+    var feature = dataGeojson.features[i];
     if (feature.properties["lunar_assembler_merge_group"] == code) {
       if (found != undefined) {
         alert("more than one area of " + code + "type what is unexpected, things may break. This is a bug, please report it on https://github.com/matkoniecz/lunar_assembler/issues");

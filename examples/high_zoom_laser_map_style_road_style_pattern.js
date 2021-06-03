@@ -258,32 +258,32 @@ function highZoomLaserMapStyle() {
       return feature.properties.name;
     },
 
-    transformGeometryAsInitialStep(data_geojson, readableBounds) {
-      data_geojson = mapStyle.programaticallyGenerateSymbolicStepParts(data_geojson);
-      return data_geojson;
+    transformGeometryAsInitialStep(dataGeojson, readableBounds) {
+      dataGeojson = mapStyle.programaticallyGenerateSymbolicStepParts(dataGeojson);
+      return dataGeojson;
     },
 
     // called after areas were merged, before sorting of areas
     // gets full data and can freely edit it
-    transformGeometryAtFinalStep(data_geojson, readableBounds) {
-      data_geojson = mapStyle.eraseWaterWhereIntersectingBridge(data_geojson);
-      data_geojson = mapStyle.applyPatternsToCarriagewaysAndWater(data_geojson);
-      return data_geojson;
+    transformGeometryAtFinalStep(dataGeojson, readableBounds) {
+      dataGeojson = mapStyle.eraseWaterWhereIntersectingBridge(dataGeojson);
+      dataGeojson = mapStyle.applyPatternsToCarriagewaysAndWater(dataGeojson);
+      return dataGeojson;
     },
 
-    eraseWaterWhereIntersectingBridge(data_geojson) {
-      var water = findMergeGroupObject(data_geojson, "water");
+    eraseWaterWhereIntersectingBridge(dataGeojson) {
+      var water = findMergeGroupObject(dataGeojson, "water");
       if (water === undefined) {
         // no reason to suspect issues
         // nothing to remove
-        return data_geojson;
+        return dataGeojson;
       }
       if (!isMultipolygonAsExpected(water)) {
         console.error("following geometry was expected to be multipolygon but was not:")
         console.error(water);
       }
 
-      var bridgeArea = findMergeGroupObject(data_geojson, "bridge_outline");
+      var bridgeArea = findMergeGroupObject(dataGeojson, "bridge_outline");
       if (bridgeArea === undefined) {
         // no reason to suspect issues
       } else {
@@ -294,7 +294,7 @@ function highZoomLaserMapStyle() {
         water.geometry.coordinates = polygonClipping.difference(water.geometry.coordinates, bridgeArea.geometry.coordinates);
       }
 
-      var footwayArea = findMergeGroupObject(data_geojson, "area:highway_footway");
+      var footwayArea = findMergeGroupObject(dataGeojson, "area:highway_footway");
       if (footwayArea === undefined) {
         // no reason to suspect issues
       } else {
@@ -305,7 +305,7 @@ function highZoomLaserMapStyle() {
           water.geometry.coordinates = polygonClipping.difference(water.geometry.coordinates, footwayArea.geometry.coordinates);
       }
 
-      return data_geojson;
+      return dataGeojson;
     },
 
     ////////////////////////////////////////////
@@ -503,13 +503,13 @@ function highZoomLaserMapStyle() {
       return [start[0] * ratioOfStart + end[0] * (1 - ratioOfStart), start[1] * ratioOfStart + end[1] * (1 - ratioOfStart)];
     },
 
-    programaticallyGenerateSymbolicStepParts(data_geojson) {
-      //alert(JSON.stringify(data_geojson))
-      var pointsInSteps = mapStyle.dataToListOfPositionOfStepsNodes(data_geojson);
-      var i = data_geojson.features.length;
+    programaticallyGenerateSymbolicStepParts(dataGeojson) {
+      //alert(JSON.stringify(dataGeojson))
+      var pointsInSteps = mapStyle.dataToListOfPositionOfStepsNodes(dataGeojson);
+      var i = dataGeojson.features.length;
       var generatedFeatures = [];
       while (i--) {
-        var feature = data_geojson.features[i];
+        var feature = dataGeojson.features[i];
         const link = "https://www.openstreetmap.org/" + feature.id;
         if (feature.properties["area:highway"] != "steps") {
           continue;
@@ -532,12 +532,12 @@ function highZoomLaserMapStyle() {
       }
       i = generatedFeatures.length;
       while (i--) {
-        data_geojson.features.push(generatedFeatures[i]);
+        dataGeojson.features.push(generatedFeatures[i]);
       }
-      return data_geojson;
+      return dataGeojson;
     },
 
-    applyPatternsToCarriagewaysAndWater(data_geojson) {
+    applyPatternsToCarriagewaysAndWater(dataGeojson) {
       // applied pattern is set of square holes, regularly spaced in a grid
       // it is intended to be used in a laser cutter that will burn are outside such exempt holes, producing a clear pattern
       // repeating pattern on grid of size 1m seems to work well, with hole 40cm sized and burned are 60cm wide
@@ -546,7 +546,7 @@ function highZoomLaserMapStyle() {
       // Returns BBox bbox extent in [minX, minY, maxX, maxY] order
       var kilometers = { units: "kilometers" };
 
-      bbox = turf.bbox(data_geojson);
+      bbox = turf.bbox(dataGeojson);
       var minLongitude = bbox[0];
       var minLatitude = bbox[1];
       var maxLongitude = bbox[2];
@@ -578,13 +578,13 @@ function highZoomLaserMapStyle() {
       const waterRowSizeInMeters = 0.3;
 
       // generate pattern for road surface by intersecting it with a prepared pattern
-      var i = data_geojson.features.length;
+      var i = dataGeojson.features.length;
       while (i--) {
-        var feature = data_geojson.features[i];
+        var feature = dataGeojson.features[i];
         if (feature.properties["lunar_assembler_merge_group"] == "water") {
           var generated = intersectGeometryWithHorizontalStripes(feature, waterRowSizeInMeters / metersInDegreeHorizontal, waterSpaceBetweenRowsInMeters / metersInDegreeHorizontal);
           generated.properties["lunar_assembler_cloned_for_pattern_fill"] = "yes";
-          data_geojson.features.push(generated); // added at the ned, and iterating from end to 0 so will not trigger infinite loop
+          dataGeojson.features.push(generated); // added at the ned, and iterating from end to 0 so will not trigger infinite loop
         }
         console.warn(feature.properties["lunar_assembler_merge_group"]);
         if (feature.properties["lunar_assembler_merge_group"] == "area:highway_carriageway_layer") {
@@ -596,10 +596,10 @@ function highZoomLaserMapStyle() {
             spaceHorizontalInMeters / metersInDegreeHorizontal
           );
           generated.properties["lunar_assembler_cloned_for_pattern_fill"] = "yes";
-          data_geojson.features.push(generated); // added at the ned, and iterating from end to 0 so will not trigger infinite loop
+          dataGeojson.features.push(generated); // added at the ned, and iterating from end to 0 so will not trigger infinite loop
         }
       }
-      return data_geojson;
+      return dataGeojson;
     },
   };
   return mapStyle;
