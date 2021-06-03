@@ -382,7 +382,33 @@ function highZoomLaserMapStyle() {
       return dataGeojson;
     },
 
+    eraseToFootwayGeometry(dataGeojson, new_geometry, identifier) {
+      var footwayArea = findMergeGroupObject(dataGeojson, "area:highway_footway");
+      if (footwayArea === undefined) {
+        // if no footway is defined in the first place it will not be added
+        // but it is a manaual hack for manually tweaked area, so...
+        //footwayArea.geometry.coordinates = new_geometry; // TODO: this WILL crash!
+      } else {
+        footwayArea.geometry.coordinates = polygonClipping.difference(footwayArea.geometry.coordinates, new_geometry);
+      }
+      return dataGeojson;
+    },
+
     applyManualPatchesAfterGeometryErasings(dataGeojson) {
+      dataGeojson = mapStyle.eraseToFootwayGeometry(
+        dataGeojson,
+        [
+          [
+            [19.925688542425632, 50.051965701819796],
+            [19.925660379230976, 50.05202576443014],
+            [19.925438091158867, 50.05194094480802],
+            [19.9254709482193, 50.05188411127172],
+            [19.925688542425632, 50.051965701819796],
+          ],
+        ],
+        "końcówka chodnika przy szkole dla niewidomych, przy przejściu"
+      );
+
       dataGeojson = mapStyle.replaceRoadAndBuildingsByFootwayHere(
         dataGeojson,
         [
