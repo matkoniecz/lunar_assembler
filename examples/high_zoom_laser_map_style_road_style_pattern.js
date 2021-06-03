@@ -279,7 +279,7 @@ function highZoomLaserMapStyle() {
         return dataGeojson;
       }
       if (!isMultipolygonAsExpected(water)) {
-        console.error("following geometry was expected to be multipolygon but was not:")
+        console.error("following geometry was expected to be multipolygon but was not:");
         console.error(water);
       }
 
@@ -288,7 +288,7 @@ function highZoomLaserMapStyle() {
         // no reason to suspect issues
       } else {
         if (!isMultipolygonAsExpected(bridgeArea)) {
-          console.error("following geometry was expected to be multipolygon but was not:")
+          console.error("following geometry was expected to be multipolygon but was not:");
           console.error(bridgeArea);
         }
         water.geometry.coordinates = polygonClipping.difference(water.geometry.coordinates, bridgeArea.geometry.coordinates);
@@ -298,11 +298,11 @@ function highZoomLaserMapStyle() {
       if (footwayArea === undefined) {
         // no reason to suspect issues
       } else {
-          if (!isMultipolygonAsExpected(footwayArea)) {
-            console.error("following geometry was expected to be multipolygon but was not:")
-            console.error(footwayArea);
-          }
-          water.geometry.coordinates = polygonClipping.difference(water.geometry.coordinates, footwayArea.geometry.coordinates);
+        if (!isMultipolygonAsExpected(footwayArea)) {
+          console.error("following geometry was expected to be multipolygon but was not:");
+          console.error(footwayArea);
+        }
+        water.geometry.coordinates = polygonClipping.difference(water.geometry.coordinates, footwayArea.geometry.coordinates);
       }
 
       return dataGeojson;

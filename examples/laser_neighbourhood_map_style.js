@@ -495,11 +495,11 @@ function highZoomLaserMapStyle() {
         return dataGeojson;
       }
       if (!isMultipolygonAsExpected(roadArea)) {
-        console.error("following geometry was expected to be multipolygon but was not:")
+        console.error("following geometry was expected to be multipolygon but was not:");
         console.error(roadArea);
       }
       if (!isMultipolygonAsExpected(crossingArea)) {
-        console.error("following geometry was expected to be multipolygon but was not:")
+        console.error("following geometry was expected to be multipolygon but was not:");
         console.error(crossingArea);
       }
       roadArea.geometry.coordinates = polygonClipping.difference(roadArea.geometry.coordinates, crossingArea.geometry.coordinates);
@@ -519,11 +519,11 @@ function highZoomLaserMapStyle() {
         return dataGeojson;
       }
       if (!isMultipolygonAsExpected(roadArea)) {
-        console.error("following geometry was expected to be multipolygon but was not:")
+        console.error("following geometry was expected to be multipolygon but was not:");
         console.error(roadArea);
       }
       if (!isMultipolygonAsExpected(footwayArea)) {
-        console.error("following geometry was expected to be multipolygon but was not:")
+        console.error("following geometry was expected to be multipolygon but was not:");
         console.error(footwayArea);
       }
       footwayArea.geometry.coordinates = polygonClipping.difference(footwayArea.geometry.coordinates, roadArea.geometry.coordinates);
@@ -543,11 +543,11 @@ function highZoomLaserMapStyle() {
         return dataGeojson;
       }
       if (!isMultipolygonAsExpected(buildingArea)) {
-        console.error("following geometry was expected to be multipolygon but was not:")
+        console.error("following geometry was expected to be multipolygon but was not:");
         console.error(buildingArea);
       }
       if (!isMultipolygonAsExpected(footwayArea)) {
-        console.error("following geometry was expected to be multipolygon but was not:")
+        console.error("following geometry was expected to be multipolygon but was not:");
         console.error(footwayArea);
       }
       footwayArea.geometry.coordinates = polygonClipping.difference(footwayArea.geometry.coordinates, buildingArea.geometry.coordinates);
@@ -566,11 +566,11 @@ function highZoomLaserMapStyle() {
         return dataGeojson;
       }
       if (!isMultipolygonAsExpected(blockedArea)) {
-        console.error("following geometry was expected to be multipolygon but was not:")
+        console.error("following geometry was expected to be multipolygon but was not:");
         console.error(blockedArea);
       }
       if (!isMultipolygonAsExpected(footwayArea)) {
-        console.error("following geometry was expected to be multipolygon but was not:")
+        console.error("following geometry was expected to be multipolygon but was not:");
         console.error(footwayArea);
       }
       footwayArea.geometry.coordinates = polygonClipping.difference(footwayArea.geometry.coordinates, blockedArea.geometry.coordinates);
@@ -590,11 +590,11 @@ function highZoomLaserMapStyle() {
         return dataGeojson;
       }
       if (!isMultipolygonAsExpected(crossingArea)) {
-        console.error("following geometry was expected to be multipolygon but was not:")
+        console.error("following geometry was expected to be multipolygon but was not:");
         console.error(crossingArea);
       }
       if (!isMultipolygonAsExpected(footwayArea)) {
-        console.error("following geometry was expected to be multipolygon but was not:")
+        console.error("following geometry was expected to be multipolygon but was not:");
         console.error(footwayArea);
       }
       footwayArea.geometry.coordinates = polygonClipping.difference(footwayArea.geometry.coordinates, crossingArea.geometry.coordinates);
@@ -609,7 +609,7 @@ function highZoomLaserMapStyle() {
         return dataGeojson;
       }
       if (!isMultipolygonAsExpected(water)) {
-        console.error("following geometry was expected to be multipolygon but was not:")
+        console.error("following geometry was expected to be multipolygon but was not:");
         console.error(water);
       }
 
@@ -618,7 +618,7 @@ function highZoomLaserMapStyle() {
         // no reason to suspect issues
       } else {
         if (!isMultipolygonAsExpected(bridgeArea)) {
-          console.error("following geometry was expected to be multipolygon but was not:")
+          console.error("following geometry was expected to be multipolygon but was not:");
           console.error(bridgeArea);
         }
         water.geometry.coordinates = polygonClipping.difference(water.geometry.coordinates, bridgeArea.geometry.coordinates);
@@ -628,11 +628,11 @@ function highZoomLaserMapStyle() {
       if (footwayArea === undefined) {
         // no reason to suspect issues
       } else {
-          if (!isMultipolygonAsExpected(footwayArea)) {
-            console.error("following geometry was expected to be multipolygon but was not:")
-            console.error(footwayArea);
-          }
-          water.geometry.coordinates = polygonClipping.difference(water.geometry.coordinates, footwayArea.geometry.coordinates);
+        if (!isMultipolygonAsExpected(footwayArea)) {
+          console.error("following geometry was expected to be multipolygon but was not:");
+          console.error(footwayArea);
+        }
+        water.geometry.coordinates = polygonClipping.difference(water.geometry.coordinates, footwayArea.geometry.coordinates);
       }
 
       return dataGeojson;
@@ -655,11 +655,11 @@ function highZoomLaserMapStyle() {
         return dataGeojson;
       }
       if (!isMultipolygonAsExpected(extraRoadArea)) {
-        console.error("following geometry was expected to be multipolygon but was not:")
+        console.error("following geometry was expected to be multipolygon but was not:");
         console.error(extraRoadArea);
       }
       if (!isMultipolygonAsExpected(extraFootwayArea)) {
-        console.error("following geometry was expected to be multipolygon but was not:")
+        console.error("following geometry was expected to be multipolygon but was not:");
         console.error(extraFootwayArea);
       }
       var intersectedGeometry = polygonClipping.intersection(extraFootwayArea.geometry.coordinates, extraRoadArea.geometry.coordinates);
@@ -820,14 +820,14 @@ function highZoomLaserMapStyle() {
         };
         console.log("checked area has area of " + turf.area(chunk) + " square meters and");
         if (turf.area(chunk) < 5) {
-          console.log("is now being included into footway area")
+          console.log("is now being included into footway area");
           // TODO: use
           // turf.lineOverlap(chunk, footwayArea)
           // or similar to merge in only actually adjoining
           // (lineOverlap seemed weird a bit and actual unions would likely should be done later)
           footwayArea.geometry.coordinates = polygonClipping.union(chunk.geometry.coordinates, footwayArea.geometry.coordinates);
         } else {
-          console.log("nothing happens")
+          console.log("nothing happens");
         }
       }
 
