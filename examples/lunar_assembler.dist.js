@@ -424,7 +424,7 @@ function dropDegenerateGeometrySegments(feature) {
       feature.geometry.coordinates = survivingGeometryParts;
     }
   }
-  console.log(feature);
+  //console.log(feature);
   return feature;
 }
 function renderUsingD3(readableBounds, dataGeojson, width, height, mapStyle, outputHolderId) {
