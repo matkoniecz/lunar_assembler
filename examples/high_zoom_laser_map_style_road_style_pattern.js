@@ -279,7 +279,8 @@ function highZoomLaserMapStyle() {
         return data_geojson;
       }
       if (!isMultipolygonAsExpected(water)) {
-        console.log(water);
+        console.error("following geometry was expected to be multipolygon but was not:")
+        console.error(water);
       }
 
       var bridgeArea = findMergeGroupObject(data_geojson, "bridge_outline");
@@ -287,7 +288,8 @@ function highZoomLaserMapStyle() {
         // no reason to suspect issues
       } else {
         if (!isMultipolygonAsExpected(bridgeArea)) {
-          console.log(bridgeArea);
+          console.error("following geometry was expected to be multipolygon but was not:")
+          console.error(bridgeArea);
         }
         water.geometry.coordinates = polygonClipping.difference(water.geometry.coordinates, bridgeArea.geometry.coordinates);
       }
@@ -297,7 +299,8 @@ function highZoomLaserMapStyle() {
         // no reason to suspect issues
       } else {
           if (!isMultipolygonAsExpected(footwayArea)) {
-            console.log(footwayArea);
+            console.error("following geometry was expected to be multipolygon but was not:")
+            console.error(footwayArea);
           }
           water.geometry.coordinates = polygonClipping.difference(water.geometry.coordinates, footwayArea.geometry.coordinates);
       }

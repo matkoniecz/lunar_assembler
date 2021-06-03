@@ -495,10 +495,12 @@ function highZoomLaserMapStyle() {
         return data_geojson;
       }
       if (!isMultipolygonAsExpected(roadArea)) {
-        console.log(roadArea);
+        console.error("following geometry was expected to be multipolygon but was not:")
+        console.error(roadArea);
       }
       if (!isMultipolygonAsExpected(crossingArea)) {
-        console.log(crossingArea);
+        console.error("following geometry was expected to be multipolygon but was not:")
+        console.error(crossingArea);
       }
       roadArea.geometry.coordinates = polygonClipping.difference(roadArea.geometry.coordinates, crossingArea.geometry.coordinates);
       return data_geojson;
@@ -517,10 +519,12 @@ function highZoomLaserMapStyle() {
         return data_geojson;
       }
       if (!isMultipolygonAsExpected(roadArea)) {
-        console.log(roadArea);
+        console.error("following geometry was expected to be multipolygon but was not:")
+        console.error(roadArea);
       }
       if (!isMultipolygonAsExpected(footwayArea)) {
-        console.log(footwayArea);
+        console.error("following geometry was expected to be multipolygon but was not:")
+        console.error(footwayArea);
       }
       footwayArea.geometry.coordinates = polygonClipping.difference(footwayArea.geometry.coordinates, roadArea.geometry.coordinates);
       return data_geojson;
@@ -539,10 +543,12 @@ function highZoomLaserMapStyle() {
         return data_geojson;
       }
       if (!isMultipolygonAsExpected(buildingArea)) {
-        console.log(buildingArea);
+        console.error("following geometry was expected to be multipolygon but was not:")
+        console.error(buildingArea);
       }
       if (!isMultipolygonAsExpected(footwayArea)) {
-        console.log(footwayArea);
+        console.error("following geometry was expected to be multipolygon but was not:")
+        console.error(footwayArea);
       }
       footwayArea.geometry.coordinates = polygonClipping.difference(footwayArea.geometry.coordinates, buildingArea.geometry.coordinates);
       return data_geojson;
@@ -560,10 +566,12 @@ function highZoomLaserMapStyle() {
         return data_geojson;
       }
       if (!isMultipolygonAsExpected(blockedArea)) {
-        console.log(blockedArea);
+        console.error("following geometry was expected to be multipolygon but was not:")
+        console.error(blockedArea);
       }
       if (!isMultipolygonAsExpected(footwayArea)) {
-        console.log(footwayArea);
+        console.error("following geometry was expected to be multipolygon but was not:")
+        console.error(footwayArea);
       }
       footwayArea.geometry.coordinates = polygonClipping.difference(footwayArea.geometry.coordinates, blockedArea.geometry.coordinates);
       return data_geojson;
@@ -582,10 +590,12 @@ function highZoomLaserMapStyle() {
         return data_geojson;
       }
       if (!isMultipolygonAsExpected(crossingArea)) {
-        console.log(crossingArea);
+        console.error("following geometry was expected to be multipolygon but was not:")
+        console.error(crossingArea);
       }
       if (!isMultipolygonAsExpected(footwayArea)) {
-        console.log(footwayArea);
+        console.error("following geometry was expected to be multipolygon but was not:")
+        console.error(footwayArea);
       }
       footwayArea.geometry.coordinates = polygonClipping.difference(footwayArea.geometry.coordinates, crossingArea.geometry.coordinates);
       return data_geojson;
@@ -599,7 +609,8 @@ function highZoomLaserMapStyle() {
         return data_geojson;
       }
       if (!isMultipolygonAsExpected(water)) {
-        console.log(water);
+        console.error("following geometry was expected to be multipolygon but was not:")
+        console.error(water);
       }
 
       var bridgeArea = findMergeGroupObject(data_geojson, "bridge_outline");
@@ -607,7 +618,8 @@ function highZoomLaserMapStyle() {
         // no reason to suspect issues
       } else {
         if (!isMultipolygonAsExpected(bridgeArea)) {
-          console.log(bridgeArea);
+          console.error("following geometry was expected to be multipolygon but was not:")
+          console.error(bridgeArea);
         }
         water.geometry.coordinates = polygonClipping.difference(water.geometry.coordinates, bridgeArea.geometry.coordinates);
       }
@@ -617,7 +629,8 @@ function highZoomLaserMapStyle() {
         // no reason to suspect issues
       } else {
           if (!isMultipolygonAsExpected(footwayArea)) {
-            console.log(footwayArea);
+            console.error("following geometry was expected to be multipolygon but was not:")
+            console.error(footwayArea);
           }
           water.geometry.coordinates = polygonClipping.difference(water.geometry.coordinates, footwayArea.geometry.coordinates);
       }
@@ -642,10 +655,12 @@ function highZoomLaserMapStyle() {
         return data_geojson;
       }
       if (!isMultipolygonAsExpected(extraRoadArea)) {
-        console.log(extraRoadArea);
+        console.error("following geometry was expected to be multipolygon but was not:")
+        console.error(extraRoadArea);
       }
       if (!isMultipolygonAsExpected(extraFootwayArea)) {
-        console.log(extraFootwayArea);
+        console.error("following geometry was expected to be multipolygon but was not:")
+        console.error(extraFootwayArea);
       }
       var intersectedGeometry = polygonClipping.intersection(extraFootwayArea.geometry.coordinates, extraRoadArea.geometry.coordinates);
       footwayArea.geometry.coordinates = polygonClipping.union(footwayArea.geometry.coordinates, intersectedGeometry);
@@ -770,9 +785,6 @@ function highZoomLaserMapStyle() {
         // alert("no road areas (lines tagged with a proper highway=*) in range!");
         // no need to repeat warning
       } else {
-        console.log(roadArea);
-        console.log(roadArea.geometry.coordinates);
-        console.log(emptyArea);
         emptyArea = polygonClipping.difference(emptyArea, roadArea.geometry.coordinates);
       }
 
@@ -798,8 +810,6 @@ function highZoomLaserMapStyle() {
       } else {
         emptyArea = polygonClipping.difference(emptyArea, blockedArea.geometry.coordinates);
       }
-      console.log("EMPTY AREA follows:");
-      console.log(emptyArea);
 
       var k = emptyArea.length;
       while (k--) {
@@ -808,13 +818,16 @@ function highZoomLaserMapStyle() {
           geometry: { type: "Polygon", coordinates: emptyArea[k] },
           properties: {},
         };
-        console.log("JJJJJJ");
+        console.log("checked area has area of " + turf.area(chunk) + " square meters and");
         if (turf.area(chunk) < 5) {
+          console.log("is now being included into footway area")
           // TODO: use
           // turf.lineOverlap(chunk, footwayArea)
           // or similar to merge in only actually adjoining
           // (lineOverlap seemed weird a bit and actual unions would likely should be done later)
           footwayArea.geometry.coordinates = polygonClipping.union(chunk.geometry.coordinates, footwayArea.geometry.coordinates);
+        } else {
+          console.log("nothing happens")
         }
       }
 
@@ -846,7 +859,7 @@ function highZoomLaserMapStyle() {
           }
         }
       }
-      console.warn(JSON.stringify({ type: "MultiPolygon", coordinates: freelyTraversableArea }));
+      //console.warn(JSON.stringify({ type: "MultiPolygon", coordinates: freelyTraversableArea }));
 
       var k = freelyTraversableArea.length;
       while (k--) {
@@ -994,7 +1007,6 @@ function highZoomLaserMapStyle() {
           generated.properties["lunar_assembler_cloned_for_pattern_fill"] = "yes";
           data_geojson.features.push(generated); // added at the ned, and iterating from end to 0 so will not trigger infinite loop
         }
-        console.warn(feature.properties["lunar_assembler_merge_group"]);
         if (feature.properties["lunar_assembler_merge_group"] == "area:highway_carriageway_layer") {
           var generated = intersectGeometryWithPlaneHavingRectangularHoles(
             feature,
