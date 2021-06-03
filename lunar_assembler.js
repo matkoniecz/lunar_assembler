@@ -412,7 +412,7 @@ function dropDegenerateGeometrySegments(feature) {
     if (survivingGeometryParts.length == 0) {
       return null;
     } else {
-      console.log(survivingGeometryParts);
+      //console.log(survivingGeometryParts);
       feature.geometry.coordinates = survivingGeometryParts;
     }
   }
