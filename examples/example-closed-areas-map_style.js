@@ -55,10 +55,16 @@ function highZoomLaserMapStyle() {
     paintOrder(feature) {
       // extra sizes go under to not block main data
       if (feature.properties["area:highway_extra_size"] != undefined) {
-        return -1000 + Math.random();
+        return -1000;
       }
-      // orfder does not really matter, random order may help expose some bugs with overlapping features
-      return Math.random();
+      // below roads/buildings
+      if (feature.properties["generated_traversable_chunk"] === "yes") {
+        return -500;
+      }
+      if (feature.properties["generated_blocked_chunk"] === "yes") {
+        return -500;
+      }
+      return 0;
     },
 
     fillColoring(feature) {
