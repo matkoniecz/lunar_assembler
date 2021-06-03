@@ -706,7 +706,7 @@ function highZoomLaserMapStyle() {
           return undefined;
         }
         if (feature.properties["highway"] == "service") {
-          return 2.0;
+          return 4.5;
         }
         return 5;
       }
