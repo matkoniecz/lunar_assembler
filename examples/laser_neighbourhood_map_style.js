@@ -417,6 +417,10 @@ function highZoomLaserMapStyle() {
         if (mapStyle.isSpecialAreaErasingFootway(feature)) {
           dataGeojson = mapStyle.eraseToFootwayGeometry(dataGeojson, feature.geometry.coordinates, "make space for display of stairs into crossing below road")
         }
+        // https://www.openstreetmap.org/way/950131721
+        if (feature.id === "way/950131721") {
+          dataGeojson = mapStyle.eraseToFootwayGeometry(dataGeojson, feature.geometry.coordinates, "erase leaking footway termination ( https://www.openstreetmap.org/way/950131721 ) ")
+        }
       }
 
       dataGeojson = mapStyle.eraseToFootwayGeometry(
