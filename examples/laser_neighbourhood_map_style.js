@@ -83,13 +83,13 @@ function highZoomLaserMapStyle() {
         return "#400080";
       }
       if (feature.properties["lunar_assembler_step_segment"] == "1") {
-        return "#ff0000";
+        return "magenta";
       }
       if (feature.properties["lunar_assembler_step_segment"] == "2") {
-        return "orange";
+        return "#ff0000";
       }
       if (feature.properties["lunar_assembler_step_segment"] == "3") {
-        return "#FFFF00";
+        return "#D33F6A";
       }
       if (feature.properties["area:highway"] == "steps") {
         // entire area of steps
