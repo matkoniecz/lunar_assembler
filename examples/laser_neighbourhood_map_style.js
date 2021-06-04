@@ -401,6 +401,9 @@ function highZoomLaserMapStyle() {
     },
 
     isSpecialAreaErasingFootway(feature){
+      // https://www.openstreetmap.org/way/950050124
+      // https://www.openstreetmap.org/way/950087102
+      // https://www.openstreetmap.org/way/950050122
       if (["way/950050124", "way/950087102", "way/950050122"].includes(feature.id)) {
         return true;
       }
@@ -411,9 +414,6 @@ function highZoomLaserMapStyle() {
       var i = dataGeojson.features.length;
       while (i--) {
         var feature = dataGeojson.features[i];
-        // https://www.openstreetmap.org/way/950050124
-        // https://www.openstreetmap.org/way/950087102
-        // https://www.openstreetmap.org/way/950050122
         if (mapStyle.isSpecialAreaErasingFootway(feature)) {
           dataGeojson = mapStyle.eraseToFootwayGeometry(dataGeojson, feature.geometry.coordinates, "make space for display of stairs into crossing below road")
         }
