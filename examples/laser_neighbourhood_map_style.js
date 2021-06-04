@@ -283,6 +283,10 @@ function highZoomLaserMapStyle() {
         if (["way/940940433", "way/947218894"].includes(feature.id)) {
           dataGeojson.features.splice(i, 1); // remove matching element
         }
+        // https://www.openstreetmap.org/way/947236875 - unimportant footway
+        if (["way/947236875"].includes(feature.id)) {
+          dataGeojson.features.splice(i, 1); // remove matching element
+        }
       }
       return dataGeojson;
     },
