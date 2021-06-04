@@ -158,10 +158,6 @@ function highZoomLaserMapStyle() {
     },
 
     strokeWidth(feature) {
-      if (mapStyle.railwayLinearValuesArray().includes(feature.properties["railway"])) {
-        return 2;
-      }
-
       return 1;
     },
 
