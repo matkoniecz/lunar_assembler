@@ -279,7 +279,7 @@ function highZoomLaserMapStyle() {
       var found = undefined;
       while (i--) {
         var feature = dataGeojson.features[i];
-        // playground and garden within school
+        // playground and garden within school - private but accessible to children
         if (["way/940940433", "way/947218894"].includes(feature.id)) {
           dataGeojson.features.splice(i, 1); // remove matching element
         }
