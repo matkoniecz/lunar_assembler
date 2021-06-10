@@ -40,6 +40,7 @@
             <center><button id="download_generated_map" href="#" style="display: none; margin: 5px auto 5px auto">Download SVG</button></center>
             <div class="generated_svg_map_within" id="generated_svg_within"></div><!-- styling background of this as white is recommended-->
             <progress id="progress_bar" value="0" max="100" style="width: 100%"></progress>
+            <div id="log_messages_within"></div>
             <div id="map" class="leaflet_interactive_map_not_hiding_further_content"></div>
     
         <p>
@@ -68,7 +69,7 @@
     <script src="high_zoom_map_style.js"></script>
     <script>
         // must be executed after imports and once passed ids exist -->
-        initializeLunarAssembler({mapStyles: [highZoomMapStyle()], mapDivId: 'map', downloadTriggerId: "download_generated_map", progressBarId: "progress_bar", mapOutputHolderId: "generated_svg_within", lat: 50.05514, lon: 19.92824, zoom: 18});
+        initializeLunarAssembler({mapStyles: [highZoomMapStyle()], mapDivId: 'map', downloadTriggerId: "download_generated_map", progressBarId: "progress_bar", mapOutputHolderId: "generated_svg_within", logOutputId: "log_messages_within", lat: 50.05514, lon: 19.92824, zoom: 18});
     </script>
 </body>
 </html>
