@@ -821,9 +821,9 @@ function highZoomLaserMapStyle() {
     boundsToGeojsonGeometry(readableBounds) {
       var entireAreaRing = [
         [readableBounds["east"], readableBounds["south"]],
-        [readableBounds["west"], readableBounds["south"]],
-        [readableBounds["west"], readableBounds["north"]],
         [readableBounds["east"], readableBounds["north"]],
+        [readableBounds["west"], readableBounds["north"]],
+        [readableBounds["west"], readableBounds["south"]],
         [readableBounds["east"], readableBounds["south"]],
       ];
       return [entireAreaRing];
