@@ -26,18 +26,18 @@ let progressBar;
 let handleOfProgressBarAnimation;
 
 function initializeLunarAssembler({
-  map_styles,
-  map_div_id,
-  download_trigger_id,
-  progress_bar_id,
-  outputHolderId,
+  mapStyles,
+  mapDivId,
+  downloadTriggerId,
+  progressBarId,
+  mapOutputHolderId,
   lat,
   lon,
   zoom,
 } = {}) {
-  initializeSelectorMap(map_styles, map_div_id, lat, lon, zoom, download_trigger_id, outputHolderId);
-  initilizeDownloadButton(download_trigger_id, outputHolderId);
-  progressBar = document.getElementById(progress_bar_id);
+  initializeSelectorMap(mapStyles, mapDivId, lat, lon, zoom, downloadTriggerId, mapOutputHolderId);
+  initilizeDownloadButton(downloadTriggerId, mapOutputHolderId);
+  progressBar = document.getElementById(progressBarId);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -87,14 +87,14 @@ function startShowingProgress() {
 
 function initializeSelectorMap(
   mapStyles,
-  map_div_id,
+  mapDivId,
   lat,
   lon,
   zoom,
-  download_trigger_id,
-  outputHolderId
+  downloadTriggerId,
+  mapOutputHolderId
 ) {
-  var map = L.map(map_div_id).setView([lat, lon], zoom);
+  var map = L.map(mapDivId).setView([lat, lon], zoom);
   var mapLink = '<a href="https://openstreetmap.org">OpenStreetMap</a>';
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: "&copy; " + mapLink + " Contributors",
@@ -124,24 +124,24 @@ function initializeSelectorMap(
 
     var bounds = layer.getBounds();
     var readableBounds = { west: bounds.getWest(), south: bounds.getSouth(), east: bounds.getEast(), north: bounds.getNorth() };
-    handleTriggerFromGUI(readableBounds, download_trigger_id, outputHolderId, mapStyles[0]); // TODO handle passing more than one map style!
+    handleTriggerFromGUI(readableBounds, downloadTriggerId, mapOutputHolderId, mapStyles[0]); // TODO handle passing more than one map style!
   });
 
   var queryString = location.search;
   let params = new URLSearchParams(queryString);
   if (params.get("rerun_query") == "yes") {
     // parameters (technically still GUI, right) requested running query immediately
-    handleTriggerFromGUI(JSON.parse(params.get("bounds")), download_trigger_id, outputHolderId, mapStyles[0]);
+    handleTriggerFromGUI(JSON.parse(params.get("bounds")), downloadTriggerId, mapOutputHolderId, mapStyles[0]);
   }
 }
 
-function initilizeDownloadButton(download_trigger_id, outputHolderId) {
-  d3.select("#" + download_trigger_id).on("click", function () {
+function initilizeDownloadButton(downloadTriggerId, mapOutputHolderId) {
+  d3.select("#" + downloadTriggerId).on("click", function () {
     download("generated.svg", document.getElementById(idOfGeneratedMap()).outerHTML);
   });
 }
 
-async function handleTriggerFromGUI(readableBounds, download_trigger_id, outputHolderId, mapStyle) {
+async function handleTriggerFromGUI(readableBounds, downloadTriggerId, mapOutputHolderId, mapStyle) {
   startShowingProgress();
   let osmJSON = await downloadOpenStreetMapData(readableBounds); // https://leafletjs.com/reference-1.6.0.html#latlngbounds-getcenter
   if (osmJSON == -1) {
@@ -155,8 +155,8 @@ async function handleTriggerFromGUI(readableBounds, download_trigger_id, outputH
   let geoJSON = toGeoJSON(osmJSON);
   const width = 800;
   const height = 600;
-  render(readableBounds, geoJSON, width, height, mapStyle, outputHolderId);
-  document.getElementById(download_trigger_id).style.display = "";
+  render(readableBounds, geoJSON, width, height, mapStyle, mapOutputHolderId);
+  document.getElementById(downloadTriggerId).style.display = "";
   document.getElementById("instruction_hidden_after_first_generation").style.display = "none";
   markAsCompleted();
   var generated = '<a href="?rerun_query=yes&bounds=' + encodeURIComponent(JSON.stringify(readableBounds)) + '">link to repeat this query</a>';
@@ -295,7 +295,7 @@ function rewind(geojson_that_is_7946_compliant_with_right_hand_winding_order) {
   return d3_geojson;
 }
 
-function render(readableBounds, dataGeojson, width, height, mapStyle, outputHolderId) {
+function render(readableBounds, dataGeojson, width, height, mapStyle, mapOutputHolderId) {
   if ("transformGeometryAsInitialStep" in mapStyle) {
     dataGeojson = mapStyle.transformGeometryAsInitialStep(dataGeojson, readableBounds);
   }
@@ -305,7 +305,7 @@ function render(readableBounds, dataGeojson, width, height, mapStyle, outputHold
     dataGeojson = mapStyle.transformGeometryAtFinalStep(dataGeojson, readableBounds);
   }
   dataGeojson = clipGeometries(readableBounds, dataGeojson);
-  renderUsingD3(readableBounds, dataGeojson, width, height, mapStyle, outputHolderId);
+  renderUsingD3(readableBounds, dataGeojson, width, height, mapStyle, mapOutputHolderId);
 }
 
 function validateGeometries(dataGeojson) {
@@ -479,7 +479,7 @@ function dropDegenerateGeometrySegments(feature) {
   //console.log(feature);
   return feature;
 }
-function renderUsingD3(readableBounds, dataGeojson, width, height, mapStyle, outputHolderId) {
+function renderUsingD3(readableBounds, dataGeojson, width, height, mapStyle, mapOutputHolderId) {
   var geoJSONRepresentingBoundaries = geoJSONPolygonRepresentingBBox(readableBounds);
   // rewinding is sometimes needed, sometimes not
   // rewinding is sometimes broken in my code (at least in oce case it was borked by my bug in futher processing!), sometimes not
@@ -499,7 +499,7 @@ function renderUsingD3(readableBounds, dataGeojson, width, height, mapStyle, out
 
   var geoGenerator = d3.geoPath().projection(projection);
 
-  selector = "#" + outputHolderId + " svg";
+  selector = "#" + mapOutputHolderId + " svg";
   let generated =
     '<svg xmlns="http://www.w3.org/2000/svg" id="' + idOfGeneratedMap() + '" height="100%" width="100%" viewBox="0 0 ' +
     width +
@@ -510,7 +510,7 @@ function renderUsingD3(readableBounds, dataGeojson, width, height, mapStyle, out
     "</svg>" +
     "\n" +
     '<div id="redo_link_holder"><div/>';
-  document.getElementById(outputHolderId).innerHTML = generated;
+  document.getElementById(mapOutputHolderId).innerHTML = generated;
 
   // turn function returning value (layering order of function)
   // into function taking two features and ordering them
