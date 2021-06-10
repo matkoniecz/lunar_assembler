@@ -79,7 +79,7 @@ function intersectGeometryWithPlaneHavingRectangularHoles(feature, holeVerticalI
     }
     minLatitudeForStripe += spaceVerticalInDegrees + holeVerticalInDegrees;
   }
-  // spkit in pairs due to https://github.com/mfogel/polygon-clipping/issues/118
+  // split in pairs due to https://github.com/mfogel/polygon-clipping/issues/118
   var generatedHorizontal = polygonClipping.union(...collected);
   collected = [];
 
