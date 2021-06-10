@@ -31,9 +31,11 @@
 <body>
     <div id="main_content_wrap" class="outer">
     <section id="main_content" class="inner">
-        <p>Generation of vector maps from OpenStreetMap data.</p>
+        <p>Generation of vector maps from OpenStreetMap data, for use in laser cutters for producing tactile maps.</p>
         
-        <p id="instruction_hidden_after_first_generation">Press the rectangle button, select a rectangle on a map and wait. Note that this tool will work well with small areas. This map style is supposed to work well with tiny areas, such as crossing. area:highway tagging is supposed to be used, otherwise it will not work.</p>
+        <p id="instruction_hidden_after_first_generation">Press the rectangle button, select a rectangle on a map and wait. Note that this tool will work well with tiny areas, such as a single crossing.</p>
+        
+        <p>This map style requires area to be mapped with <a href="https://wiki.openstreetmap.org/wiki/Key:area:highway">area:highway</a>, otherwise it will not work. TODO: link other map style without that limitation</p>
 
         <p>(there is more text below map, you can also see an <a href="lunar_assembler_in_action.gif">animation</a> showing how this tool is supposed to work)</p>
         
@@ -53,12 +55,10 @@
             </ul>
         </p>      
         <p>Map style is generating SVG design files for ue in laset cutter. As orientation maps for blind people of a very small area, such as a single road crossing.</p>
-        <p>laser parameters that I used are given, but this is a solely example! You will need to test it on laser curtter you use which parameters are optimal. Yes, it is time consuming</p>
-        <p>TODO: setup callibration table</p>
+        <p>laser parameters that I used are given, but this is a solely example! You will need to test it on laser cutter you use which parameters are optimal. Yes, it is time consuming</p>
         <p>
             It generates a single SVG that is intended to be used for multiple cuts:
             <ol>
-                <li>TODO is it added?: entire area (rectangle/square) to have a base for further steps</li>
                 <li>separate cut, splitting road surface with own pattern and everything else (separate colours for cut lines around entire area and for engraving) - engraving was 400 speed 40 power 0.08 line interval on my laser.
                     <ul>
                         <li>

@@ -31,9 +31,9 @@
 <body>
     <div id="main_content_wrap" class="outer">
     <section id="main_content" class="inner">
-        <p>Generation of vector maps from OpenStreetMap data.</p>
+        <p>Generation of vector maps from OpenStreetMap data, for use in laser cutters for producing tactile maps.</p>
         
-        <p id="instruction_hidden_after_first_generation">Press rectangle button, select rectangle on a map and wait. Note that this tool will work well with small areas. This map style is supposed to work well with tiny areas, such as crossing. area:highway tagging is supposed to be used, otherwise it will not work.</p>
+        <p id="instruction_hidden_after_first_generation">Press the rectangle button, select a rectangle on a map and wait. Note that this tool will work well with small areas, such as a neighbourhood.</p>
 
         <p>(there is more text below map, you can also see an <a href="lunar_assembler_in_action.gif">animation</a> showing how this tool is supposed to work)</p>
         
@@ -43,7 +43,20 @@
             <div id="log_messages_within"></div>
             <div id="map" class="leaflet_interactive_map_not_hiding_further_content"></div>
     
-    </section>
+            <p>
+                <ul>
+                    <li>Move map to a small area interesting for you (a single crossing will work, generating map of Poland will fail).</li>
+                    <li>Press the "rectangle" button, select interesting area for you.</li>
+                    <li>Wait - waiting several seconds is normal, currently no real progress info is displayed during download. Not even progress bar animation is whown when map is generated in your browser, it may take a bit.</li>
+                    <li>Generated map should appear below map used for selecting, download should be also automatically triggered. There is also download button available below generated map image.</li>
+                    <li>Use this for something!</li>
+                </ul>
+            </p>      
+
+            <p>Map style is generating SVG design files for ue in laset cutter. As orientation maps for blind people of a very small area, such as a single road crossing.</p>
+            <p>laser parameters that I used are given, but this is a solely example! You will need to test it on laser cutter you use which parameters are optimal. Yes, it is time consuming</p>
+            <p>TODO: finish describing parameters at closeup, clone relevant ones</p>
+        </section>
 
     <!-- actual code -->
     <script src="laser_neighbourhood_map_style.js"></script>
