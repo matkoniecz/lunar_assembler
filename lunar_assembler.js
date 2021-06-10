@@ -280,7 +280,7 @@ function rewind(geojson_that_is_7946_compliant_with_right_hand_winding_order) {
   // https://gis.stackexchange.com/questions/392452/why-d3-js-works-only-with-geojson-violating-right-hand-rule
   // I opened https://github.com/d3/d3-shape/issues/178
 
-  if(d3_geojson.length == 1) {
+  if(geojson_that_is_7946_compliant_with_right_hand_winding_order.length == 1) {
     console.warn("one element! Is spread working as expected? See #68") // TODO - trigger and debug it
   }
 
