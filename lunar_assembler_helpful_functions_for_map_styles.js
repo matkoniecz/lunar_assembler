@@ -16,33 +16,6 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-function isMultipolygonAsExpected(feature) {
-  if (feature == undefined) {
-    alert("UNEXPECTED undefined" + " in " + JSON.stringify(feature) + "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues");
-    return false;
-  }
-  if (feature.geometry.type == "Point" || feature.geometry.type === "MultiPoint") {
-    alert(
-      "UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature) + "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
-    );
-    return false;
-  } else if (feature.geometry.type == "LineString" || feature.geometry.type == "MultiLineString") {
-    alert(
-      "UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature) + "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
-    );
-    return false;
-  } else if (feature.geometry.type == "Polygon") {
-    alert(
-      "UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature) + "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
-    );
-    return false;
-  } else if (feature.geometry.type == "MultiPolygon") {
-    return true;
-  }
-  alert("UNEXPECTED GEOMETRY " + feature.geometry.type);
-  return false;
-}
-
 function intersectGeometryWithHorizontalStripes(feature, stripeSizeInDegrees, distanceBetweenStripesInDegrees) {
   bbox = turf.bbox(feature);
   var minLongitude = bbox[0];

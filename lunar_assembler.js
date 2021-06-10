@@ -238,6 +238,42 @@ function toGeoJSON(osmJSON) {
   return geoJSON;
 }
 
+function isMultipolygonAsExpected(feature) {
+  if (isAreaAsExpected(feature) == false) {
+    return false;
+  }
+  if (feature.geometry.type == "Polygon") {
+    alert(
+      "UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature) + "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
+    );
+    return false;
+  }
+  return true;
+}
+
+function isAreaAsExpected(feature) {
+  if (feature == undefined) {
+    alert("UNEXPECTED undefined" + " in " + JSON.stringify(feature) + "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues");
+    return false;
+  }
+  if (feature.geometry.type == "Point" || feature.geometry.type === "MultiPoint") {
+    alert(
+      "UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature) + "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
+    );
+    return false;
+  } else if (feature.geometry.type == "LineString" || feature.geometry.type == "MultiLineString") {
+    alert(
+      "UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature) + "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
+    );
+    return false;
+  } else if (feature.geometry.type == "Polygon") {
+    return true;
+  } else if (feature.geometry.type == "MultiPolygon") {
+    return true;
+  }
+  alert("UNEXPECTED GEOMETRY " + feature.geometry.type);
+  return false;
+}
 // TODO: what kind of geojson is accepted here? will it crash when I pass a point here?
 function rewind(geojson_that_is_7946_compliant_with_right_hand_winding_order) {
   // ARGHHHHHH ARGHHHHHH ARGHHHH
@@ -318,12 +354,31 @@ function mergeAsRequestedByMapStyle(dataGeojson, mapStyle) {
     var produced = forMerging[0];
     var coordinatesForMerging = [];
     for (var k = 0; k < forMerging.length; k++) {
+      if(isAreaAsExpected(forMerging[k]) == false) {
+        console.error("================================")
+        console.error("expected area, got not area, something want wrong, this is a bug!")
+        console.error(forMerging[k])
+        console.error("please report it on https://github.com/matkoniecz/lunar_assembler/issues ")
+        console.error("================================")
+      }
       coordinatesForMerging.push(forMerging[k].geometry.coordinates);
     }
     // it is union so output will be nonepty
     // https://github.com/mfogel/polygon-clipping#output
     produced.geometry.type = "MultiPolygon";
-    produced.geometry.coordinates = polygonClipping.union(...coordinatesForMerging);
+    if(coordinatesForMerging.length == 1) {
+      // adding it fixed crashing on empty areas for laser map style and private/public areas
+      // https://github.com/matkoniecz/lunar_assembler/issues/68
+      // necessary as ... will go multiple levels deep to decompose single element array
+      // for some Godforsaken reason
+      produced.geometry.coordinates = polygonClipping.union(coordinatesForMerging);
+      // uncomment below code to crash again
+      // console.log(coordinatesForMerging)
+      // console.log(...coordinatesForMerging)
+      //produced.geometry.coordinates = polygonClipping.union(...coordinatesForMerging);
+    } else {
+      produced.geometry.coordinates = polygonClipping.union(...coordinatesForMerging);
+    }
     produced.properties["lunar_assembler_merge_group"] = key;
     processeedFeatures.push(produced);
   }
