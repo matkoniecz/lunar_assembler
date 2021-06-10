@@ -44,7 +44,7 @@ function initializeLunarAssembler({
   lon,
   zoom,
 } = {}) {
-  document.getElementById(logOutputId).innerHTML = "Hello world!"
+  //document.getElementById(logOutputId).innerHTML = "Hello world!"
   initializeSelectorMap(mapStyles, mapDivId, lat, lon, zoom, downloadTriggerId, mapOutputHolderId);
   initilizeDownloadButton(downloadTriggerId, mapOutputHolderId);
   progressBar = document.getElementById(progressBarId);
