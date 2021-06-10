@@ -20,17 +20,17 @@ Code used to run mentioned example can be found in example folder.
 
 ## Published styles
 
-Demonstration of [basic high-zoom map style](https://matkoniecz.github.io/lunar_assembler/examples/dev.html)
+Demonstration of [basic high-zoom map style](https://matkoniecz.github.io/lunar_assembler/examples/general_high_zoom.html)
 
-[Map style classifying areas into public and private](https://matkoniecz.github.io/lunar_assembler/examples/example-closed-areas.html). Done using mapped fences, walls, footways and roads.
+[Map style classifying areas into public and private](https://matkoniecz.github.io/lunar_assembler/examples/public-vs-closed-areas.html). Done using mapped fences, walls, footways and roads.
 
 ### For making 3D tactile maps for blind
 
 This map styles are designed for used in a laser cutter, to produce maps for blind.
 
-[Ultra-high zoom map for showing a single crossing](https://matkoniecz.github.io/lunar_assembler/examples/dev-laser-road-style-pattern.html), relying on area:highway
+[Ultra-high zoom map for showing a single crossing](https://matkoniecz.github.io/lunar_assembler/examples/laser_road_crossing_closeup.html), relying on area:highway
 
-[high zoom map style for showing neighbourhood, with some attempts to automatically simplify data, no need for area:highway](https://matkoniecz.github.io/lunar_assembler/examples/dev-laser-neighbourhood.html)
+[high zoom map style for showing neighbourhood, with some attempts to automatically simplify data, no need for area:highway](https://matkoniecz.github.io/lunar_assembler/examples/laser-neighbourhood.html)
 
 #### Laser cut 3D tactile map
 
