@@ -22,7 +22,7 @@ Code used to run mentioned example can be found in example folder.
 
 Demonstration of [basic high-zoom map style](https://matkoniecz.github.io/lunar_assembler/examples/general_high_zoom.html)
 
-[Map style classifying areas into public and private](https://matkoniecz.github.io/lunar_assembler/examples/public-vs-closed-areas.html). Done using mapped fences, walls, footways and roads.
+[Map style classifying areas into public and private](https://matkoniecz.github.io/lunar_assembler/examples/public-vs-closed-areas.html). Done using as data fences, walls, footways and roads mapped in OpenStreetMap.
 
 ### For making 3D tactile maps for blind
 
