@@ -287,6 +287,11 @@ function rewind(geojson_that_is_7946_compliant_with_right_hand_winding_order) {
   // ARGHHHHHH ARGHHHHHH ARGHHHH
   // https://gis.stackexchange.com/questions/392452/why-d3-js-works-only-with-geojson-violating-right-hand-rule
   // I opened https://github.com/d3/d3-shape/issues/178
+
+  if(d3_geojson.length == 1) {
+    console.warn("one element! Is spread working as expected? See #68") // TODO - trigger and debug it
+  }
+
   const d3_geojson = {
     ...geojson_that_is_7946_compliant_with_right_hand_winding_order,
   };
@@ -624,6 +629,9 @@ function intersectGeometryWithHorizontalStripes(feature, stripeSizeInDegrees, di
     }
     minLatitudeForStripe += stripeSizeInDegrees + distanceBetweenStripesInDegrees;
   }
+  if(collected.length == 1) {
+    console.warn("one element! Is spread working as expected? See #68") // TODO - trigger and debug it
+  }
   var generated = polygonClipping.union(...collected);
 
   var cloned = JSON.parse(JSON.stringify(feature));
@@ -659,6 +667,9 @@ function intersectGeometryWithPlaneHavingRectangularHoles(feature, holeVerticalI
     }
     minLatitudeForStripe += spaceVerticalInDegrees + holeVerticalInDegrees;
   }
+  if(collected.length == 1) {
+    console.warn("one element! Is spread working as expected? See #68") // TODO - trigger and debug it
+  }
   // split in pairs due to https://github.com/mfogel/polygon-clipping/issues/118
   var generatedHorizontal = polygonClipping.union(...collected);
   collected = [];
@@ -680,6 +691,9 @@ function intersectGeometryWithPlaneHavingRectangularHoles(feature, holeVerticalI
       collected.push(intersectedStripe);
     }
     minLongitudeForStripe += spaceHorizontalInDegrees + holeHorizontalInDegrees;
+  }
+  if(collected.length == 1) {
+    console.warn("one element! Is spread working as expected? See #68") // TODO - trigger and debug it
   }
   var generatedVertical = polygonClipping.union(...collected);
   var generated = polygonClipping.union(generatedHorizontal, generatedVertical);
