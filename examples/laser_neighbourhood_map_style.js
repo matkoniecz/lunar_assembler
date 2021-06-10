@@ -265,6 +265,8 @@ function highZoomLaserMapStyle() {
 
       dataGeojson = mapStyle.fillSliversAroundFootways(dataGeojson, readableBounds);
 
+      // last one - after that there are two carriageways and two waterways areas
+      // with one being interection with a pattern
       dataGeojson = mapStyle.applyPatternsToCarriagewaysAndWater(dataGeojson);
 
       return dataGeojson;
