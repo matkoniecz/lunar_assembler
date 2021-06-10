@@ -236,6 +236,7 @@ function highZoomLaserMapStyle() {
       }
       // hack for https://www.openstreetmap.org/way/660168838
       if (["way/660168838", "way/655408390", "way/655029668"].includes(feature.id)) {
+        feature.properties["area:highway"] = "footway" //otherwise entire footway areas can gen area:highway=steps!
         return "area:highway_footway";
       }
 
