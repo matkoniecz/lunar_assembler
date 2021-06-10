@@ -30,7 +30,7 @@ This map styles are designed for used in a laser cutter, to produce maps for bli
 
 [Ultra-high zoom map for showing a single crossing](https://matkoniecz.github.io/lunar_assembler/examples/laser_road_crossing_closeup.html), relying on area:highway
 
-[high zoom map style for showing neighbourhood, with some attempts to automatically simplify data, no need for area:highway](https://matkoniecz.github.io/lunar_assembler/examples/laser-neighbourhood.html)
+[high zoom map style for showing neighbourhood, with some attempts to automatically simplify data, no need for area:highway](https://matkoniecz.github.io/lunar_assembler/examples/laser_neighbourhood.html)
 
 #### Laser cut 3D tactile map
 
