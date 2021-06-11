@@ -38,6 +38,10 @@ function highZoomLaserMapStyle() {
         }
       }
 
+      if (railwayLinearValuesArray().includes(feature.properties["railway"])) {
+        var priority = 0.99;
+        return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
+      }
       if (feature.properties["lunar_assembler_cloned_for_pattern_fill"] != undefined) {
         var priority = 0.48;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
