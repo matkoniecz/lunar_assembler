@@ -137,7 +137,6 @@ function highZoomLaserMapStyle() {
       }
       if (
         motorizedRoadValuesArray().includes(feature.properties["area:highway"]) ||
-        feature.properties["area:highway"] === "bicycle_crossing" ||
         feature.properties["lunar_assembler_merge_group"] == "area:highway_carriageway_layer"
       ) {
         if (feature.properties["lunar_assembler_cloned_for_pattern_fill"] == "yes") {
@@ -187,7 +186,6 @@ function highZoomLaserMapStyle() {
       // or open pull request with an implementation
       if (
         motorizedRoadValuesArray().includes(feature.properties["area:highway"]) ||
-        feature.properties["area:highway"] === "bicycle_crossing" ||
         feature.properties["area:highway"] === "cycleway" ||
         feature.properties["amenity"] === "parking"
       ) {
