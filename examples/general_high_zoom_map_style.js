@@ -415,10 +415,15 @@ function highZoomMapStyle() {
 
     generateLegendEntry(key, value, rule){
       var tag = key + "=" + value;
+      var url = "https://wiki.openstreetmap.org/wiki/Tag:" + encodeURIComponent(tag);
+
       if(value == undefined) {
         tag = key + "=*"
+        url = "https://wiki.openstreetmap.org/wiki/Key:" + encodeURIComponent(key);
       }
-      return "<li>" + tag + " - " + rule["description"] + "</li>\n"
+
+      var linked_tag = '<a href="' + url + '">' + tag + "</a>"
+      return "<li>" + linked_tag + " - " + rule["description"] + "</li>\n"
 
     },
 
