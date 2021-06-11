@@ -141,7 +141,11 @@ function initializeSelectorMap(
   let params = new URLSearchParams(queryString);
   if (params.get("rerun_query") == "yes") {
     // parameters (technically still GUI, right) requested running query immediately
-    handleTriggerFromGUI(JSON.parse(params.get("bounds")), downloadTriggerId, mapOutputHolderId, mapStyles[0]);
+    const bounds = JSON.parse(params.get("bounds"));
+    const centerLat = (bounds["north"] + bounds["south"])/2;
+    const centerLon = (bounds["east"] + bounds["west"])/2;
+    map.panTo(new L.LatLng(centerLat, centerLon));
+    handleTriggerFromGUI(bounds, downloadTriggerId, mapOutputHolderId, mapStyles[0]);
   }
 }
 
