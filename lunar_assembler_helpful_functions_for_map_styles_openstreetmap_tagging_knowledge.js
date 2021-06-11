@@ -62,4 +62,4 @@ function pedestrianWaysValuesArray() {
     "pedestrian",
     "living_street",
   ];
-},
+}
