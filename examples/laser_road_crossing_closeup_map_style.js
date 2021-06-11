@@ -113,6 +113,172 @@ function highZoomLaserMapStyle() {
       return valueRangeForOneLayer * layer;
     },
 
+    unifiedStyling() {
+      returned = []
+      var i = motorizedRoadValuesArray().length;
+      while (i--) {
+        value = motorizedRoadValuesArray()[i];
+        returned.push( {
+          'area_color': "#808080",
+          'description': 'area of a motorized road - pattern, part expected to be engraved',
+          'matches': [
+            [
+              {'key': 'area:highway', 'value': value},
+              {'key': 'lunar_assembler_cloned_for_pattern_fill', 'value': 'yes', 'role': 'supplementary_obvious_filter'}
+            ],
+          ]
+        })
+        returned.push( {
+          'area_color': "#B4B4B4",
+          'description': 'area of a motorized road (linear representation must be also present! Using only area representation is invalid!)',
+          'matches': [
+            {'key': 'area:highway', 'value': value},
+          ],
+        })
+      }
+
+      var i = railwayLinearValuesArray().length;
+      while (i--) {
+        value = railwayLinearValuesArray()[i];
+        returned.push( {
+          'line_color': "black",
+          'line_width': 2,
+          'description': 'linear representation of a single railway track',
+          'matches': [
+            {'key': 'railway', 'value': value},
+          ],
+        })
+      }
+
+      var i = pedestrianWaysValuesArray().length;
+      while (i--) {
+        value = pedestrianWaysValuesArray()[i];
+        if(value == "steps") {
+          continue;
+        }
+        returned.push( {
+          'area_color': "green",
+          'description': 'area of a pedestrian way (linear representation must be also present! Using only area representation is invalid!)',
+          'matches': [
+            {'key': 'area:highway', 'value': value},
+          ],
+        })
+      }
+
+      returned.push(...[
+        {
+          'area_color': "green",
+          'description': 'pedestrian square (using it for sidewalk areas is invalid!)',
+          'matches': [
+            [
+              {'key': 'highway', 'value': 'pedestrian'},
+              {'key': 'area', 'value': 'yes', 'role': 'supplementary_obvious_filter'},
+            ],
+            [
+              {'key': 'highway', 'value': 'pedestrian'},
+              {'key': 'type', 'value': 'multipolygon', 'role': 'supplementary_obvious_filter'},
+            ],
+          ],
+        },
+        {
+          'area_color': "#808080",
+          'description': 'road area of a taxi stop (used in addition to amenity=taxi) - pattern, part expected to be engraved',
+          'matches': [
+            [
+              {'key': 'area:highway', 'value': 'taxi_stop'},
+              {'key': 'lunar_assembler_cloned_for_pattern_fill', 'value': 'yes', 'role': 'supplementary_obvious_filter'}
+            ],
+          ]
+        },
+        {
+          'area_color': "#B4B4B4",
+          'description': 'road area of a taxi stop (used in addition to amenity=taxi)',
+          'matches': [
+            {'key': 'area:highway', 'value': 'taxi_stop'},
+          ],
+        },
+        {
+          'area_color': "#808080",
+          'description': 'road area of a bus stop - pattern, part expected to be engraved',
+          'matches': [
+            [
+              {'key': 'area:highway', 'value': 'bus_stop'},
+              {'key': 'lunar_assembler_cloned_for_pattern_fill', 'value': 'yes', 'role': 'supplementary_obvious_filter'}
+            ],
+          ]
+        },
+        {
+          'area_color': "#B4B4B4",
+          'description': 'road area of a bus stop (used in addition to highway=bus_stop)',
+          'matches': [
+            {'key': 'area:highway', 'value': 'bus_stop'},
+          ],
+        },
+        {
+          'area_color': "#808080",
+          'description': 'road area of a cycleway - pattern, part expected to be engraved',
+          'matches': [
+            [
+              {'key': 'area:highway', 'value': 'cycleway'},
+              {'key': 'lunar_assembler_cloned_for_pattern_fill', 'value': 'yes', 'role': 'supplementary_obvious_filter'}
+            ],
+          ]
+        },
+        {
+          'area_color': "#B4B4B4",
+          'description': 'road area of a cycleway (used in addition to highway=bus_stop)',
+          'matches': [
+            {'key': 'area:highway', 'value': 'cycleway'},
+          ],
+        },
+
+        {
+          'area_color': "orange",
+          'description': 'area representation of steps (used in addition to linear highway=steps)',
+          'matches': [
+            {'key': 'area:highway', 'value': 'steps'},
+          ],
+        },
+        {
+          'area_color': "yellow",
+          'description': 'pedestrian crossing through a road (area used in addition to area representing road)',
+          'matches': [
+            {'key': 'area:highway', 'value': 'crossing'},
+          ],
+        },
+        {
+          'area_color': "#B45A00",
+          'description': 'buildings (all and every building value. Yes - including building=no that has no good reason for use)',
+          'matches': [
+            {'key': 'building'},
+          ],
+        },
+        {
+          'area_color': "#00FFFF",
+          'description': 'water - pattern, part expected to be engraved',
+          'matches': [
+            [
+              {'key': 'natural', 'value': 'water'},
+              {'key': 'lunar_assembler_cloned_for_pattern_fill', 'value': 'yes', 'role': 'supplementary_obvious_filter'}
+            ],
+            [
+              {'key': 'waterway', 'value': 'riverbank'},
+              {'key': 'lunar_assembler_cloned_for_pattern_fill', 'value': 'yes', 'role': 'supplementary_obvious_filter'}
+            ]
+          ],
+        },
+        {
+          'area_color': "blue",
+          'description': 'water - entire area, expected to be cut at outline to separate element for easier painting (or used solely for orientation)',
+          'matches': [
+            {'key': 'natural', 'value': 'water'},
+            {'key': 'waterway', 'value': 'riverbank'},
+          ],
+        },
+     ])
+     return returned
+    },
+
     fillColoring(feature) {
       console.log(feature);
       if (["Point"].includes(feature.geometry.type)) {
@@ -132,38 +298,7 @@ function highZoomLaserMapStyle() {
       if (feature.properties["lunar_assembler_step_segment"] == "3") {
         return "#D33F6A";
       }
-      if (feature.properties["area:highway"] == "steps") {
-        // entire area of steps
-        return "orange";
-      }
-      if (feature.properties["building"] != null) {
-        return "#B45A00";
-      }
-      if (
-        motorizedRoadValuesArray().includes(feature.properties["area:highway"]) ||
-        feature.properties["lunar_assembler_merge_group"] == "area:highway_carriageway_layer"
-      ) {
-        if (feature.properties["lunar_assembler_cloned_for_pattern_fill"] == "yes") {
-          return "#808080";
-        }
-        return "#B4B4B4";
-      }
-      if (
-        ["footway", "pedestrian", "path"].includes(feature.properties["area:highway"]) ||
-        (feature.properties["highway"] == "pedestrian" && (feature.properties["area"] === "yes" || feature.properties["type"] === "multipolygon"))
-      ) {
-        return "green";
-      }
-      if (feature.properties["area:highway"] === "crossing") {
-        return "yellow";
-      }
-      if (feature.properties["natural"] === "water" || feature.properties["waterway"] === "riverbank") {
-        if (feature.properties["lunar_assembler_cloned_for_pattern_fill"] == "yes") {
-          return "#00FFFF";
-        }
-        return "blue";
-      }
-      return "none";
+      return getMatchFromUnifiedStyling(feature, 'area_color', mapStyle.unifiedStyling());
     },
 
     strokeColoring(feature) {
@@ -172,15 +307,11 @@ function highZoomLaserMapStyle() {
         // and leaves ugly circles - see building=* nodes
         return "none";
       }
-      return "none";
+      return getMatchFromUnifiedStyling(feature, 'line_color', mapStyle.unifiedStyling());
     },
 
     strokeWidth(feature) {
-      if (railwayLinearValuesArray().includes(feature.properties["railway"])) {
-        return 2;
-      }
-
-      return 1;
+      return getMatchFromUnifiedStyling(feature, 'line_width', mapStyle.unifiedStyling());
     },
 
     mergeIntoGroup(feature) {
@@ -191,7 +322,8 @@ function highZoomLaserMapStyle() {
       if (
         motorizedRoadValuesArray().includes(feature.properties["area:highway"]) ||
         feature.properties["area:highway"] === "cycleway" ||
-        feature.properties["amenity"] === "parking"
+        feature.properties["area:highway"] === "bus_stop" ||
+        feature.properties["area:highway"] === "taxi_stop"
       ) {
         return "area:highway_carriageway_layer";
       }
