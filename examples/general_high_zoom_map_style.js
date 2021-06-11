@@ -414,16 +414,18 @@ function highZoomMapStyle() {
     },
 
     generateLegendEntry(key, value, rule){
-      var tag = key + "=" + value;
-      var url = "https://wiki.openstreetmap.org/wiki/Tag:" + encodeURIComponent(tag);
+      var url_value = "https://wiki.openstreetmap.org/wiki/Tag:" + encodeURIComponent(key + "=" + value);
+      var url_key = "https://wiki.openstreetmap.org/wiki/Key:" + encodeURIComponent(key);
 
+      var linked_key = '<a href="' + url_key + '">' + key + "</a>"
       if(value == undefined) {
-        tag = key + "=*"
-        url = "https://wiki.openstreetmap.org/wiki/Key:" + encodeURIComponent(key);
+        return "<li>" + linked_key  + "=* - " + rule["description"] + "</li>\n"
+      } else {
+        var linked_value = '<a href="' + url_value + '">' + value + "</a>"
+        return "<li>" + linked_key + "=" + linked_value + " - " + rule["description"] + "</li>\n"
+
       }
 
-      var linked_tag = '<a href="' + url + '">' + tag + "</a>"
-      return "<li>" + linked_tag + " - " + rule["description"] + "</li>\n"
 
     },
 
