@@ -208,11 +208,11 @@ function highZoomMapStyle() {
           'matches': [
             [
               {'key': 'highway', 'value': 'pedestrian'},
-              {'key': 'area', 'value': 'yes'},
+              {'key': 'area', 'value': 'yes', 'role': 'supplementary_obvious_filter'},
             ],
             [
               {'key': 'highway', 'value': 'pedestrian'},
-              {'key': 'type', 'value': 'multipolygon'},
+              {'key': 'type', 'value': 'multipolygon', 'role': 'supplementary_obvious_filter'},
             ],
           ],
         },
@@ -411,6 +411,55 @@ function highZoomMapStyle() {
         },
      ])
      return returned
+    },
+
+    generateLegendEntry(key, value, rule){
+      var tag = key + "=" + value;
+      if(value == undefined) {
+        tag = key + "=*"
+      }
+      return "<li>" + tag + " - " + rule["description"] + "</li>\n"
+
+    },
+
+    // highZoomMapStyle().generateLegend() in console
+    generateLegend(){
+      var returned = "<ul>\n"
+      const styleRules = mapStyle.unifiedStyling()
+      var k = -1;
+      while (k+1 < styleRules.length) {
+        k++;
+        const rule = styleRules[k];
+        var i = rule['matches'].length;
+        while (i--) {
+          const match = rule['matches'][i];
+          if(Array.isArray(match)) {
+            // multiple rules, all must be matched
+            var actualFiters = [];
+            var m = match.length;
+            while (m--) {
+              if(match[m]['role'] === 'supplementary_obvious_filter') {
+                continue;
+              }
+              actualFiters.push(match);
+            }
+            if(actualFiters.length != 1){
+              throw "unsupported to have multiple actual filters!"
+            }
+            returned += mapStyle.generateLegendEntry(actualFiters[0]['key'], actualFiters[0]['value'], rule)
+            console.warn(mapStyle.generateLegendEntry(actualFiters[0]['key'], actualFiters[0]['value'], rule))
+            console.error(returned)
+          } else {
+            // single key=* or key=value match
+            returned += mapStyle.generateLegendEntry(match['key'], match['value'], rule)
+            console.warn(mapStyle.generateLegendEntry(match['key'], match['value'], rule))
+            console.error(returned)
+          }
+        }
+      }
+      returned += "</ul>"
+      console.error(returned)
+      return returned;
     },
 
     isMatcherMatchingFeature(match, feature){
