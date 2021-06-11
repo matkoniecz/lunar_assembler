@@ -185,14 +185,14 @@ function highZoomMapStyle() {
           'line_width': 1,
           'description': 'linear representation of a cycleway',
           'matches': [
-            {'key': 'highway', 'value': 'crossing'},
+            {'key': 'highway', 'value': 'cycleway'},
           ],
         },
         {
           'area_color': "#9595b4",
           'description': 'area of a cycleway (linear representation must be also present! Using only area representation is invalid!)',
           'matches': [
-            {'key': 'area:highway', 'value': 'crossing'},
+            {'key': 'area:highway', 'value': 'cycleway'},
           ],
         },
         {
