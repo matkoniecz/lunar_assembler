@@ -4,9 +4,16 @@ SVG maps from OpenStreetMap data in browser, can be used by marking area on a ma
 
 ## In action
 
+### General high zoom map style
+![images_for_description/road_crossing_example.png](images_for_description/road_crossing_example.png)
+![images_for_description/airport_example.png](images_for_description/airport_example.png)
+
 [try it!](https://mapsaregreat.com/osm_to_svg_in_browser/)
 
 ![examples/lunar_assembler_in_action.gif](examples/lunar_assembler_in_action.gif)
+
+### Generating design for laser cut tactile maps
+![images_for_description/laser_cut_design_example.png](images_for_description/laser_cut_design_example.png)
 
 ## More basic info
 
