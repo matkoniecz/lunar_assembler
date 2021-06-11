@@ -34,6 +34,9 @@ function highZoomLaserMapStyle() {
         "service",
         "track",
         "road",
+        "busway",
+        "raceway",
+        "escape",
       ];
     },
 
