@@ -176,7 +176,7 @@ function highZoomMapStyle() {
           'line_width': 2,
           'description': 'linear representation of a single railway track',
           'matches': [
-            {'key': 'highway', 'value': value},
+            {'key': 'railway', 'value': value},
           ],
         })
       }
@@ -311,7 +311,7 @@ function highZoomMapStyle() {
         },
         {
           'area_color': "#efdfef",
-          'description': 'part of general militray-industrial land',
+          'description': 'part of general military-industrial land',
           'matches': [
             {'key': 'landuse', 'value': 'industrial'},
             {'key': 'landuse', 'value': 'railway'},
