@@ -258,14 +258,6 @@ function highZoomMapStyle() {
           ],
         },
         {
-          'area_color': "blue",
-          'description': 'water',
-          'matches': [
-            {'key': 'natural', 'value': 'water'},
-            {'key': 'waterway', 'value': 'riverbank'},
-          ],
-        },
-        {
           'area_color': "green",
           'description': 'tree-covered land',
           'matches': [
