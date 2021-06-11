@@ -146,70 +146,331 @@ function highZoomMapStyle() {
       return valueRangeForOneLayer * layer;
     },
 
+    unifiedStyling() {
+      returned = []
+      var i = this.motorizedRoadValuesArray().length;
+      while (i--) {
+        value = this.motorizedRoadValuesArray()[i];
+        returned.push( {
+          'area_color': "#555555",
+          'description': 'area of a motorized road (linear representation must be also present! Using only area representation is invalid!)',
+          'matches': [
+            {'key': 'area:highway', 'value': value},
+          ],
+        })
+        returned.push( {
+          'line_color': "#555555",
+          'line_width': 2,
+          'description': 'linear representation of a motorized road',
+          'matches': [
+            {'key': 'highway', 'value': value},
+          ],
+        })
+      }
+
+      var i = this.railwayLinearValuesArray().length;
+      while (i--) {
+        value = this.railwayLinearValuesArray()[i];
+        returned.push( {
+          'line_color': "black",
+          'line_width': 2,
+          'description': 'linear representation of a single railway track',
+          'matches': [
+            {'key': 'highway', 'value': value},
+          ],
+        })
+      }
+
+      var i = this.pedestrianWaysValuesArray().length;
+      while (i--) {
+        value = this.pedestrianWaysValuesArray()[i];
+        returned.push( {
+          'area_color': "#aaaaaa",
+          'description': 'area of a pedestrian way (linear representation must be also present! Using only area representation is invalid!)',
+          'matches': [
+            {'key': 'area:highway', 'value': value},
+          ],
+        })
+        returned.push( {
+          'line_color': "#aaaaaa",
+          'line_width': 1,
+          'description': 'linear representation of a pedestrian way',
+          'matches': [
+            {'key': 'highway', 'value': value},
+          ],
+        })
+      }
+
+      returned.push(...[
+        {
+          'area_color': "#aaaaaa",
+          'description': 'pedestrian square (using it for sidewalk areas is invalid!)',
+          'matches': [
+            [
+              {'key': 'highway', 'value': 'pedestrian'},
+              {'key': 'area', 'value': 'yes'},
+            ],
+            [
+              {'key': 'highway', 'value': 'pedestrian'},
+              {'key': 'type', 'value': 'multipolygon'},
+            ],
+          ],
+        },
+        {
+          'line_color': "#9595b4",
+          'line_width': 1,
+          'description': 'linear representation of a cycleway',
+          'matches': [
+            {'key': 'highway', 'value': 'crossing'},
+          ],
+        },
+        {
+          'area_color': "#9595b4",
+          'description': 'area of a cycleway (linear representation must be also present! Using only area representation is invalid!)',
+          'matches': [
+            {'key': 'area:highway', 'value': 'crossing'},
+          ],
+        },
+        {
+          'area_color': "#a06060",
+          'description': 'pedestrian crossing through a road (area used in addition to area representing road)',
+          'matches': [
+            {'key': 'area:highway', 'value': 'crossing'},
+          ],
+        },
+        {
+          'area_color': "#bea4c1",
+          'description': 'bicycle crossing through a road (area used in addition to area representing road)',
+          'matches': [
+            {'key': 'area:highway', 'value': 'bicycle_crossing'},
+          ],
+        },
+        {
+          'area_color': "blue",
+          'description': 'water',
+          'matches': [
+            {'key': 'natural', 'value': 'water'},
+            {'key': 'waterway', 'value': 'riverbank'},
+          ],
+        },
+        {
+          'line_color': "blue",
+          'line_width': 10,
+          'description': 'linear representation of a river',
+          'matches': [
+            {'key': 'waterway', 'value': 'river'},
+          ],
+        },
+        {
+          'line_color': "blue",
+          'line_width': 7,
+          'description': 'linear representation of a canal, assumed to be large',
+          'matches': [
+            {'key': 'waterway', 'value': 'canal'},
+          ],
+        },
+        {
+          'line_color': "blue",
+          'line_width': 2,
+          'description': 'linear representation of a stream',
+          'matches': [
+            {'key': 'waterway', 'value': 'stream'},
+          ],
+        },
+        {
+          'line_color': "blue",
+          'line_width': 1,
+          'description': 'linear representation of a ditch/drain',
+          'matches': [
+            {'key': 'waterway', 'value': 'ditch'},
+            {'key': 'waterway', 'value': 'stream'},
+          ],
+        },
+        {
+          'area_color': "black",
+          'description': 'buildings (all and every building value. Yes - including building=no that has no good reason for use)',
+          'matches': [
+            {'key': 'building'},
+          ],
+        },
+        {
+          'area_color': "blue",
+          'description': 'water',
+          'matches': [
+            {'key': 'natural', 'value': 'water'},
+            {'key': 'waterway', 'value': 'riverbank'},
+          ],
+        },
+        {
+          'area_color': "green",
+          'description': 'tree-covered land',
+          'matches': [
+            {'key': 'natural', 'value': 'wood'},
+            {'key': 'landuse', 'value': 'forest'},
+          ],
+        },
+        {
+          'area_color': "#efdfef",
+          'description': 'part of general militray-industrial land',
+          'matches': [
+            {'key': 'landuse', 'value': 'industrial'},
+            {'key': 'landuse', 'value': 'railway'},
+            {'key': 'landuse', 'value': 'quarry'},
+            {'key': 'landuse', 'value': 'construction'},
+            {'key': 'landuse', 'value': 'military'},
+            {'key': 'aeroway', 'value': 'aerodrome'},
+          ],
+        },
+        {
+          'area_color': "#efefef",
+          'description': 'part of general builtup land',
+          'matches': [
+            {'key': 'landuse', 'value': 'residential'},
+            {'key': 'landuse', 'value': 'highway'},
+            {'key': 'landuse', 'value': 'retail'},
+            {'key': 'landuse', 'value': 'commercial'},
+            {'key': 'landuse', 'value': 'garages'},
+            {'key': 'landuse', 'value': 'farmyard'},
+            {'key': 'landuse', 'value': 'education'},
+            {'key': 'amenity', 'value': 'school'},
+            {'key': 'amenity', 'value': 'kidergarten'},
+            {'key': 'amenity', 'value': 'university'},
+          ],
+        },
+        {
+          'area_color': "#eef0d5",
+          'description': 'plants on an agriculture land',
+          'matches': [
+            {'key': 'landuse', 'value': 'farmland'},
+            {'key': 'landuse', 'value': 'vineyard'},
+            {'key': 'landuse', 'value': 'orchard'},
+          ],
+        },
+        {
+          'area_color': "#c8facc",
+          'description': 'recreation land',
+          'matches': [
+            {'key': 'leisure', 'value': 'park'},
+            {'key': 'leisure', 'value': 'pitch'},
+            {'key': 'leisure', 'value': 'playground'},
+            {'key': 'landuse', 'value': 'village_green'},
+          ],
+        },
+        {
+          'area_color': "#a2ce8d",
+          'description': 'vegetation that is not agriculture or forest',
+          'matches': [
+            {'key': 'landuse', 'value': 'grass'},
+            {'key': 'landuse', 'value': 'allotments'},
+            {'key': 'landuse', 'value': 'meadow'},
+            {'key': 'natural', 'value': 'grassland'},
+            {'key': 'natural', 'value': 'scrub'},
+            {'key': 'natural', 'value': 'heath'},
+            {'key': 'leisure', 'value': 'garden'},
+          ],
+        },
+        {
+          'area_color': "gray",
+          'description': 'bridge outline',
+          'matches': [
+            {'key': 'man_made', 'value': 'bridge'},
+          ],
+        },
+        {
+          'area_color': "#EEE5DC",
+          'description': 'bare rock',
+          'matches': [
+            {'key': 'natural', 'value': 'bare_rock'},
+          ],
+        },
+        {
+          'line_color': "black",
+          'line_width': 1,
+          'description': 'raised barrier',
+          'matches': [
+            {'key': 'barrier', 'value': 'fence'},
+            {'key': 'barrier', 'value': 'wall'},
+            {'key': 'barrier', 'value': 'guard_rail'},
+          ],
+        },
+        {
+          'line_color': "purple",
+          'line_width': 5,
+          'description': 'runway',
+          'matches': [
+            {'key': 'aeroway', 'value': 'runway'},
+          ],
+        },
+        {
+          'line_color': "purple",
+          'line_width': 2,
+          'description': 'taxiway',
+          'matches': [
+            {'key': 'aeroway', 'value': 'taxiway'},
+          ],
+        },
+     ])
+     return returned
+    },
+
+    isMatcherMatchingFeature(match, feature){
+      if(('value' in match) === false) {
+        // matches any key
+        if(match["key"] in feature.properties) {
+          return true;
+        }
+      } else if(feature.properties[match["key"]] == match["value"]) {
+        return true;
+      }
+      return false;
+    },
+
+    getMatchFromUnifiedStyling(feature, property) {
+      const styleRules = mapStyle.unifiedStyling()
+      var k = styleRules.length;
+      while (k--) {
+        const rule = styleRules[k];
+        if((property in rule) === false) {
+          continue;
+        }
+        var i = rule['matches'].length;
+        while (i--) {
+            const match = rule['matches'][i];
+            if(Array.isArray(match)) {
+              // multiple rules, all must be matched
+              var m = match.length;
+              var success = true;
+              while (m--) {
+                if(mapStyle.isMatcherMatchingFeature(match[m], feature) == false) {
+                  success = false;
+                }
+              }
+              if(success) {
+                return rule[property]
+              }
+
+            } else {
+              // single key=* or key=value match
+              if(mapStyle.isMatcherMatchingFeature(match, feature)) {
+                return rule[property]
+              }  
+            }
+          }
+      }
+      return "none";
+    },
+
     fillColoring(feature) {
-      console.log(feature);
+      //console.log(feature);
       if (["Point"].includes(feature.geometry.type)) {
         //no rendering of points, for start size seems to randomly differ
         // and leaves ugly circles - see building=* areas
         return "none";
       }
 
-      if (feature.properties["building"] != null) {
-        return "black";
-      }
-      if (mapStyle.motorizedRoadValuesArray().includes(feature.properties["area:highway"])) {
-        return "#555555";
-      }
-      if (
-        mapStyle.pedestrianWaysValuesArray().includes(feature.properties["area:highway"]) ||
-        (feature.properties["highway"] == "pedestrian" && (feature.properties["area"] === "yes" || feature.properties["type"] === "multipolygon"))
-      ) {
-        return "#aaaaaa";
-      }
-      if (feature.properties["area:highway"] === "cycleway") {
-        return "#9595b4";
-      }
-      if (feature.properties["area:highway"] === "bicycle_crossing") {
-        return "#bea4c1";
-      }
-      if (feature.properties["area:highway"] === "crossing") {
-        return "#a06060";
-      }
-      if (feature.properties["natural"] === "water" || feature.properties["waterway"] === "riverbank") {
-        return "blue";
-      }
-      if (feature.properties["natural"] === "wood" || feature.properties["landuse"] === "forest") {
-        return "green";
-      }
-      if (["industrial", "railway", "quarry", "construction", "military"].includes(feature.properties["landuse"]) || feature.properties["aeroway"] === "aerodrome") {
-        return "#efdfef";
-      }
-      if (
-        ["residential", "highway", "retail", "commercial", "garages", "farmyard"].includes(feature.properties["landuse"]) ||
-        ["school", "kidergarten", "university"].includes(feature.properties["amenity"])
-      ) {
-        return "#efefef";
-      }
-      if (["farmland", "vineyard"].includes(feature.properties["landuse"])) {
-        return "#eef0d5";
-      }
-      if (["park", "pitch", "playground"].includes(feature.properties["leisure"]) || feature.properties["landuse"] === "village_green") {
-        return "#c8facc";
-      }
-      if (
-        ["grass", "allotments", "orchard", "meadow"].includes(feature.properties["landuse"]) ||
-        ["grassland", "scrub", "heath"].includes(feature.properties["natural"]) ||
-        ["garden"].includes(feature.properties["leisure"])
-      ) {
-        return "#a2ce8d";
-      }
-      if (feature.properties["man_made"] === "bridge") {
-        return "gray";
-      }
-      if (feature.properties["natural"] === "bare_rock") {
-        return "#EEE5DC";
-      }
-      return "none";
+      // more complex rules can be used here in addition - or instead of unified styling
+
+      return mapStyle.getMatchFromUnifiedStyling(feature, 'area_color');
     },
 
     strokeColoring(feature) {
@@ -218,60 +479,16 @@ function highZoomMapStyle() {
         // and leaves ugly circles - see building=* areas
         return "none";
       }
-      if (["fence", "wall", "guard_rail"].includes(feature.properties["barrier"])) {
-        return "black";
-      }
-      if (mapStyle.motorizedRoadValuesArray().includes(feature.properties["highway"])) {
-        return "#555555";
-      }
-      if (mapStyle.pedestrianWaysValuesArray().includes(feature.properties["highway"])) {
-        return "#aaaaaa";
-      }
-      if (feature.properties["highway"] === "cycleway") {
-        return "#9595b4";
-      }
 
-      if (feature.properties["aeroway"] === "runway" || feature.properties["aeroway"] === "taxiway") {
-        return "purple";
-      }
+      // more complex rules can be used here in addition - or instead of unified styling
 
-      if (mapStyle.railwayLinearValuesArray().includes(feature.properties["railway"])) {
-        return "black";
-      }
-      if (feature.properties["waterway"] != null) {
-        return "blue";
-      }
-
-      return "none";
+      return mapStyle.getMatchFromUnifiedStyling(feature, 'line_color');
     },
 
     strokeWidth(feature) {
-      if (mapStyle.motorizedRoadValuesArray().includes(feature.properties["highway"])) {
-        return 2;
-      }
-      if (feature.properties["aeroway"] === "runway") {
-        return 5;
-      }
-      if (feature.properties["waterway"] === "river") {
-        return 10;
-      }
-      if (feature.properties["waterway"] === "canal") {
-        return 7;
-      }
-      if (feature.properties["waterway"] === "stream") {
-        return 2;
-      }
-      if (["ditch", "drain"].includes(feature.properties["waterway"])) {
-        return 1;
-      }
-      if (feature.properties["aeroway"] === "taxiway") {
-        return 2;
-      }
-      if (mapStyle.railwayLinearValuesArray().includes(feature.properties["railway"])) {
-        return 2;
-      }
+      // more complex rules can be used here in addition - or instead of unified styling
 
-      return 1;
+      return mapStyle.getMatchFromUnifiedStyling(feature, 'line_width');
     },
 
     mergeIntoGroup(feature) {
