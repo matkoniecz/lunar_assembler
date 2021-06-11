@@ -447,18 +447,13 @@ function highZoomMapStyle() {
               throw "unsupported to have multiple actual filters!"
             }
             returned += mapStyle.generateLegendEntry(actualFiters[0]['key'], actualFiters[0]['value'], rule)
-            console.warn(mapStyle.generateLegendEntry(actualFiters[0]['key'], actualFiters[0]['value'], rule))
-            console.error(returned)
           } else {
             // single key=* or key=value match
             returned += mapStyle.generateLegendEntry(match['key'], match['value'], rule)
-            console.warn(mapStyle.generateLegendEntry(match['key'], match['value'], rule))
-            console.error(returned)
           }
         }
       }
       returned += "</ul>"
-      console.error(returned)
       return returned;
     },
 
