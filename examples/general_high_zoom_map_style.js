@@ -448,7 +448,7 @@ function highZoomMapStyle() {
               if(match[m]['role'] === 'supplementary_obvious_filter') {
                 continue;
               }
-              actualFiters.push(match);
+              actualFiters.push(match[m]);
             }
             if(actualFiters.length != 1){
               throw "unsupported to have multiple actual filters!"
