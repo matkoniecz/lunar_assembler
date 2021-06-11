@@ -35,8 +35,6 @@ function highZoomMapStyle() {
         "track",
         "road",
         "busway",
-        "bus_stop",
-        "taxi_stop",
         "raceway",
         "escape",
       ];
@@ -214,6 +212,20 @@ function highZoomMapStyle() {
               {'key': 'highway', 'value': 'pedestrian'},
               {'key': 'type', 'value': 'multipolygon', 'role': 'supplementary_obvious_filter'},
             ],
+          ],
+        },
+        {
+          'area_color': "#555555",
+          'description': 'road area of a taxi stop (used in addition to amenity=taxi)',
+          'matches': [
+            {'key': 'area:highway', 'value': 'taxi_stop'},
+          ],
+        },
+        {
+          'area_color': "#555555",
+          'description': 'road area of a bus stop (used in addition to highway=bus_stop)',
+          'matches': [
+            {'key': 'area:highway', 'value': 'bus_stop'},
           ],
         },
         {
