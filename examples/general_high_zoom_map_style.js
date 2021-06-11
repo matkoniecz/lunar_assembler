@@ -38,7 +38,7 @@ function highZoomMapStyle() {
         }
       }
 
-      if (mapStyle.railwayLinearValuesArray().includes(feature.properties["railway"])) {
+      if (railwayLinearValuesArray().includes(feature.properties["railway"])) {
         var priority = 0.99;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
       }
