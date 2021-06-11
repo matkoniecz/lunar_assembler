@@ -4,6 +4,615 @@
 
 /* ------------------------ */
 
+/*lunar_assembler_helpful_functions_for_map_styles.js*/
+
+/*
+    lunar_assembler - tool for generating SVG files from OpenStreetMap data. Available as a website.
+    Copyright (C) 2021 Mateusz Konieczny
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, under version 3 of the
+    License only.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+function findMergeGroupObject(dataGeojson, code) {
+  var i = dataGeojson.features.length;
+  var found = undefined;
+  while (i--) {
+    var feature = dataGeojson.features[i];
+    //lunar_assembler_merge_group is applied by lunar assembler, see mergeAsRequestedByMapStyle function
+    if (feature.properties["lunar_assembler_merge_group"] == code) {
+      if (found != undefined) {
+        alert("more than one area of " + code + " type what is unexpected, things may break. This is a bug, please report it on https://github.com/matkoniecz/lunar_assembler/issues");
+      }
+      found = feature;
+    }
+  }
+  if (found == undefined) {
+    console.warn("findMergeGroupObject failed to find " + code + " - if not expected please report at https://github.com/matkoniecz/lunar_assembler/issues");
+  }
+  return found;
+}
+
+
+/* ------------------------ */
+
+/*lunar_assembler_helpful_functions_for_map_styles_generate_symbolic_steps_from_area_highway.js*/
+
+function programaticallyGenerateSymbolicStepParts(dataGeojson) {
+    //alert(JSON.stringify(dataGeojson))
+    var pointsInSteps = dataToListOfPositionOfStepsNodes(dataGeojson);
+    var i = dataGeojson.features.length;
+    var generatedFeatures = [];
+    while (i--) {
+      var feature = dataGeojson.features[i];
+      const link = "https://www.openstreetmap.org/" + feature.id;
+      if (feature.properties["area:highway"] != "steps") {
+        continue;
+      }
+      const rings = feature.geometry.coordinates.length;
+      if (rings != 1) {
+        alert(
+          "untested for polygons with holes. And it seems that it should be represented as two highway=steps and two area:highway anyway. See " +
+            link +
+            "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
+        );
+      }
+      var newFeaturesForAdding = buildAreasSplittingStepAreaIntoSymbolicSteps(feature, pointsInSteps);
+      if (newFeaturesForAdding != null) {
+        k = newFeaturesForAdding.length;
+        while (k--) {
+          generatedFeatures.push(newFeaturesForAdding[k]);
+        }
+      }
+    }
+    i = generatedFeatures.length;
+    while (i--) {
+      dataGeojson.features.push(generatedFeatures[i]);
+    }
+    return dataGeojson;
+  }
+
+  ////////////////////////////////////////////
+    // steps processing
+    function dataToListOfPositionOfStepsNodes(geojson) {
+      // TODO: document is the first on list lower or higher
+      pointsInSteps = [];
+      var i = geojson.features.length;
+      while (i--) {
+        var feature = geojson.features[i];
+        const link = "https://www.openstreetmap.org/" + feature.id;
+        if (feature.properties["highway"] == "steps") {
+          if (feature.properties["area"] == "yes" || feature.properties["type"] === "multipolygon") {
+            alert("steps mapped as an area should use area:highway=steps tagging, " + link + " needs fixing");
+          } else if (feature.geometry.type != "LineString") {
+            alert("Unexpected geometry for steps, expected a LineString, got " + feature.geometry.type + " " + link + " needs fixing");
+          } else {
+            var k = feature.geometry.coordinates.length;
+            if (feature.properties["incline"] == "down") {
+              // reverse order (assumes incline=up to be default)
+              index = 0;
+              while (index < k) {
+                pointsInSteps.push(feature.geometry.coordinates[index]);
+                index += 1;
+              }
+            } else {
+              while (k--) {
+                pointsInSteps.push(feature.geometry.coordinates[k]);
+              }
+            }
+          }
+        }
+      }
+      return pointsInSteps;
+    }
+
+    function buildAreasSplittingStepAreaIntoSymbolicSteps(feature, pointsInSteps) {
+        // gets feature (area:highway=steps) and list of points in highway=steps
+        // returns array of features with extra shapes giving symbolic depiction of steps
+  
+        // we can detect connecting nodes. Lets assume simplest case:
+        // two nodes where highway=steps are connected, without substantially changing geometry
+        // and area:highway has four more nodes for depicting steps geometry
+        // so, for given feature we can detect skeleton with two ways forming sides of steps
+        // this can be split into parts and form the expected steps
+        //
+        // it wil fail for more complicated steps!
+        // unit testing would be useful...
+        // write just standalone code for now? not with some testing framework?
+  
+        const link = "https://www.openstreetmap.org/" + feature.id;
+        var matches = indexesOfPointsWhichAreConnectedToStepsWay(feature, pointsInSteps);
+        if (matches === null) {
+          alert("unable to build steps pattern for " + link + " - please create an issue at https://github.com/matkoniecz/lunar_assembler/issues if that is unexpected and unwanted");
+          return null;
+        }
+        var nodeCountOnPolygon = feature.geometry.coordinates[0].length;
+        expectStepsPolygonCountToBeSixNodes(nodeCountOnPolygon, link);
+  
+        //alert((matches[0].indexInObject-1) + " " + (matches[1].indexInObject+1))
+        //alert((matches[0].indexInObject+1) + " " + (matches[1].indexInObject-1))
+  
+        var pointBetweenStarts = feature.geometry.coordinates[0][matches[0].indexInObject];
+        var pointBetweenEnds = feature.geometry.coordinates[0][matches[0].indexInObject];
+  
+        var firstLineStartIndex = (matches[0].indexInObject - 1) % nodeCountOnPolygon;
+        var firstLineStart = feature.geometry.coordinates[0][firstLineStartIndex];
+        var firstLineEndIndex = (matches[1].indexInObject + 1) % nodeCountOnPolygon;
+        var firstLineEnd = feature.geometry.coordinates[0][firstLineEndIndex];
+        //alert(JSON.stringify({type: 'LineString', coordinates: [firstLineStart, firstLineEnd]}));
+  
+        var secondLineStartIndex = (matches[0].indexInObject + 1) % nodeCountOnPolygon;
+        var secondLineStart = feature.geometry.coordinates[0][secondLineStartIndex];
+        var secondLineEndIndex = (matches[1].indexInObject - 1) % nodeCountOnPolygon;
+        var secondLineEnd = feature.geometry.coordinates[0][secondLineEndIndex];
+        //alert(JSON.stringify({type: 'LineString', coordinates: [secondLineStart, secondLineEnd]}));
+  
+        return buildAreasSplittingStepAreaIntoSymbolicStepsFromProvidedSkeletonLines(firstLineStart, firstLineEnd, secondLineStart, secondLineEnd, pointBetweenStarts, pointBetweenEnds);
+      }
+      
+      
+      function indexOfMatchingPointInArray(point, array) {
+      var indexOfMatchingPointInSteps = -1;
+      var stepIndex = array.length;
+      while (stepIndex--) {
+        if (point[0] === array[stepIndex][0] && point[1] === array[stepIndex][1]) {
+          indexOfMatchingPointInSteps = stepIndex;
+          return stepIndex;
+        }
+      }
+      return -1;
+    }
+
+    function expectStepsPolygonCountToBeSixNodes(nodeCountOnPolygon, link) {
+      const expected = 6 + 1; // +1 as a border node is repeated
+      if (nodeCountOnPolygon != expected) {
+        if (nodeCountOnPolygon > expected) {
+          alert(
+            "untested for large (" +
+              nodeCountOnPolygon +
+              " nodes) area:highway=steps geometries with more than 6 nodes. See " +
+              link +
+              "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
+          );
+        } else {
+          alert("unexpectedly low node count ( " + nodeCountOnPolygon + "), is highway=steps attached to area:highway=steps? See " + link);
+        }
+      }
+    }
+
+    function indexesOfPointsWhichAreConnectedToStepsWay(feature, pointsInSteps) {
+      const link = "https://www.openstreetmap.org/" + feature.id;
+      if (feature.geometry.type != "Polygon") {
+        alert(
+          "unsupported for " +
+            feature.geometry.type +
+            "! Skipping, see " +
+            link +
+            "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
+        );
+        return null;
+      }
+      var nodeCountOnPolygon = feature.geometry.coordinates[0].length;
+      expectStepsPolygonCountToBeSixNodes(nodeCountOnPolygon, link);
+      var nodeIndex = nodeCountOnPolygon;
+      var theFirstIntersection = undefined;
+      var theSecondIntersection = undefined;
+      while (nodeIndex-- > 1) {
+        // > 1 is necessary as the last one is repetition of the first one
+        const point = feature.geometry.coordinates[0][nodeIndex];
+
+        indexOfMatchingPointInSteps = indexOfMatchingPointInArray(point, pointsInSteps);
+        if (indexOfMatchingPointInSteps != -1) {
+          //alert(point + " found at index " + indexOfMatchingPointInSteps + "of steps array");
+          if (theFirstIntersection == undefined) {
+            theFirstIntersection = { indexInObject: nodeIndex, indexInStepsArray: indexOfMatchingPointInSteps };
+          } else if (theSecondIntersection == undefined) {
+            theSecondIntersection = { indexInObject: nodeIndex, indexInStepsArray: indexOfMatchingPointInSteps };
+          } else {
+            alert("more than 2 intersections of area:highway=steps with highway=steps, at " + link + "\nOSM data needs fixing.");
+          }
+        }
+      }
+      if (theFirstIntersection == undefined || theSecondIntersection == undefined) {
+        alert(
+          "expected 2 intersections of area:highway=steps with highway=steps, got less at " +
+            link +
+            "\nIt can happen when steps area is within range but steps way is outside, special step pattern will not be generated for this steps."
+        );
+        return null;
+      }
+      if (theFirstIntersection["indexInStepsArray"] > theSecondIntersection["indexInStepsArray"]) {
+        // ensure that steps are going up/down - TODO!!!!
+        var swap = theFirstIntersection;
+        theFirstIntersection = theSecondIntersection;
+        theSecondIntersection = swap;
+      }
+      return [theFirstIntersection, theSecondIntersection];
+    }
+
+    function buildAreasSplittingStepAreaIntoSymbolicStepsFromProvidedSkeletonLines(firstLineStart, firstLineEnd, secondLineStart, secondLineEnd, pointBetweenStarts, pointBetweenEnds) {
+      // gets lines data - one for each side of steps
+      // firstLineStart, firstLineEnd
+      // secondLineStart, secondLineEnd
+      // gets data about extra geometry parts at upper and lower steps boundary
+      // pointBetweenStarts, pointBetweenEnds
+      //
+      // returns array of features with extra shapes giving symbolic depiction of steps
+      returned = [];
+      // add _part_X tags
+      const partCount = 4;
+      var partIndex = partCount;
+      while (partIndex--) {
+        //TODO: what if steps attachment changes geometry?
+        //the first and the last line should include also middle nodes...
+        ratioOfStartForTop = (partIndex + 1) / partCount;
+        ratioOfStartForBottom = partIndex / partCount;
+        var cornerOnTopOfTheFirstLine = pointBetweenTwoPoints(firstLineStart, firstLineEnd, ratioOfStartForTop);
+        var cornerOnBottomOfTheFirstLine = pointBetweenTwoPoints(firstLineStart, firstLineEnd, ratioOfStartForBottom);
+
+        var cornerOnTopOfTheSecondLine = pointBetweenTwoPoints(secondLineStart, secondLineEnd, ratioOfStartForTop);
+        var cornerOnBottomOfTheSecondLine = pointBetweenTwoPoints(secondLineStart, secondLineEnd, ratioOfStartForBottom);
+
+        const coords = [cornerOnTopOfTheFirstLine, cornerOnTopOfTheSecondLine, cornerOnBottomOfTheSecondLine, cornerOnBottomOfTheFirstLine, cornerOnTopOfTheFirstLine];
+        const geometry = { type: "Polygon", coordinates: [coords] };
+        const generatedFeature = { type: "Feature", properties: { lunar_assembler_step_segment: "" + partIndex }, geometry: geometry };
+        //alert(JSON.stringify(generatedFeature));
+        returned.push(generatedFeature);
+
+        //winding :( TODO, lets ignore it for now
+      }
+      return returned;
+    }
+
+
+    function pointBetweenTwoPoints(start, end, ratioOfStart) {
+      return [start[0] * ratioOfStart + end[0] * (1 - ratioOfStart), start[1] * ratioOfStart + end[1] * (1 - ratioOfStart)];
+    }
+
+
+
+/* ------------------------ */
+
+/*lunar_assembler_helpful_functions_for_map_styles_apply_patterns_to_areas.js*/
+
+/*
+    lunar_assembler - tool for generating SVG files from OpenStreetMap data. Available as a website.
+    Copyright (C) 2021 Mateusz Konieczny
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, under version 3 of the
+    License only.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+function intersectGeometryWithHorizontalStripes(feature, stripeSizeInDegrees, distanceBetweenStripesInDegrees) {
+  bbox = turf.bbox(feature);
+  var minLongitude = bbox[0];
+  var minLatitude = bbox[1];
+  var maxLongitude = bbox[2];
+  var maxLatitude = bbox[3];
+  if (!isMultipolygonAsExpected(feature)) {
+    return null;
+  }
+  var collected = [];
+  // gathering horizontal stripes
+  var minLatitudeForStripe = minLatitude;
+  while (minLatitudeForStripe < maxLatitude) {
+    var maxLatitudeForStripe = minLatitudeForStripe + stripeSizeInDegrees;
+    var stripeRing = [
+      [minLongitude, minLatitudeForStripe],
+      [maxLongitude, minLatitudeForStripe],
+      [maxLongitude, maxLatitudeForStripe],
+      [minLongitude, maxLatitudeForStripe],
+      [minLongitude, minLatitudeForStripe],
+    ];
+    var stripe = [stripeRing];
+    var intersectedStripe = polygonClipping.intersection(feature.geometry.coordinates, stripe);
+    if (intersectedStripe != []) {
+      collected.push(intersectedStripe);
+    }
+    minLatitudeForStripe += stripeSizeInDegrees + distanceBetweenStripesInDegrees;
+  }
+  if(collected.length == 1) {
+    console.warn("one element! Is spread working as expected? See #68") // TODO - trigger and debug it
+  }
+  var generated = polygonClipping.union(...collected);
+
+  var cloned = JSON.parse(JSON.stringify(feature));
+  cloned.geometry.coordinates = generated;
+  return cloned;
+}
+
+function intersectGeometryWithPlaneHavingRectangularHoles(feature, holeVerticalInDegrees, holeHorizontalInDegrees, spaceVerticalInDegrees, spaceHorizontalInDegrees) {
+  bbox = turf.bbox(feature);
+  var minLongitude = bbox[0];
+  var minLatitude = bbox[1];
+  var maxLongitude = bbox[2];
+  var maxLatitude = bbox[3];
+  if (!isMultipolygonAsExpected(feature)) {
+    return null;
+  }
+  var collected = [];
+  // gathering horizontal stripes
+  var minLatitudeForStripe = minLatitude;
+  while (minLatitudeForStripe < maxLatitude) {
+    var maxLatitudeForStripe = minLatitudeForStripe + spaceVerticalInDegrees;
+    var stripeRing = [
+      [minLongitude, minLatitudeForStripe],
+      [maxLongitude, minLatitudeForStripe],
+      [maxLongitude, maxLatitudeForStripe],
+      [minLongitude, maxLatitudeForStripe],
+      [minLongitude, minLatitudeForStripe],
+    ];
+    var stripe = [stripeRing];
+    var intersectedStripe = polygonClipping.intersection(feature.geometry.coordinates, stripe);
+    if (intersectedStripe.length > 0) {
+      collected.push(intersectedStripe);
+    }
+    minLatitudeForStripe += spaceVerticalInDegrees + holeVerticalInDegrees;
+  }
+  if(collected.length == 1) {
+    console.warn("one element! Is spread working as expected? See #68") // TODO - trigger and debug it
+  }
+  // split in pairs due to https://github.com/mfogel/polygon-clipping/issues/118
+  var generatedHorizontal = polygonClipping.union(...collected);
+  collected = [];
+
+  // gathering vertical stripes
+  var minLongitudeForStripe = minLongitude;
+  while (minLongitudeForStripe < maxLongitude) {
+    var maxLongitudeForStripe = minLongitudeForStripe + spaceHorizontalInDegrees;
+    var stripeRing = [
+      [minLongitudeForStripe, minLatitude],
+      [maxLongitudeForStripe, minLatitude],
+      [maxLongitudeForStripe, maxLatitude],
+      [minLongitudeForStripe, maxLatitude],
+      [minLongitudeForStripe, minLatitude],
+    ];
+    var stripe = [stripeRing];
+    var intersectedStripe = polygonClipping.intersection(feature.geometry.coordinates, stripe);
+    if (intersectedStripe.length > 0) {
+      collected.push(intersectedStripe);
+    }
+    minLongitudeForStripe += spaceHorizontalInDegrees + holeHorizontalInDegrees;
+  }
+  if(collected.length == 1) {
+    console.warn("one element! Is spread working as expected? See #68") // TODO - trigger and debug it
+  }
+  var generatedVertical = polygonClipping.union(...collected);
+  var generated = polygonClipping.union(generatedHorizontal, generatedVertical);
+  //console.warn("road pattern follows");
+  //console.warn(generated);
+  //console.warn("road pattern above");
+
+  var cloned = JSON.parse(JSON.stringify(feature));
+  cloned.geometry.coordinates = generated;
+  return cloned;
+}
+
+
+/* ------------------------ */
+
+/*lunar_assembler_helpful_functions_for_map_styles_openstreetmap_tagging_knowledge.js*/
+
+/*
+    lunar_assembler - tool for generating SVG files from OpenStreetMap data. Available as a website.
+    Copyright (C) 2021 Mateusz Konieczny
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, under version 3 of the
+    License only.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+function motorizedRoadValuesArray() {
+  return [
+    "motorway",
+    "motorway_link",
+    "trunk",
+    "trunk_link",
+    "primary",
+    "primary_link",
+    "secondary",
+    "secondary_link",
+    "tertiary",
+    "tertiary_link",
+    "unclassified",
+    "residential",
+    "service",
+    "track",
+    "road",
+    "busway",
+    "raceway",
+    "escape",
+  ];
+}
+
+function railwayLinearValuesArray() {
+  return [
+    "rail",
+    "disused",
+    "tram",
+    "subway",
+    "narrow_gauge",
+    "light_rail",
+    "preserved",
+    "construction",
+    "miniature",
+    "monorail",
+  ];
+}
+
+function pedestrianWaysValuesArray() {
+  return [
+    "footway",
+    "path",
+    "steps",
+    "pedestrian",
+    "living_street",
+  ];
+}
+
+
+/* ------------------------ */
+
+/*lunar_assembler_helpful_functions_for_map_styles_unified_styling_handler.js*/
+
+/*
+    lunar_assembler - tool for generating SVG files from OpenStreetMap data. Available as a website.
+    Copyright (C) 2021 Mateusz Konieczny
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, under version 3 of the
+    License only.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+function isMatcherMatchingFeature(match, feature){
+  if(('value' in match) === false) {
+    // matches any key
+    if(match["key"] in feature.properties) {
+      return true;
+    }
+  } else if(feature.properties[match["key"]] == match["value"]) {
+    return true;
+  }
+  return false;
+}
+
+function getMatchFromUnifiedStyling(feature, property, styleRules) {
+  var k = -1;
+  while (k + 1 < styleRules.length) {
+    k += 1
+    const rule = styleRules[k];
+    if((property in rule) === false) {
+      continue;
+    }
+    var i = rule['matches'].length;
+    while (i--) {
+        const match = rule['matches'][i];
+        if(Array.isArray(match)) {
+          // multiple rules, all must be matched
+          var m = match.length;
+          var success = true;
+          while (m--) {
+            if(isMatcherMatchingFeature(match[m], feature) == false) {
+              success = false;
+            }
+          }
+          if(success) {
+            return rule[property]
+          }
+
+        } else {
+          // single key=* or key=value match
+          if(isMatcherMatchingFeature(match, feature)) {
+            return rule[property]
+          }  
+        }
+      }
+  }
+  return "none";
+}
+
+function generateLegendEntry(key, value, rule){
+  var styling_summary = ""
+  if("area_color" in rule) {
+    styling_summary += '<div style="display: inline; color:' + rule["area_color"] + '"> ■ </div>'
+  }
+  if("line_color" in rule) {
+    styling_summary += '<div style="display: inline; color:' + rule["line_color"] + '"> ┃ </div>'
+  }
+
+  var url_value = "https://wiki.openstreetmap.org/wiki/Tag:" + encodeURIComponent(key + "=" + value);
+  var url_key = "https://wiki.openstreetmap.org/wiki/Key:" + encodeURIComponent(key);
+
+  var linked_key = '<a href="' + url_key + '">' + key + "</a>"
+  if(value == undefined) {
+    return "<li>" + styling_summary + " " + linked_key  + "=* - " + rule["description"] + "</li>\n"
+  } else {
+    var linked_value = '<a href="' + url_value + '">' + value + "</a>"
+    return "<li>" + styling_summary + " " + linked_key + "=" + linked_value + " - " + rule["description"] + "</li>\n"
+
+  }
+}
+
+// for high zoom:
+// generateLegend(highZoomMapStyle().unifiedStyling())
+// in console
+function  generateLegend(styleRules){
+  var returned = ""
+  returned += '<p>Note: width styling is <a href="https://github.com/matkoniecz/lunar_assembler/issues/87">currently not shown</a> in the legend</p> ' 
+  returned += "<!--automatically generated by generateLegend function-->\n" 
+  returned += "<ul>\n"
+  var k = -1;
+  while (k+1 < styleRules.length) {
+    k++;
+    const rule = styleRules[k];
+    var i = rule['matches'].length;
+    while (i--) {
+      const match = rule['matches'][i];
+      if(Array.isArray(match)) {
+        // multiple rules, all must be matched
+        var actualFiters = [];
+        var m = match.length;
+        while (m--) {
+          if(match[m]['role'] === 'supplementary_obvious_filter') {
+            continue;
+          }
+          actualFiters.push(match[m]);
+        }
+        if(actualFiters.length != 1){
+          throw "unsupported to have multiple actual filters!"
+        }
+        returned += generateLegendEntry(actualFiters[0]['key'], actualFiters[0]['value'], rule)
+      } else {
+        // single key=* or key=value match
+        returned += generateLegendEntry(match['key'], match['value'], rule)
+      }
+    }
+  }
+  returned += "</ul>"
+  return returned;
+}
+
+
+/* ------------------------ */
+
 /*lunar_assembler.js*/
 
 /*
@@ -583,484 +1192,6 @@ function download(filename, text) {
 
   document.body.removeChild(element);
 }
-
-
-/* ------------------------ */
-
-/*lunar_assembler_helpful_functions_for_map_styles.js*/
-
-/*
-    lunar_assembler - tool for generating SVG files from OpenStreetMap data. Available as a website.
-    Copyright (C) 2021 Mateusz Konieczny
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, under version 3 of the
-    License only.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
-function findMergeGroupObject(dataGeojson, code) {
-  var i = dataGeojson.features.length;
-  var found = undefined;
-  while (i--) {
-    var feature = dataGeojson.features[i];
-    //lunar_assembler_merge_group is applied by lunar assembler, see mergeAsRequestedByMapStyle function
-    if (feature.properties["lunar_assembler_merge_group"] == code) {
-      if (found != undefined) {
-        alert("more than one area of " + code + " type what is unexpected, things may break. This is a bug, please report it on https://github.com/matkoniecz/lunar_assembler/issues");
-      }
-      found = feature;
-    }
-  }
-  if (found == undefined) {
-    console.warn("findMergeGroupObject failed to find " + code + " - if not expected please report at https://github.com/matkoniecz/lunar_assembler/issues");
-  }
-  return found;
-}
-
-
-/* ------------------------ */
-
-/*lunar_assembler_helpful_functions_for_map_styles_generate_symbolic_steps_from_area_highway.js*/
-
-function programaticallyGenerateSymbolicStepParts(dataGeojson) {
-    //alert(JSON.stringify(dataGeojson))
-    var pointsInSteps = dataToListOfPositionOfStepsNodes(dataGeojson);
-    var i = dataGeojson.features.length;
-    var generatedFeatures = [];
-    while (i--) {
-      var feature = dataGeojson.features[i];
-      const link = "https://www.openstreetmap.org/" + feature.id;
-      if (feature.properties["area:highway"] != "steps") {
-        continue;
-      }
-      const rings = feature.geometry.coordinates.length;
-      if (rings != 1) {
-        alert(
-          "untested for polygons with holes. And it seems that it should be represented as two highway=steps and two area:highway anyway. See " +
-            link +
-            "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
-        );
-      }
-      var newFeaturesForAdding = buildAreasSplittingStepAreaIntoSymbolicSteps(feature, pointsInSteps);
-      if (newFeaturesForAdding != null) {
-        k = newFeaturesForAdding.length;
-        while (k--) {
-          generatedFeatures.push(newFeaturesForAdding[k]);
-        }
-      }
-    }
-    i = generatedFeatures.length;
-    while (i--) {
-      dataGeojson.features.push(generatedFeatures[i]);
-    }
-    return dataGeojson;
-  }
-
-  ////////////////////////////////////////////
-    // steps processing
-    function dataToListOfPositionOfStepsNodes(geojson) {
-      // TODO: document is the first on list lower or higher
-      pointsInSteps = [];
-      var i = geojson.features.length;
-      while (i--) {
-        var feature = geojson.features[i];
-        const link = "https://www.openstreetmap.org/" + feature.id;
-        if (feature.properties["highway"] == "steps") {
-          if (feature.properties["area"] == "yes" || feature.properties["type"] === "multipolygon") {
-            alert("steps mapped as an area should use area:highway=steps tagging, " + link + " needs fixing");
-          } else if (feature.geometry.type != "LineString") {
-            alert("Unexpected geometry for steps, expected a LineString, got " + feature.geometry.type + " " + link + " needs fixing");
-          } else {
-            var k = feature.geometry.coordinates.length;
-            if (feature.properties["incline"] == "down") {
-              // reverse order (assumes incline=up to be default)
-              index = 0;
-              while (index < k) {
-                pointsInSteps.push(feature.geometry.coordinates[index]);
-                index += 1;
-              }
-            } else {
-              while (k--) {
-                pointsInSteps.push(feature.geometry.coordinates[k]);
-              }
-            }
-          }
-        }
-      }
-      return pointsInSteps;
-    }
-
-    function buildAreasSplittingStepAreaIntoSymbolicSteps(feature, pointsInSteps) {
-        // gets feature (area:highway=steps) and list of points in highway=steps
-        // returns array of features with extra shapes giving symbolic depiction of steps
-  
-        // we can detect connecting nodes. Lets assume simplest case:
-        // two nodes where highway=steps are connected, without substantially changing geometry
-        // and area:highway has four more nodes for depicting steps geometry
-        // so, for given feature we can detect skeleton with two ways forming sides of steps
-        // this can be split into parts and form the expected steps
-        //
-        // it wil fail for more complicated steps!
-        // unit testing would be useful...
-        // write just standalone code for now? not with some testing framework?
-  
-        const link = "https://www.openstreetmap.org/" + feature.id;
-        var matches = indexesOfPointsWhichAreConnectedToStepsWay(feature, pointsInSteps);
-        if (matches === null) {
-          alert("unable to build steps pattern for " + link + " - please create an issue at https://github.com/matkoniecz/lunar_assembler/issues if that is unexpected and unwanted");
-          return null;
-        }
-        var nodeCountOnPolygon = feature.geometry.coordinates[0].length;
-        expectStepsPolygonCountToBeSixNodes(nodeCountOnPolygon, link);
-  
-        //alert((matches[0].indexInObject-1) + " " + (matches[1].indexInObject+1))
-        //alert((matches[0].indexInObject+1) + " " + (matches[1].indexInObject-1))
-  
-        var pointBetweenStarts = feature.geometry.coordinates[0][matches[0].indexInObject];
-        var pointBetweenEnds = feature.geometry.coordinates[0][matches[0].indexInObject];
-  
-        var firstLineStartIndex = (matches[0].indexInObject - 1) % nodeCountOnPolygon;
-        var firstLineStart = feature.geometry.coordinates[0][firstLineStartIndex];
-        var firstLineEndIndex = (matches[1].indexInObject + 1) % nodeCountOnPolygon;
-        var firstLineEnd = feature.geometry.coordinates[0][firstLineEndIndex];
-        //alert(JSON.stringify({type: 'LineString', coordinates: [firstLineStart, firstLineEnd]}));
-  
-        var secondLineStartIndex = (matches[0].indexInObject + 1) % nodeCountOnPolygon;
-        var secondLineStart = feature.geometry.coordinates[0][secondLineStartIndex];
-        var secondLineEndIndex = (matches[1].indexInObject - 1) % nodeCountOnPolygon;
-        var secondLineEnd = feature.geometry.coordinates[0][secondLineEndIndex];
-        //alert(JSON.stringify({type: 'LineString', coordinates: [secondLineStart, secondLineEnd]}));
-  
-        return buildAreasSplittingStepAreaIntoSymbolicStepsFromProvidedSkeletonLines(firstLineStart, firstLineEnd, secondLineStart, secondLineEnd, pointBetweenStarts, pointBetweenEnds);
-      }
-      
-      
-      function indexOfMatchingPointInArray(point, array) {
-      var indexOfMatchingPointInSteps = -1;
-      var stepIndex = array.length;
-      while (stepIndex--) {
-        if (point[0] === array[stepIndex][0] && point[1] === array[stepIndex][1]) {
-          indexOfMatchingPointInSteps = stepIndex;
-          return stepIndex;
-        }
-      }
-      return -1;
-    }
-
-    function expectStepsPolygonCountToBeSixNodes(nodeCountOnPolygon, link) {
-      const expected = 6 + 1; // +1 as a border node is repeated
-      if (nodeCountOnPolygon != expected) {
-        if (nodeCountOnPolygon > expected) {
-          alert(
-            "untested for large (" +
-              nodeCountOnPolygon +
-              " nodes) area:highway=steps geometries with more than 6 nodes. See " +
-              link +
-              "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
-          );
-        } else {
-          alert("unexpectedly low node count ( " + nodeCountOnPolygon + "), is highway=steps attached to area:highway=steps? See " + link);
-        }
-      }
-    }
-
-    function indexesOfPointsWhichAreConnectedToStepsWay(feature, pointsInSteps) {
-      const link = "https://www.openstreetmap.org/" + feature.id;
-      if (feature.geometry.type != "Polygon") {
-        alert(
-          "unsupported for " +
-            feature.geometry.type +
-            "! Skipping, see " +
-            link +
-            "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
-        );
-        return null;
-      }
-      var nodeCountOnPolygon = feature.geometry.coordinates[0].length;
-      expectStepsPolygonCountToBeSixNodes(nodeCountOnPolygon, link);
-      var nodeIndex = nodeCountOnPolygon;
-      var theFirstIntersection = undefined;
-      var theSecondIntersection = undefined;
-      while (nodeIndex-- > 1) {
-        // > 1 is necessary as the last one is repetition of the first one
-        const point = feature.geometry.coordinates[0][nodeIndex];
-
-        indexOfMatchingPointInSteps = indexOfMatchingPointInArray(point, pointsInSteps);
-        if (indexOfMatchingPointInSteps != -1) {
-          //alert(point + " found at index " + indexOfMatchingPointInSteps + "of steps array");
-          if (theFirstIntersection == undefined) {
-            theFirstIntersection = { indexInObject: nodeIndex, indexInStepsArray: indexOfMatchingPointInSteps };
-          } else if (theSecondIntersection == undefined) {
-            theSecondIntersection = { indexInObject: nodeIndex, indexInStepsArray: indexOfMatchingPointInSteps };
-          } else {
-            alert("more than 2 intersections of area:highway=steps with highway=steps, at " + link + "\nOSM data needs fixing.");
-          }
-        }
-      }
-      if (theFirstIntersection == undefined || theSecondIntersection == undefined) {
-        alert(
-          "expected 2 intersections of area:highway=steps with highway=steps, got less at " +
-            link +
-            "\nIt can happen when steps area is within range but steps way is outside, special step pattern will not be generated for this steps."
-        );
-        return null;
-      }
-      if (theFirstIntersection["indexInStepsArray"] > theSecondIntersection["indexInStepsArray"]) {
-        // ensure that steps are going up/down - TODO!!!!
-        var swap = theFirstIntersection;
-        theFirstIntersection = theSecondIntersection;
-        theSecondIntersection = swap;
-      }
-      return [theFirstIntersection, theSecondIntersection];
-    }
-
-    function buildAreasSplittingStepAreaIntoSymbolicStepsFromProvidedSkeletonLines(firstLineStart, firstLineEnd, secondLineStart, secondLineEnd, pointBetweenStarts, pointBetweenEnds) {
-      // gets lines data - one for each side of steps
-      // firstLineStart, firstLineEnd
-      // secondLineStart, secondLineEnd
-      // gets data about extra geometry parts at upper and lower steps boundary
-      // pointBetweenStarts, pointBetweenEnds
-      //
-      // returns array of features with extra shapes giving symbolic depiction of steps
-      returned = [];
-      // add _part_X tags
-      const partCount = 4;
-      var partIndex = partCount;
-      while (partIndex--) {
-        //TODO: what if steps attachment changes geometry?
-        //the first and the last line should include also middle nodes...
-        ratioOfStartForTop = (partIndex + 1) / partCount;
-        ratioOfStartForBottom = partIndex / partCount;
-        var cornerOnTopOfTheFirstLine = pointBetweenTwoPoints(firstLineStart, firstLineEnd, ratioOfStartForTop);
-        var cornerOnBottomOfTheFirstLine = pointBetweenTwoPoints(firstLineStart, firstLineEnd, ratioOfStartForBottom);
-
-        var cornerOnTopOfTheSecondLine = pointBetweenTwoPoints(secondLineStart, secondLineEnd, ratioOfStartForTop);
-        var cornerOnBottomOfTheSecondLine = pointBetweenTwoPoints(secondLineStart, secondLineEnd, ratioOfStartForBottom);
-
-        const coords = [cornerOnTopOfTheFirstLine, cornerOnTopOfTheSecondLine, cornerOnBottomOfTheSecondLine, cornerOnBottomOfTheFirstLine, cornerOnTopOfTheFirstLine];
-        const geometry = { type: "Polygon", coordinates: [coords] };
-        const generatedFeature = { type: "Feature", properties: { lunar_assembler_step_segment: "" + partIndex }, geometry: geometry };
-        //alert(JSON.stringify(generatedFeature));
-        returned.push(generatedFeature);
-
-        //winding :( TODO, lets ignore it for now
-      }
-      return returned;
-    }
-
-
-    function pointBetweenTwoPoints(start, end, ratioOfStart) {
-      return [start[0] * ratioOfStart + end[0] * (1 - ratioOfStart), start[1] * ratioOfStart + end[1] * (1 - ratioOfStart)];
-    }
-
-
-
-/* ------------------------ */
-
-/*lunar_assembler_helpful_functions_for_map_styles_apply_patterns_to_areas.js*/
-
-/*
-    lunar_assembler - tool for generating SVG files from OpenStreetMap data. Available as a website.
-    Copyright (C) 2021 Mateusz Konieczny
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, under version 3 of the
-    License only.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
-function intersectGeometryWithHorizontalStripes(feature, stripeSizeInDegrees, distanceBetweenStripesInDegrees) {
-  bbox = turf.bbox(feature);
-  var minLongitude = bbox[0];
-  var minLatitude = bbox[1];
-  var maxLongitude = bbox[2];
-  var maxLatitude = bbox[3];
-  if (!isMultipolygonAsExpected(feature)) {
-    return null;
-  }
-  var collected = [];
-  // gathering horizontal stripes
-  var minLatitudeForStripe = minLatitude;
-  while (minLatitudeForStripe < maxLatitude) {
-    var maxLatitudeForStripe = minLatitudeForStripe + stripeSizeInDegrees;
-    var stripeRing = [
-      [minLongitude, minLatitudeForStripe],
-      [maxLongitude, minLatitudeForStripe],
-      [maxLongitude, maxLatitudeForStripe],
-      [minLongitude, maxLatitudeForStripe],
-      [minLongitude, minLatitudeForStripe],
-    ];
-    var stripe = [stripeRing];
-    var intersectedStripe = polygonClipping.intersection(feature.geometry.coordinates, stripe);
-    if (intersectedStripe != []) {
-      collected.push(intersectedStripe);
-    }
-    minLatitudeForStripe += stripeSizeInDegrees + distanceBetweenStripesInDegrees;
-  }
-  if(collected.length == 1) {
-    console.warn("one element! Is spread working as expected? See #68") // TODO - trigger and debug it
-  }
-  var generated = polygonClipping.union(...collected);
-
-  var cloned = JSON.parse(JSON.stringify(feature));
-  cloned.geometry.coordinates = generated;
-  return cloned;
-}
-
-function intersectGeometryWithPlaneHavingRectangularHoles(feature, holeVerticalInDegrees, holeHorizontalInDegrees, spaceVerticalInDegrees, spaceHorizontalInDegrees) {
-  bbox = turf.bbox(feature);
-  var minLongitude = bbox[0];
-  var minLatitude = bbox[1];
-  var maxLongitude = bbox[2];
-  var maxLatitude = bbox[3];
-  if (!isMultipolygonAsExpected(feature)) {
-    return null;
-  }
-  var collected = [];
-  // gathering horizontal stripes
-  var minLatitudeForStripe = minLatitude;
-  while (minLatitudeForStripe < maxLatitude) {
-    var maxLatitudeForStripe = minLatitudeForStripe + spaceVerticalInDegrees;
-    var stripeRing = [
-      [minLongitude, minLatitudeForStripe],
-      [maxLongitude, minLatitudeForStripe],
-      [maxLongitude, maxLatitudeForStripe],
-      [minLongitude, maxLatitudeForStripe],
-      [minLongitude, minLatitudeForStripe],
-    ];
-    var stripe = [stripeRing];
-    var intersectedStripe = polygonClipping.intersection(feature.geometry.coordinates, stripe);
-    if (intersectedStripe.length > 0) {
-      collected.push(intersectedStripe);
-    }
-    minLatitudeForStripe += spaceVerticalInDegrees + holeVerticalInDegrees;
-  }
-  if(collected.length == 1) {
-    console.warn("one element! Is spread working as expected? See #68") // TODO - trigger and debug it
-  }
-  // split in pairs due to https://github.com/mfogel/polygon-clipping/issues/118
-  var generatedHorizontal = polygonClipping.union(...collected);
-  collected = [];
-
-  // gathering vertical stripes
-  var minLongitudeForStripe = minLongitude;
-  while (minLongitudeForStripe < maxLongitude) {
-    var maxLongitudeForStripe = minLongitudeForStripe + spaceHorizontalInDegrees;
-    var stripeRing = [
-      [minLongitudeForStripe, minLatitude],
-      [maxLongitudeForStripe, minLatitude],
-      [maxLongitudeForStripe, maxLatitude],
-      [minLongitudeForStripe, maxLatitude],
-      [minLongitudeForStripe, minLatitude],
-    ];
-    var stripe = [stripeRing];
-    var intersectedStripe = polygonClipping.intersection(feature.geometry.coordinates, stripe);
-    if (intersectedStripe.length > 0) {
-      collected.push(intersectedStripe);
-    }
-    minLongitudeForStripe += spaceHorizontalInDegrees + holeHorizontalInDegrees;
-  }
-  if(collected.length == 1) {
-    console.warn("one element! Is spread working as expected? See #68") // TODO - trigger and debug it
-  }
-  var generatedVertical = polygonClipping.union(...collected);
-  var generated = polygonClipping.union(generatedHorizontal, generatedVertical);
-  //console.warn("road pattern follows");
-  //console.warn(generated);
-  //console.warn("road pattern above");
-
-  var cloned = JSON.parse(JSON.stringify(feature));
-  cloned.geometry.coordinates = generated;
-  return cloned;
-}
-
-
-/* ------------------------ */
-
-/*lunar_assembler_helpful_functions_for_map_styles_openstreetmap_tagging_knowledge.js*/
-
-/*
-    lunar_assembler - tool for generating SVG files from OpenStreetMap data. Available as a website.
-    Copyright (C) 2021 Mateusz Konieczny
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, under version 3 of the
-    License only.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
-function motorizedRoadValuesArray() {
-  return [
-    "motorway",
-    "motorway_link",
-    "trunk",
-    "trunk_link",
-    "primary",
-    "primary_link",
-    "secondary",
-    "secondary_link",
-    "tertiary",
-    "tertiary_link",
-    "unclassified",
-    "residential",
-    "service",
-    "track",
-    "road",
-    "busway",
-    "raceway",
-    "escape",
-  ];
-}
-
-function railwayLinearValuesArray() {
-  return [
-    "rail",
-    "disused",
-    "tram",
-    "subway",
-    "narrow_gauge",
-    "light_rail",
-    "preserved",
-    "construction",
-    "miniature",
-    "monorail",
-  ];
-}
-
-function pedestrianWaysValuesArray() {
-  return [
-    "footway",
-    "path",
-    "steps",
-    "pedestrian",
-    "living_street",
-  ];
-},
 
 
 /* ------------------------ */
