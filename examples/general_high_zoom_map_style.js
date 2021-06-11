@@ -17,54 +17,6 @@
 */
 function highZoomMapStyle() {
   var mapStyle = {
-    motorizedRoadValuesArray() {
-      return [
-        "motorway",
-        "motorway_link",
-        "trunk",
-        "trunk_link",
-        "primary",
-        "primary_link",
-        "secondary",
-        "secondary_link",
-        "tertiary",
-        "tertiary_link",
-        "unclassified",
-        "residential",
-        "service",
-        "track",
-        "road",
-        "busway",
-        "raceway",
-        "escape",
-      ];
-    },
-
-    pedestrianWaysValuesArray() {
-      return [
-        "footway",
-        "path",
-        "steps",
-        "pedestrian",
-        "living_street",
-      ];
-    },
-
-    railwayLinearValuesArray() {
-      return [
-        "rail",
-        "disused",
-        "tram",
-        "subway",
-        "narrow_gauge",
-        "light_rail",
-        "preserved",
-        "construction",
-        "miniature",
-        "monorail",
-      ];
-    },
-
     paintOrder(feature) {
       // higher values: more on top
 
@@ -146,9 +98,9 @@ function highZoomMapStyle() {
 
     unifiedStyling() {
       returned = []
-      var i = this.motorizedRoadValuesArray().length;
+      var i = motorizedRoadValuesArray().length;
       while (i--) {
-        value = this.motorizedRoadValuesArray()[i];
+        value = motorizedRoadValuesArray()[i];
         returned.push( {
           'area_color': "#555555",
           'description': 'area of a motorized road (linear representation must be also present! Using only area representation is invalid!)',
@@ -166,9 +118,9 @@ function highZoomMapStyle() {
         })
       }
 
-      var i = this.railwayLinearValuesArray().length;
+      var i = railwayLinearValuesArray().length;
       while (i--) {
-        value = this.railwayLinearValuesArray()[i];
+        value = railwayLinearValuesArray()[i];
         returned.push( {
           'line_color': "black",
           'line_width': 2,
@@ -179,9 +131,9 @@ function highZoomMapStyle() {
         })
       }
 
-      var i = this.pedestrianWaysValuesArray().length;
+      var i = pedestrianWaysValuesArray().length;
       while (i--) {
-        value = this.pedestrianWaysValuesArray()[i];
+        value = pedestrianWaysValuesArray()[i];
         returned.push( {
           'area_color': "#aaaaaa",
           'description': 'area of a pedestrian way (linear representation must be also present! Using only area representation is invalid!)',
@@ -570,11 +522,11 @@ function highZoomMapStyle() {
       // only areas (including multipolygins) can be merged for now
       // please open an issue if you need it, it increaes chance of implementation a bit
       // or open pull request with an implementation
-      if (mapStyle.motorizedRoadValuesArray().includes(feature.properties["area:highway"])) {
+      if (motorizedRoadValuesArray().includes(feature.properties["area:highway"])) {
         return "area:highway_carriageway_layer" + feature.properties["layer"];
       }
       if (
-        mapStyle.pedestrianWaysValuesArray().includes(feature.properties["area:highway"]) ||
+        pedestrianWaysValuesArray().includes(feature.properties["area:highway"]) ||
         (feature.properties["highway"] == "pedestrian" && (feature.properties["area"] === "yes" || feature.properties["type"] === "multipolygon"))
       ) {
         return "area:highway_footway" + feature.properties["layer"];

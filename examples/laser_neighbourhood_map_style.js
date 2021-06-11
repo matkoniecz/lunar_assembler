@@ -17,44 +17,6 @@
 */
 function highZoomLaserMapStyle() {
   var mapStyle = {
-    motorizedRoadValuesArray() {
-      return [
-        "motorway",
-        "motorway_link",
-        "trunk",
-        "trunk_link",
-        "primary",
-        "primary_link",
-        "secondary",
-        "secondary_link",
-        "tertiary",
-        "tertiary_link",
-        "unclassified",
-        "residential",
-        "service",
-        "track",
-        "road",
-        "busway",
-        "raceway",
-        "escape",
-      ];
-    },
-
-    railwayLinearValuesArray() {
-      return [
-        "rail",
-        "disused",
-        "tram",
-        "subway",
-        "narrow_gauge",
-        "light_rail",
-        "preserved",
-        "construction",
-        "miniature",
-        "monorail",
-      ];
-    },
-
     paintOrder(feature) {
       // extra sizes go under to not block main data
       if (feature.properties["generated_traversable_chunk"] != undefined) {
@@ -109,7 +71,7 @@ function highZoomLaserMapStyle() {
         return "#B4B4B4";
       }
 
-      if (mapStyle.motorizedRoadValuesArray().includes(feature.properties["area:highway_extra_size"]) || feature.properties["area:highway_extra_size"] === "bicycle_crossing") {
+      if (motorizedRoadValuesArray().includes(feature.properties["area:highway_extra_size"]) || feature.properties["area:highway_extra_size"] === "bicycle_crossing") {
         //return "#d3d3d3"; // useful for debugging code, confusing in produced map
       }
 
@@ -170,7 +132,7 @@ function highZoomLaserMapStyle() {
       // please open an issue if you need it, it increaes chance of implementation a bit
       // or open pull request with an implementation
       if (
-        mapStyle.motorizedRoadValuesArray().includes(feature.properties["area:highway"]) ||
+        motorizedRoadValuesArray().includes(feature.properties["area:highway"]) ||
         feature.properties["area:highway"] === "bicycle_crossing" ||
         feature.properties["area:highway"] === "cycleway" ||
         feature.properties["amenity"] === "parking_space"
@@ -179,7 +141,7 @@ function highZoomLaserMapStyle() {
       }
 
       if (
-        mapStyle.motorizedRoadValuesArray().includes(feature.properties["area:highway_extra_size"]) ||
+        motorizedRoadValuesArray().includes(feature.properties["area:highway_extra_size"]) ||
         feature.properties["area:highway_extra_size"] === "bicycle_crossing" ||
         feature.properties["area:highway_extra_size"] === "cycleway"
       ) {
@@ -728,7 +690,7 @@ function highZoomLaserMapStyle() {
     },
 
     widthOfRoadGeometryInMeters(feature) {
-      if (mapStyle.motorizedRoadValuesArray().includes(feature.properties["highway"])) {
+      if (motorizedRoadValuesArray().includes(feature.properties["highway"])) {
         if (feature.properties["lanes"] != undefined) {
           // in case of lanes==1 it is likely that it is wide anyway due to parking lanes
           // supporting them would allow to drop this exception
@@ -789,7 +751,7 @@ function highZoomLaserMapStyle() {
     },
 
     isFeatureMakingFreePedestrianMovementPossible(feature) {
-      if (mapStyle.motorizedRoadValuesArray().includes(feature.properties["highway"]) || ["footway", "pedestrian", "path", "steps", "cycleway"].includes(feature.properties["highway"])) {
+      if (motorizedRoadValuesArray().includes(feature.properties["highway"]) || ["footway", "pedestrian", "path", "steps", "cycleway"].includes(feature.properties["highway"])) {
         if (mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
           return false;
         }

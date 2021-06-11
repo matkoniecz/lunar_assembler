@@ -17,44 +17,6 @@
 */
 function highZoomLaserMapStyle() {
   var mapStyle = {
-    motorizedRoadValuesArray() {
-      return [
-        "motorway",
-        "motorway_link",
-        "trunk",
-        "trunk_link",
-        "primary",
-        "primary_link",
-        "secondary",
-        "secondary_link",
-        "tertiary",
-        "tertiary_link",
-        "unclassified",
-        "residential",
-        "service",
-        "track",
-        "road",
-        "busway",
-        "raceway",
-        "escape",
-      ];
-    },
-
-    railwayLinearValuesArray() {
-      return [
-        "rail",
-        "disused",
-        "tram",
-        "subway",
-        "narrow_gauge",
-        "light_rail",
-        "preserved",
-        "construction",
-        "miniature",
-        "monorail",
-      ];
-    },
-
     paintOrder(feature) {
       // higher values: more on top
 
@@ -89,7 +51,7 @@ function highZoomLaserMapStyle() {
       // further standard layering, even if most is not applicable
       // TODO: prune it? delete it? put water/buildings on top to
       // make mistakes more noticeable?
-      if (mapStyle.railwayLinearValuesArray().includes(feature.properties["railway"])) {
+      if (railwayLinearValuesArray().includes(feature.properties["railway"])) {
         var priority = 0.40;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
       }
@@ -174,7 +136,7 @@ function highZoomLaserMapStyle() {
         return "#B45A00";
       }
       if (
-        mapStyle.motorizedRoadValuesArray().includes(feature.properties["area:highway"]) ||
+        motorizedRoadValuesArray().includes(feature.properties["area:highway"]) ||
         feature.properties["area:highway"] === "bicycle_crossing" ||
         feature.properties["lunar_assembler_merge_group"] == "area:highway_carriageway_layer"
       ) {
@@ -211,7 +173,7 @@ function highZoomLaserMapStyle() {
     },
 
     strokeWidth(feature) {
-      if (mapStyle.railwayLinearValuesArray().includes(feature.properties["railway"])) {
+      if (railwayLinearValuesArray().includes(feature.properties["railway"])) {
         return 2;
       }
 
@@ -224,7 +186,7 @@ function highZoomLaserMapStyle() {
       // please open an issue if you need it, it increaes chance of implementation a bit
       // or open pull request with an implementation
       if (
-        mapStyle.motorizedRoadValuesArray().includes(feature.properties["area:highway"]) ||
+        motorizedRoadValuesArray().includes(feature.properties["area:highway"]) ||
         feature.properties["area:highway"] === "bicycle_crossing" ||
         feature.properties["area:highway"] === "cycleway" ||
         feature.properties["amenity"] === "parking"
