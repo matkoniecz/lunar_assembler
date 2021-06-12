@@ -37,80 +37,183 @@ function highZoomLaserMapStyle() {
       return 0;
     },
 
+    
+    unifiedStyling() {
+      returned = []
+      returned.push(...[
+        {
+          'area_color': "#B45A00",
+          'description': 'buildings',
+          'matches': [
+            {'key': 'building'},
+          ],
+        },
+        {
+          'area_color': "#00FFFF",
+          'description': 'water - pattern, part expected to be engraved',
+          'matches': [
+            [
+              {'key': 'natural', 'value': 'water'},
+              {'key': 'lunar_assembler_cloned_for_pattern_fill', 'value': 'yes', 'role': 'supplementary_obvious_filter'}
+            ],
+            [
+              {'key': 'waterway', 'value': 'riverbank'},
+              {'key': 'lunar_assembler_cloned_for_pattern_fill', 'value': 'yes', 'role': 'supplementary_obvious_filter'}
+            ]
+          ],
+        },
+        {
+          'area_color': "blue",
+          'description': 'water - entire area, expected to be cut at outline to separate element for easier painting (or used solely for orientation)',
+          'matches': [
+            {'key': 'natural', 'value': 'water'},
+            {'key': 'waterway', 'value': 'riverbank'},
+          ],
+        },
+      ])
+
+      var barriersKeyValue = []
+      var i = linearGenerallyImpassableBarrierValuesArray().length;
+      while (i--) {
+        value = linearGenerallyImpassableBarrierValuesArray()[i];
+        barriersKeyValue.push({'key': 'barrier', 'value': value, 'purpose': 'generally impassable barrier, for detecting where access is blocked'})
+      }
+
+      returned.push({
+        'area_color': "#b76b80",
+        'description': 'generated barrier areas',
+        'automatically_generated_using': barriersKeyValue,
+      'matches': [{'key': 'generated_barrier_area', 'value': 'yes'}],
+      })
+
+      var blockDetection = JSON.parse(JSON.stringify(barriersKeyValue));
+      // TODO: now it is necessary to manually change one thing in two places - change that and return list of inaccessibility tags
+      blockDetection.push({'key': 'building', 'purpose': 'generally impassable barrier, for detecting where access is blocked'})
+      blockDetection.push({'key': 'natural', 'value': 'water', 'purpose': 'generally impassable barrier, for detecting where access is blocked'})
+      blockDetection.push({'key': 'waterway', 'value': 'riverbank', 'purpose': 'generally impassable barrier, for detecting where access is blocked'})
+
+      returned.push({
+        'area_color': "#808000",
+        'description': 'areas that are inaccessible, generated automatically',
+        'automatically_generated_using': blockDetection,
+      'matches': [
+        {'key': 'generated_blocked_chunk', 'value': 'yes'},
+        {'key': 'native_blocked_chunk', 'value': 'yes'},
+      ],
+      })
+      // generated_traversable_chunk=yes is not rendered
+
+      returned.push(
+        {
+          'area_color': "yellow",
+          'description': 'pedestrian crossing through a road',
+          'automatically_generated_using': [
+            {'key': 'footway', 'value': 'crossing', 'purpose': 'detecting crossings'},
+          ],
+          'matches': [
+            [
+              {'key': 'footway', 'value': 'crossing'},
+              {'key': 'area:highway', 'value': 'footway', 'role': 'supplementary_obvious_filter'}, // paint only inflated paths, not from original linear source 
+            ],
+            [
+              {'key': 'footway', 'value': 'crossing'},
+              {'key': 'area:highway', 'value': 'path', 'role': 'supplementary_obvious_filter'}, // paint only inflated paths, not from original linear source 
+            ],
+          ],
+        }
+      )
+
+      var i = pedestrianWaysValuesArray().length;
+      while (i--) {
+        value = pedestrianWaysValuesArray()[i];
+        returned.push( {
+          'area_color': "green",
+          'description': 'area of a pedestrian way (linear representation must be also present! Using only area representation is invalid!)',
+          'matches': [
+            {'key': 'area:highway', 'value': value},
+          ],
+        })
+      }
+
+      returned.push(...[
+          {
+          'area_color': "green",
+          'description': 'pedestrian square (using it for sidewalk areas is invalid!)',
+          'matches': [
+            [
+              {'key': 'highway', 'value': 'pedestrian'},
+              {'key': 'area', 'value': 'yes', 'role': 'supplementary_obvious_filter'},
+            ],
+            [
+              {'key': 'highway', 'value': 'pedestrian'},
+              {'key': 'type', 'value': 'multipolygon', 'role': 'supplementary_obvious_filter'},
+            ],
+          ],
+        },
+        {
+          'area_color': "orange",
+          'description': 'area representation of steps (used in addition to linear highway=steps)',
+          'matches': [
+            {'key': 'area:highway', 'value': 'steps'},
+          ],
+        },
+      ])
+      returned.push(...unifiedMapStyleSegmentForSymbolicStepRepresentation())
+
+     var roadGeneration = []
+     var i = motorizedRoadValuesArray().length;
+     while (i--) {
+       roadGeneration.push({'key': 'highway', 'value': motorizedRoadValuesArray()[i], 'purpose': 'road centerline used for generating road areas'})
+       roadGeneration.push({'key': 'area:highway', 'value': motorizedRoadValuesArray()[i], 'purpose': 'merged with areas generated from centerlines'})
+     }
+     roadGeneration.push({'key': 'highway', 'value': 'cycleway', 'purpose': 'road centerline used for generating road areas'})
+     roadGeneration.push({'key': 'area:highway', 'value': 'cycleway', 'purpose': 'merged with areas generated from centerlines'})
+     roadGeneration.push({'key': 'area:highway', 'value': 'taxi_stop', 'purpose': 'merged with areas generated from centerlines'})
+     roadGeneration.push({'key': 'area:highway', 'value': 'bus_stop', 'purpose': 'merged with areas generated from centerlines'})
+     roadGeneration.push({'key': 'amenity', 'value': 'parking_space', 'purpose': 'merged with areas generated from centerlines'})
+     returned.push({
+       'area_color': "#808080",
+       'description': 'road areas (pattern, expected to be engraved) - generated from linear highway=*, supplemented by highway areas where it was mapped',
+       'automatically_generated_using': roadGeneration,
+     'matches': [
+       [
+        {'key': 'lunar_assembler_merge_group', 'value': 'area:highway_carriageway_layer'},
+        {'key': 'lunar_assembler_cloned_for_pattern_fill', 'value': 'yes'}, 
+       ],
+     ],
+     })
+     returned.push({
+       'area_color': "#B4B4B4",
+       'description': 'road areas (entire area, for orientation and for cutting road area into a separate piece for paining) - generated from linear highway=*, supplemented by highway areas where it was mapped',
+       'automatically_generated_using': roadGeneration,
+     'matches': [
+       {'key': 'lunar_assembler_merge_group', 'value': 'area:highway_carriageway_layer'},
+     ],
+     })
+
+     var i = railwayLinearValuesArray().length;
+     while (i--) {
+       value = railwayLinearValuesArray()[i];
+       returned.push( {
+         'line_color': "black",
+         'line_width': 2,
+         'description': 'linear representation of a single railway track',
+         'matches': [
+           {'key': 'railway', 'value': value},
+         ],
+       })
+     }
+
+     return returned;
+    },
+
     fillColoring(feature) {
       if (["Point"].includes(feature.geometry.type)) {
         //no rendering of points, for start size seems to randomly differ
         // and leaves ugly circles - see building=* nodes
         return "none";
       }
-      //console.log(feature);
-      if (feature.properties["lunar_assembler_step_segment"] == "0") {
-        return "#400080";
-      }
-      if (feature.properties["lunar_assembler_step_segment"] == "1") {
-        return "magenta";
-      }
-      if (feature.properties["lunar_assembler_step_segment"] == "2") {
-        return "#ff0000";
-      }
-      if (feature.properties["lunar_assembler_step_segment"] == "3") {
-        return "#D33F6A";
-      }
-      if (feature.properties["area:highway"] == "steps") {
-        // entire area of steps
-        return "orange";
-      }
-
-      if (feature.properties["building"] != null) {
-        return "#B45A00";
-      }
-      if (feature.properties["lunar_assembler_merge_group"] == "area:highway_carriageway_layer") {
-        if (feature.properties["lunar_assembler_cloned_for_pattern_fill"] == "yes") {
-          return "#808080";
-        }
-        return "#B4B4B4";
-      }
-
-      if (motorizedRoadValuesArray().includes(feature.properties["area:highway_extra_size"]) || feature.properties["area:highway_extra_size"] === "bicycle_crossing") {
-        //return "#d3d3d3"; // useful for debugging code, confusing in produced map
-      }
-
-      if (feature.properties["area:highway_extra_size"] == null) {
-        if (
-          pedestrianWaysValuesArray().includes(feature.properties["area:highway"]) ||
-          (feature.properties["highway"] == "pedestrian" && (feature.properties["area"] === "yes" || feature.properties["type"] === "multipolygon"))
-        ) {
-          if (feature.properties["footway"] == "crossing") {
-            return "yellow";
-          }
-          return "green";
-        }
-      }
-
-      if (pedestrianWaysValuesArray().includes(feature.properties["area:highway_extra_size"])) {
-        if (feature.properties["footway"] == "crossing") {
-          //return "#eee8aa";  // useful for debugging code, confusing in produced map
-        }
-        //return "#adff2f";  // useful for debugging code, confusing in produced map
-      }
-
-      if (feature.properties["natural"] === "water" || feature.properties["waterway"] === "riverbank") {
-        if (feature.properties["lunar_assembler_cloned_for_pattern_fill"] == "yes") {
-          return "#00FFFF";
-        }
-        return "blue";
-      }
-
-      if (feature.properties["generated_barrier_area"] != null) {
-        return "#b76b80";
-      }
-      if (feature.properties["generated_traversable_chunk"] === "yes") {
-        //return "#ffcc00"
-      }
-      if (feature.properties["generated_blocked_chunk"] === "yes" || feature.properties["native_blocked_chunk"] === "yes") {
-        return "#808000";
-      }
-      return "none";
+      return getMatchFromUnifiedStyling(feature, 'area_color', mapStyle.unifiedStyling());
     },
 
     strokeColoring(feature) {
@@ -119,11 +222,11 @@ function highZoomLaserMapStyle() {
         // and leaves ugly circles - see building=* nodes
         return "none";
       }
-      return "none";
+      return getMatchFromUnifiedStyling(feature, 'line_color', mapStyle.unifiedStyling());
     },
 
     strokeWidth(feature) {
-      return 1;
+      return getMatchFromUnifiedStyling(feature, 'line_width', mapStyle.unifiedStyling());
     },
 
     mergeIntoGroup(feature) {
@@ -135,6 +238,8 @@ function highZoomLaserMapStyle() {
         motorizedRoadValuesArray().includes(feature.properties["area:highway"]) ||
         feature.properties["area:highway"] === "bicycle_crossing" ||
         feature.properties["area:highway"] === "cycleway" ||
+        feature.properties["area:highway"] === "taxi_stop" ||
+        feature.properties["area:highway"] === "bus_stop" ||
         feature.properties["amenity"] === "parking_space"
       ) {
         return "area:highway_carriageway_layer";
@@ -922,7 +1027,7 @@ function highZoomLaserMapStyle() {
         if (linearGenerallyImpassableBarrierValuesArray().includes(feature.properties["barrier"])) {
           var produced = turf.buffer(feature, 0.1 / 1000, { units: "kilometers" });
           var cloned = JSON.parse(JSON.stringify(produced));
-          cloned.properties["generated_barrier_area"] = feature.properties["barrier"];
+          cloned.properties["generated_barrier_area"] = "yes";
           generated.push(cloned);
         }
       }
@@ -962,6 +1067,10 @@ function highZoomLaserMapStyle() {
             }
             if (feature.properties["tunnel"] != "yes") {
               // hack for now, likely separate matching group would be better
+              continue;
+            }
+            if(feature.properties["footway"] == "crossing") {
+              // producing halo in this case is unwanted and would require extra further filters
               continue;
             }
             if (["footway", "pedestrian", "path", "steps", "cycleway"].includes(feature.properties["highway"])) {

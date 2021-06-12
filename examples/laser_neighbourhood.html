@@ -56,13 +56,15 @@
             <p>Map style is generating SVG design files for ue in laset cutter. As orientation maps for blind people of a very small area, such as a single road crossing.</p>
             <p>laser parameters that I used are given, but this is a solely example! You will need to test it on laser cutter you use which parameters are optimal. Yes, it is time consuming</p>
             <p>TODO: finish describing parameters at closeup, clone relevant ones</p>
-        </section>
+            <h2>Legend</h2>
+
+            <p id="automatically_generated_legend"></p>
+            </section>
 
     <!-- actual code -->
     <script src="laser_neighbourhood_map_style.js"></script>
     <script>
-
-
+        document.getElementById("automatically_generated_legend").innerHTML = generateLegend(highZoomLaserMapStyle().unifiedStyling())
         // must be executed after imports and once passed ids exist -->
         initializeLunarAssembler({mapStyles: [highZoomLaserMapStyle()], mapDivId: 'map', downloadTriggerId: "download_generated_map", progressBarId: "progress_bar", mapOutputHolderId: "generated_svg_within", logOutputId: "log_messages_within", lat: 50.05156, lon: 19.92787, zoom: 18});
     </script>
