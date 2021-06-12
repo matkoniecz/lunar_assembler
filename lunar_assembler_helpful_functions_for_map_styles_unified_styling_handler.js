@@ -84,12 +84,76 @@ function valueWithWikiLink(key, value) {
   return '<a href="' + url + '">' + value + "</a>"
 }
 
-function generateLegendEntry(key, value, rule){
+function linkedAndDescribedTag(key, value, description) {
   if(value == undefined) {
-    return "<li>" + stylingSummary(rule) + " " + keyWithWikiLink(key)  + "=* - " + rule["description"] + "</li>\n"
+    return keyWithWikiLink(key)  + "=* - " + description
   } else {
-    return "<li>" + stylingSummary(rule) + " " + keyWithWikiLink(key) + "=" + valueWithWikiLink(key, value) + " - " + rule["description"] + "</li>\n"
+    return keyWithWikiLink(key) + "=" + valueWithWikiLink(key, value) + " - " + description
   }
+}
+
+function generateLegendEntry(key, value, rule){
+  return "<li>" + stylingSummary(rule) + " " + linkedAndDescribedTag(key, value, rule["description"]) + "</li>\n"
+}
+
+function addLegendEntriesForDataStraightFromOpenStreetMap(rule) {
+  returned = ""
+  var i = rule['matches'].length;
+  while (i--) {
+    const match = rule['matches'][i];
+    if(Array.isArray(match)) {
+      // multiple rules, all must be matched
+      var actualFiters = [];
+      var m = match.length;
+      while (m--) {
+        if(match[m]['role'] === 'supplementary_obvious_filter') {
+          continue;
+        }
+        actualFiters.push(match[m]);
+      }
+      if(actualFiters.length != 1){
+        throw "unsupported to have multiple actual filters!"
+      }
+      returned += generateLegendEntry(actualFiters[0]['key'], actualFiters[0]['value'], rule)
+    } else {
+      // single key=* or key=value match
+      returned += generateLegendEntry(match['key'], match['value'], rule)
+    }
+  }
+  return returned
+}
+
+function addLegendEntriesForProcessedElements(rule) {
+  returned = "";
+  returned += "<li>" + stylingSummary(rule) + " " + rule["description"] + " - this is generated using:\n"
+  returned += "<ul>"
+  var length = rule['automatically_generated_using'].length;
+  var i = -1;
+  while (i + 1 < length) {
+    i += 1;
+    const match = rule['automatically_generated_using'][i];
+    if(Array.isArray(match)) {
+      // multiple rules, all must be matched
+      var actualFiters = [];
+      var m = match.length;
+      while (m--) {
+        if(match[m]['role'] === 'supplementary_obvious_filter') {
+          continue;
+        }
+        actualFiters.push(match[m]);
+      }
+      if(actualFiters.length != 1){
+        throw "unsupported to have multiple actual filters!"
+      }
+      returned += "<li>" + linkedAndDescribedTag(actualFiters[0]['key'], actualFiters[0]['value'], actualFiters[0]["role"]) + "</li>\n"
+    } else {
+      // single key=* or key=value match
+      returned += "<li>" + linkedAndDescribedTag(match['key'], match['value'], match["purpose"]) + "</li>\n"
+    }
+  }
+  returned += "</ul>\n"
+  returned += "</li>\n"
+  return returned
 }
 
 // for high zoom:
@@ -104,28 +168,13 @@ function  generateLegend(styleRules){
   while (k+1 < styleRules.length) {
     k++;
     const rule = styleRules[k];
-    var i = rule['matches'].length;
-    while (i--) {
-      const match = rule['matches'][i];
-      if(Array.isArray(match)) {
-        // multiple rules, all must be matched
-        var actualFiters = [];
-        var m = match.length;
-        while (m--) {
-          if(match[m]['role'] === 'supplementary_obvious_filter') {
-            continue;
-          }
-          actualFiters.push(match[m]);
-        }
-        if(actualFiters.length != 1){
-          throw "unsupported to have multiple actual filters!"
-        }
-        returned += generateLegendEntry(actualFiters[0]['key'], actualFiters[0]['value'], rule)
-      } else {
-        // single key=* or key=value match
-        returned += generateLegendEntry(match['key'], match['value'], rule)
-      }
+
+    if("automatically_generated_using" in rule) {
+      returned += addLegendEntriesForProcessedElements(rule);
+    } else {
+      returned += addLegendEntriesForDataStraightFromOpenStreetMap(rule);
     }
+
   }
   returned += "</ul>"
   return returned;
