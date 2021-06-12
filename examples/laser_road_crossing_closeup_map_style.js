@@ -130,12 +130,6 @@ function highZoomLaserMapStyle() {
         })
       }
 
-      const stepGenerationExplanation = [
-        {'key': 'area:highway', 'value': 'steps', 'purpose': 'area of steps, for an automatic generation of a symbolic representation'},
-        {'key': 'highway', 'value': 'steps', 'purpose': 'detecting upper/lower side of steps, for an automatic generation of a symbolic representation'},
-        {'key': 'incline', 'value': 'up', 'purpose': 'detecting upper/lower side of steps, for an automatic generation of a symbolic representation'},
-        {'key': 'incline', 'value': 'down', 'purpose': 'detecting upper/lower side of steps, for an automatic generation of a symbolic representation'},
-      ]
 
       returned.push(...[
         {
@@ -153,35 +147,10 @@ function highZoomLaserMapStyle() {
           ],
         },
         {
-          'area_color': "#400080",
-          'description': 'step segment, part of a symbolic steps representation - automatically generated (the lowest one, 4th from the top)',
-          'automatically_generated_using': stepGenerationExplanation,
+          'area_color': "yellow",
+          'description': 'pedestrian crossing through a road (area used in addition to area representing road)',
           'matches': [
-            {'key': 'lunar_assembler_step_segment', 'value': '0'},
-          ],
-        },
-        {
-          'area_color': "magenta",
-          'description': 'step segment, part of a symbolic steps representation - automatically generated (2nd from the bottom, 3rd from the top)',
-          'automatically_generated_using': stepGenerationExplanation,
-          'matches': [
-            {'key': 'lunar_assembler_step_segment', 'value': '1'},
-          ],
-        },
-        {
-          'area_color': "#ff0000",
-          'description': 'step segment, part of symbolic steps representation - automatically generated (3rd from the bottom, 2nd from the top)',
-          'automatically_generated_using': stepGenerationExplanation,
-          'matches': [
-            {'key': 'lunar_assembler_step_segment', 'value': '2'},
-          ],
-        },
-        {
-          'area_color': "#D33F6A",
-          'description': 'step segment - automatically generated - automatically generated (4th from the bottom, the highest one)',
-          'automatically_generated_using': stepGenerationExplanation,
-          'matches': [
-            {'key': 'lunar_assembler_step_segment', 'value': '3'},
+            {'key': 'area:highway', 'value': 'crossing'},
           ],
         },
         {
@@ -191,13 +160,9 @@ function highZoomLaserMapStyle() {
             {'key': 'area:highway', 'value': 'steps'},
           ],
         },
-        {
-          'area_color': "yellow",
-          'description': 'pedestrian crossing through a road (area used in addition to area representing road)',
-          'matches': [
-            {'key': 'area:highway', 'value': 'crossing'},
-          ],
-        },
+      ])
+      returned.push(...unifiedMapStyleSegmentForSymbolicStepRepresentation())
+      returned.push(...[
         {
           'area_color': "#B45A00",
           'description': 'buildings (all and every building value. Yes - including building=no that has no good reason for use)',
@@ -227,58 +192,7 @@ function highZoomLaserMapStyle() {
             {'key': 'waterway', 'value': 'riverbank'},
           ],
         },
-        {
-          'area_color': "#808080",
-          'description': 'road area of a taxi stop (used in addition to amenity=taxi) - pattern, part expected to be engraved',
-          'matches': [
-            [
-              {'key': 'area:highway', 'value': 'taxi_stop'},
-              {'key': 'lunar_assembler_cloned_for_pattern_fill', 'value': 'yes', 'role': 'supplementary_obvious_filter'}
-            ],
-          ]
-        },
-        {
-          'area_color': "#B4B4B4",
-          'description': 'road area of a taxi stop (used in addition to amenity=taxi)',
-          'matches': [
-            {'key': 'area:highway', 'value': 'taxi_stop'},
-          ],
-        },
-        {
-          'area_color': "#808080",
-          'description': 'road area of a bus stop - pattern, part expected to be engraved',
-          'matches': [
-            [
-              {'key': 'area:highway', 'value': 'bus_stop'},
-              {'key': 'lunar_assembler_cloned_for_pattern_fill', 'value': 'yes', 'role': 'supplementary_obvious_filter'}
-            ],
-          ]
-        },
-        {
-          'area_color': "#B4B4B4",
-          'description': 'road area of a bus stop (used in addition to highway=bus_stop)',
-          'matches': [
-            {'key': 'area:highway', 'value': 'bus_stop'},
-          ],
-        },
-        {
-          'area_color': "#808080",
-          'description': 'road area of a cycleway - pattern, part expected to be engraved',
-          'matches': [
-            [
-              {'key': 'area:highway', 'value': 'cycleway'},
-              {'key': 'lunar_assembler_cloned_for_pattern_fill', 'value': 'yes', 'role': 'supplementary_obvious_filter'}
-            ],
-          ]
-        },
-        {
-          'area_color': "#B4B4B4",
-          'description': 'road area of a cycleway (used in addition to highway=bus_stop)',
-          'matches': [
-            {'key': 'area:highway', 'value': 'cycleway'},
-          ],
-        },
-     ])
+      ])
      var i = motorizedRoadValuesArray().length;
      while (i--) {
        value = motorizedRoadValuesArray()[i];
@@ -292,7 +206,11 @@ function highZoomLaserMapStyle() {
            ],
          ]
        })
-       returned.push( {
+      }
+      var i = motorizedRoadValuesArray().length;
+       while (i--) {
+         value = motorizedRoadValuesArray()[i];
+         returned.push( {
          'area_color': "#B4B4B4",
          'description': 'area of a motorized road (linear representation must be also present! Using only area representation is invalid!)',
          'matches': [
@@ -301,7 +219,61 @@ function highZoomLaserMapStyle() {
        })
      }
 
-     var i = railwayLinearValuesArray().length;
+     returned.push(...[
+      {
+        'area_color': "#808080",
+        'description': 'road area of a taxi stop (used in addition to amenity=taxi) - pattern, part expected to be engraved',
+        'matches': [
+          [
+            {'key': 'area:highway', 'value': 'taxi_stop'},
+            {'key': 'lunar_assembler_cloned_for_pattern_fill', 'value': 'yes', 'role': 'supplementary_obvious_filter'}
+          ],
+        ]
+      },
+      {
+        'area_color': "#B4B4B4",
+        'description': 'road area of a taxi stop (used in addition to amenity=taxi)',
+        'matches': [
+          {'key': 'area:highway', 'value': 'taxi_stop'},
+        ],
+      },
+    {
+        'area_color': "#808080",
+        'description': 'road area of a bus stop - pattern, part expected to be engraved',
+        'matches': [
+          [
+            {'key': 'area:highway', 'value': 'bus_stop'},
+            {'key': 'lunar_assembler_cloned_for_pattern_fill', 'value': 'yes', 'role': 'supplementary_obvious_filter'}
+          ],
+        ]
+      },
+      {
+        'area_color': "#B4B4B4",
+        'description': 'road area of a bus stop (used in addition to highway=bus_stop)',
+        'matches': [
+          {'key': 'area:highway', 'value': 'bus_stop'},
+        ],
+      },
+      {
+        'area_color': "#808080",
+        'description': 'road area of a cycleway - pattern, part expected to be engraved',
+        'matches': [
+          [
+            {'key': 'area:highway', 'value': 'cycleway'},
+            {'key': 'lunar_assembler_cloned_for_pattern_fill', 'value': 'yes', 'role': 'supplementary_obvious_filter'}
+          ],
+        ]
+      },
+      {
+        'area_color': "#B4B4B4",
+        'description': 'road area of a cycleway (used in addition to highway=bus_stop)',
+        'matches': [
+          {'key': 'area:highway', 'value': 'cycleway'},
+        ],
+      },
+   ])
+
+   var i = railwayLinearValuesArray().length;
      while (i--) {
        value = railwayLinearValuesArray()[i];
        returned.push( {
@@ -313,7 +285,7 @@ function highZoomLaserMapStyle() {
          ],
        })
      }
-    return returned
+    return returned;
     },
 
     fillColoring(feature) {

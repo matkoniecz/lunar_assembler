@@ -1,3 +1,47 @@
+// for use in unified map style, this allows to avoid a pointess duplications
+function unifiedMapStyleSegmentForSymbolicStepRepresentation() {
+  const stepGenerationExplanation = [
+    {'key': 'area:highway', 'value': 'steps', 'purpose': 'area of steps, for an automatic generation of a symbolic representation'},
+    {'key': 'highway', 'value': 'steps', 'purpose': 'detecting upper/lower side of steps, for an automatic generation of a symbolic representation'},
+    {'key': 'incline', 'value': 'up', 'purpose': 'detecting upper/lower side of steps, for an automatic generation of a symbolic representation'},
+    {'key': 'incline', 'value': 'down', 'purpose': 'detecting upper/lower side of steps, for an automatic generation of a symbolic representation'},
+  ]
+  return [
+    {
+      'area_color': "#400080",
+      'description': 'step segment, part of a symbolic steps representation - automatically generated (the lowest one, 4th from the top)',
+      'automatically_generated_using': stepGenerationExplanation,
+      'matches': [
+        {'key': 'lunar_assembler_step_segment', 'value': '0'},
+      ],
+    },
+    {
+      'area_color': "magenta",
+      'description': 'step segment, part of a symbolic steps representation - automatically generated (2nd from the bottom, 3rd from the top)',
+      'automatically_generated_using': stepGenerationExplanation,
+      'matches': [
+        {'key': 'lunar_assembler_step_segment', 'value': '1'},
+      ],
+    },
+    {
+      'area_color': "#ff0000",
+      'description': 'step segment, part of symbolic steps representation - automatically generated (3rd from the bottom, 2nd from the top)',
+      'automatically_generated_using': stepGenerationExplanation,
+      'matches': [
+        {'key': 'lunar_assembler_step_segment', 'value': '2'},
+      ],
+    },
+    {
+      'area_color': "#D33F6A",
+      'description': 'step segment - automatically generated - automatically generated (4th from the bottom, the highest one)',
+      'automatically_generated_using': stepGenerationExplanation,
+      'matches': [
+        {'key': 'lunar_assembler_step_segment', 'value': '3'},
+      ],
+    },
+  ]
+}
+
 function programaticallyGenerateSymbolicStepParts(dataGeojson) {
     //alert(JSON.stringify(dataGeojson))
     var pointsInSteps = dataToListOfPositionOfStepsNodes(dataGeojson);
