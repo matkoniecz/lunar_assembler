@@ -130,6 +130,13 @@ function highZoomLaserMapStyle() {
         })
       }
 
+      const stepGenerationExplanation = [
+        {'key': 'area:highway', 'value': 'steps', 'purpose': 'area of steps, for an automatic generation of a symbolic representation'},
+        {'key': 'highway', 'value': 'steps', 'purpose': 'detecting upper/lower side of steps, for an automatic generation of a symbolic representation'},
+        {'key': 'incline', 'value': 'up', 'purpose': 'detecting upper/lower side of steps, for an automatic generation of a symbolic representation'},
+        {'key': 'incline', 'value': 'down', 'purpose': 'detecting upper/lower side of steps, for an automatic generation of a symbolic representation'},
+      ]
+
       returned.push(...[
         {
           'area_color': "green",
@@ -143,6 +150,38 @@ function highZoomLaserMapStyle() {
               {'key': 'highway', 'value': 'pedestrian'},
               {'key': 'type', 'value': 'multipolygon', 'role': 'supplementary_obvious_filter'},
             ],
+          ],
+        },
+        {
+          'area_color': "#400080",
+          'description': 'step segment, part of a symbolic steps representation - automatically generated (the lowest one, 4th from the top)',
+          'automatically_generated_using': stepGenerationExplanation,
+          'matches': [
+            {'key': 'lunar_assembler_step_segment', 'value': '0'},
+          ],
+        },
+        {
+          'area_color': "magenta",
+          'description': 'step segment, part of a symbolic steps representation - automatically generated (2nd from the bottom, 3rd from the top)',
+          'automatically_generated_using': stepGenerationExplanation,
+          'matches': [
+            {'key': 'lunar_assembler_step_segment', 'value': '1'},
+          ],
+        },
+        {
+          'area_color': "#ff0000",
+          'description': 'step segment, part of symbolic steps representation - automatically generated (3rd from the bottom, 2nd from the top)',
+          'automatically_generated_using': stepGenerationExplanation,
+          'matches': [
+            {'key': 'lunar_assembler_step_segment', 'value': '2'},
+          ],
+        },
+        {
+          'area_color': "#D33F6A",
+          'description': 'step segment - automatically generated - automatically generated (4th from the bottom, the highest one)',
+          'automatically_generated_using': stepGenerationExplanation,
+          'matches': [
+            {'key': 'lunar_assembler_step_segment', 'value': '3'},
           ],
         },
         {
@@ -283,18 +322,6 @@ function highZoomLaserMapStyle() {
         //no rendering of points, for start size seems to randomly differ
         // and leaves ugly circles - see building=* nodes
         return "none";
-      }
-      if (feature.properties["lunar_assembler_step_segment"] == "0") {
-        return "#400080";
-      }
-      if (feature.properties["lunar_assembler_step_segment"] == "1") {
-        return "magenta";
-      }
-      if (feature.properties["lunar_assembler_step_segment"] == "2") {
-        return "#ff0000";
-      }
-      if (feature.properties["lunar_assembler_step_segment"] == "3") {
-        return "#D33F6A";
       }
       return getMatchFromUnifiedStyling(feature, 'area_color', mapStyle.unifiedStyling());
     },
