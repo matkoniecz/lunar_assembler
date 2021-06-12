@@ -151,18 +151,18 @@ function highZoomMapStyle() {
         })
       }
 
-      var barrierKeyValue = []
+      var barriersKeyValue = []
       var i = linearGenerallyImpassableBarrierValuesArray().length;
       while (i--) {
         value = linearGenerallyImpassableBarrierValuesArray()[i];
-        barrierKeyValue.push({'key': 'barrier', 'value': value})
+        barriersKeyValue.push({'key': 'barrier', 'value': value})
       }
 
       returned.push({
         'line_color': "black",
         'line_width': 1,
         'description': 'linear, generally impassable barrier',
-        'matches': barrierKeyValue,
+        'matches': barriersKeyValue,
       })
 
     returned.push(...[
