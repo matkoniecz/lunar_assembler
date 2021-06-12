@@ -646,7 +646,7 @@ function addLegendEntriesForDataStraightFromOpenStreetMap(rule) {
         actualFiters.push(match[m]);
       }
       if(actualFiters.length != 1){
-        throw "unsupported to have multiple actual filters!"
+        throw "unsupported to have multiple actual filters! - on " + JSON.stringify(match)
       }
       returned += generateLegendEntry(actualFiters[0]['key'], actualFiters[0]['value'], rule)
     } else {
@@ -677,7 +677,7 @@ function addLegendEntriesForProcessedElements(rule) {
         actualFiters.push(match[m]);
       }
       if(actualFiters.length != 1){
-        throw "unsupported to have multiple actual filters!"
+        throw "unsupported to have multiple actual filters! - on " + JSON.stringify(match)
       }
       returned += "<li>" + linkedAndDescribedTag(actualFiters[0]['key'], actualFiters[0]['value'], actualFiters[0]["role"]) + "</li>\n"
     } else {
