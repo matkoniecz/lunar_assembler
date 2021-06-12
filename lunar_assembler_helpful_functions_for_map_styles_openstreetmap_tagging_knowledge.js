@@ -36,6 +36,7 @@ function motorizedRoadValuesArray() {
     "busway",
     "raceway",
     "escape",
+    "living_street",
   ];
 }
 
@@ -60,6 +61,5 @@ function pedestrianWaysValuesArray() {
     "path",
     "steps",
     "pedestrian",
-    "living_street",
   ];
 }
