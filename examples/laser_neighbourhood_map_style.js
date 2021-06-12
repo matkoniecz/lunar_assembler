@@ -77,7 +77,7 @@ function highZoomLaserMapStyle() {
 
       if (feature.properties["area:highway_extra_size"] == null) {
         if (
-          ["footway", "pedestrian", "path", "steps"].includes(feature.properties["area:highway"]) ||
+          pedestrianWaysValuesArray().includes(feature.properties["area:highway"]) ||
           (feature.properties["highway"] == "pedestrian" && (feature.properties["area"] === "yes" || feature.properties["type"] === "multipolygon"))
         ) {
           if (feature.properties["footway"] == "crossing") {
@@ -87,7 +87,7 @@ function highZoomLaserMapStyle() {
         }
       }
 
-      if (["footway", "pedestrian", "path", "steps"].includes(feature.properties["area:highway_extra_size"])) {
+      if (pedestrianWaysValuesArray().includes(feature.properties["area:highway_extra_size"])) {
         if (feature.properties["footway"] == "crossing") {
           //return "#eee8aa";  // useful for debugging code, confusing in produced map
         }
@@ -154,7 +154,7 @@ function highZoomLaserMapStyle() {
       }
 
       if (feature.properties["area:highway_extra_size"] == null && mapStyle.isSpecialAreaErasingFootway(feature) == false) {
-        if (["footway", "pedestrian", "path", "steps"].includes(feature.properties["area:highway"]) || (feature.properties["highway"] == "pedestrian" && feature.properties["area"] === "yes")) {
+        if (pedestrianWaysValuesArray().includes(feature.properties["area:highway"]) || (feature.properties["highway"] == "pedestrian" && feature.properties["area"] === "yes")) {
           // hack for https://www.openstreetmap.org/?mlat=50.05267&mlon=19.92927#map=19/50.05267/19.92927
           if (feature.properties["footway"] == "crossing") {
             return "area:highway_crossing";
@@ -162,7 +162,7 @@ function highZoomLaserMapStyle() {
           return "area:highway_footway";
         }
       }
-      if (["footway", "pedestrian", "path", "steps"].includes(feature.properties["area:highway_extra_size"])) {
+      if (pedestrianWaysValuesArray().includes(feature.properties["area:highway_extra_size"])) {
         // hack for https://www.openstreetmap.org/?mlat=50.05267&mlon=19.92927#map=19/50.05267/19.92927
         if (feature.properties["footway"] == "crossing") {
           return "area:highway_crossing_extra_size";
