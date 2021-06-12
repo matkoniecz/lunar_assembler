@@ -266,7 +266,7 @@ function highZoomMapStyle() {
         },
         {
           'area_color': "black",
-          'description': 'buildings (all and every building value. Yes - including building=no that has no good reason for use)',
+          'description': 'buildings',
           'matches': [
             {'key': 'building'},
           ],

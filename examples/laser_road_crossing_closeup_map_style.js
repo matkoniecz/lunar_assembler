@@ -165,7 +165,7 @@ function highZoomLaserMapStyle() {
       returned.push(...[
         {
           'area_color': "#B45A00",
-          'description': 'buildings (all and every building value. Yes - including building=no that has no good reason for use)',
+          'description': 'buildings',
           'matches': [
             {'key': 'building'},
           ],
