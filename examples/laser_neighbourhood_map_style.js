@@ -1057,15 +1057,15 @@ function highZoomLaserMapStyle() {
             generated.push(cloned);
           }
           {
-            if (feature.properties["service"] == "driveway" && feature.properties["service"] == "parking_aisle") {              
+            if (feature.properties["service"] == "driveway" || feature.properties["service"] == "parking_aisle") {              
               // driveways are not allowed to produce footway halo around them
               continue;
             }
-            if (feature.properties["embankment"] != "yes") {
+            if (feature.properties["embankment"] == "yes") {
               // hack, the proper solution would be to have separate groups for ones in embankment and not
               continue;
             }
-            if (feature.properties["tunnel"] != "yes") {
+            if (feature.properties["tunnel"] == "yes") {
               // hack for now, likely separate matching group would be better
               continue;
             }
