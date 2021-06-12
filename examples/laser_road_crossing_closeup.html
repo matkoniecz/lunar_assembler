@@ -93,11 +93,15 @@
         <p>If you want to map something (map missing objects, fix mistake) and you are unsure how to start - visit <a href="https://www.openstreetmap.org/">openstreetmap.org</a>, zoom in to interesting area and press "edit" button and follow instructions. You can contact OpenStreetMap community using one of global or local channels listed at <a href="https://community.osm.be/">community.osm.be</a>.</p>
         
         You can visit <a href="https://github.com/matkoniecz/lunar_assembler">matkoniecz/lunar_assembler</a> to see code, obtain code or contribute. This software as <a href="https://www.gnu.org/licenses/agpl-3.0.html">AGPLv3</a> licenced.
+
+        <h2>Legend</h2>
+        <p id="automatically_generated_legend"></p>
     </section>
 
     <!-- actual code -->
     <script src="laser_road_crossing_closeup_map_style.js"></script>
     <script>
+        document.getElementById("automatically_generated_legend").innerHTML = generateLegend(highZoomLaserMapStyle().unifiedStyling())
         // must be executed after imports and once passed ids exist -->
         initializeLunarAssembler({mapStyles: [highZoomLaserMapStyle()], mapDivId: 'map', downloadTriggerId: "download_generated_map", progressBarId: "progress_bar", mapOutputHolderId: "generated_svg_within", logOutputId: "log_messages_within", lat: 50.05514, lon: 19.92824, zoom: 18});
     </script>

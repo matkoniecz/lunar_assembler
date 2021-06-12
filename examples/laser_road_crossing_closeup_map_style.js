@@ -115,41 +115,6 @@ function highZoomLaserMapStyle() {
 
     unifiedStyling() {
       returned = []
-      var i = motorizedRoadValuesArray().length;
-      while (i--) {
-        value = motorizedRoadValuesArray()[i];
-        returned.push( {
-          'area_color': "#808080",
-          'description': 'area of a motorized road - pattern, part expected to be engraved',
-          'matches': [
-            [
-              {'key': 'area:highway', 'value': value},
-              {'key': 'lunar_assembler_cloned_for_pattern_fill', 'value': 'yes', 'role': 'supplementary_obvious_filter'}
-            ],
-          ]
-        })
-        returned.push( {
-          'area_color': "#B4B4B4",
-          'description': 'area of a motorized road (linear representation must be also present! Using only area representation is invalid!)',
-          'matches': [
-            {'key': 'area:highway', 'value': value},
-          ],
-        })
-      }
-
-      var i = railwayLinearValuesArray().length;
-      while (i--) {
-        value = railwayLinearValuesArray()[i];
-        returned.push( {
-          'line_color': "black",
-          'line_width': 2,
-          'description': 'linear representation of a single railway track',
-          'matches': [
-            {'key': 'railway', 'value': value},
-          ],
-        })
-      }
-
       var i = pedestrianWaysValuesArray().length;
       while (i--) {
         value = pedestrianWaysValuesArray()[i];
@@ -178,6 +143,49 @@ function highZoomLaserMapStyle() {
               {'key': 'highway', 'value': 'pedestrian'},
               {'key': 'type', 'value': 'multipolygon', 'role': 'supplementary_obvious_filter'},
             ],
+          ],
+        },
+        {
+          'area_color': "orange",
+          'description': 'area representation of steps (used in addition to linear highway=steps)',
+          'matches': [
+            {'key': 'area:highway', 'value': 'steps'},
+          ],
+        },
+        {
+          'area_color': "yellow",
+          'description': 'pedestrian crossing through a road (area used in addition to area representing road)',
+          'matches': [
+            {'key': 'area:highway', 'value': 'crossing'},
+          ],
+        },
+        {
+          'area_color': "#B45A00",
+          'description': 'buildings (all and every building value. Yes - including building=no that has no good reason for use)',
+          'matches': [
+            {'key': 'building'},
+          ],
+        },
+        {
+          'area_color': "#00FFFF",
+          'description': 'water - pattern, part expected to be engraved',
+          'matches': [
+            [
+              {'key': 'natural', 'value': 'water'},
+              {'key': 'lunar_assembler_cloned_for_pattern_fill', 'value': 'yes', 'role': 'supplementary_obvious_filter'}
+            ],
+            [
+              {'key': 'waterway', 'value': 'riverbank'},
+              {'key': 'lunar_assembler_cloned_for_pattern_fill', 'value': 'yes', 'role': 'supplementary_obvious_filter'}
+            ]
+          ],
+        },
+        {
+          'area_color': "blue",
+          'description': 'water - entire area, expected to be cut at outline to separate element for easier painting (or used solely for orientation)',
+          'matches': [
+            {'key': 'natural', 'value': 'water'},
+            {'key': 'waterway', 'value': 'riverbank'},
           ],
         },
         {
@@ -231,52 +239,42 @@ function highZoomLaserMapStyle() {
             {'key': 'area:highway', 'value': 'cycleway'},
           ],
         },
-
-        {
-          'area_color': "orange",
-          'description': 'area representation of steps (used in addition to linear highway=steps)',
-          'matches': [
-            {'key': 'area:highway', 'value': 'steps'},
-          ],
-        },
-        {
-          'area_color': "yellow",
-          'description': 'pedestrian crossing through a road (area used in addition to area representing road)',
-          'matches': [
-            {'key': 'area:highway', 'value': 'crossing'},
-          ],
-        },
-        {
-          'area_color': "#B45A00",
-          'description': 'buildings (all and every building value. Yes - including building=no that has no good reason for use)',
-          'matches': [
-            {'key': 'building'},
-          ],
-        },
-        {
-          'area_color': "#00FFFF",
-          'description': 'water - pattern, part expected to be engraved',
-          'matches': [
-            [
-              {'key': 'natural', 'value': 'water'},
-              {'key': 'lunar_assembler_cloned_for_pattern_fill', 'value': 'yes', 'role': 'supplementary_obvious_filter'}
-            ],
-            [
-              {'key': 'waterway', 'value': 'riverbank'},
-              {'key': 'lunar_assembler_cloned_for_pattern_fill', 'value': 'yes', 'role': 'supplementary_obvious_filter'}
-            ]
-          ],
-        },
-        {
-          'area_color': "blue",
-          'description': 'water - entire area, expected to be cut at outline to separate element for easier painting (or used solely for orientation)',
-          'matches': [
-            {'key': 'natural', 'value': 'water'},
-            {'key': 'waterway', 'value': 'riverbank'},
-          ],
-        },
      ])
-     return returned
+     var i = motorizedRoadValuesArray().length;
+     while (i--) {
+       value = motorizedRoadValuesArray()[i];
+       returned.push( {
+         'area_color': "#808080",
+         'description': 'area of a motorized road - pattern, part expected to be engraved',
+         'matches': [
+           [
+             {'key': 'area:highway', 'value': value},
+             {'key': 'lunar_assembler_cloned_for_pattern_fill', 'value': 'yes', 'role': 'supplementary_obvious_filter'}
+           ],
+         ]
+       })
+       returned.push( {
+         'area_color': "#B4B4B4",
+         'description': 'area of a motorized road (linear representation must be also present! Using only area representation is invalid!)',
+         'matches': [
+           {'key': 'area:highway', 'value': value},
+         ],
+       })
+     }
+
+     var i = railwayLinearValuesArray().length;
+     while (i--) {
+       value = railwayLinearValuesArray()[i];
+       returned.push( {
+         'line_color': "black",
+         'line_width': 2,
+         'description': 'linear representation of a single railway track',
+         'matches': [
+           {'key': 'railway', 'value': value},
+         ],
+       })
+     }
+    return returned
     },
 
     fillColoring(feature) {
