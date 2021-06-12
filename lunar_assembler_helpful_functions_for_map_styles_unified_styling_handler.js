@@ -63,25 +63,32 @@ function getMatchFromUnifiedStyling(feature, property, styleRules) {
   return "none";
 }
 
-function generateLegendEntry(key, value, rule){
-  var styling_summary = ""
+function stylingSummary(rule){
+  var returned = ""
   if("area_color" in rule) {
-    styling_summary += '<div style="display: inline; color:' + rule["area_color"] + '"> ■ </div>'
+    returned += '<div style="display: inline; color:' + rule["area_color"] + '"> ■ </div>'
   }
   if("line_color" in rule) {
-    styling_summary += '<div style="display: inline; color:' + rule["line_color"] + '"> ┃ </div>'
+    returned += '<div style="display: inline; color:' + rule["line_color"] + '"> ┃ </div>'
   }
+  return returned;
+}
 
-  var url_value = "https://wiki.openstreetmap.org/wiki/Tag:" + encodeURIComponent(key + "=" + value);
-  var url_key = "https://wiki.openstreetmap.org/wiki/Key:" + encodeURIComponent(key);
+function keyWithWikiLink(key) {
+  var url = "https://wiki.openstreetmap.org/wiki/Key:" + encodeURIComponent(key);
+  return '<a href="' + url + '">' + key + "</a>"
+}
 
-  var linked_key = '<a href="' + url_key + '">' + key + "</a>"
+function valueWithWikiLink(key, value) {
+  var url = "https://wiki.openstreetmap.org/wiki/Tag:" + encodeURIComponent(key + "=" + value);
+  return '<a href="' + url + '">' + value + "</a>"
+}
+
+function generateLegendEntry(key, value, rule){
   if(value == undefined) {
-    return "<li>" + styling_summary + " " + linked_key  + "=* - " + rule["description"] + "</li>\n"
+    return "<li>" + stylingSummary(rule) + " " + keyWithWikiLink(key)  + "=* - " + rule["description"] + "</li>\n"
   } else {
-    var linked_value = '<a href="' + url_value + '">' + value + "</a>"
-    return "<li>" + styling_summary + " " + linked_key + "=" + linked_value + " - " + rule["description"] + "</li>\n"
-
+    return "<li>" + stylingSummary(rule) + " " + keyWithWikiLink(key) + "=" + valueWithWikiLink(key, value) + " - " + rule["description"] + "</li>\n"
   }
 }
 
