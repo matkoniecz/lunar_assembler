@@ -75,10 +75,6 @@ function highZoomLaserMapStyle() {
         var priority = 0.24;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
       }
-      if (feature.properties["barrier"] != null) {
-        var priority = 0.20;
-        return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
-      }
       if (feature.properties["man_made"] === "bridge") {
         var priority = 0.16;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
