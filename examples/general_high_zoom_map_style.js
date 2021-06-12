@@ -151,7 +151,21 @@ function highZoomMapStyle() {
         })
       }
 
-      returned.push(...[
+      var barrierKeyValue = []
+      var i = linearGenerallyImpassableBarrierValuesArray().length;
+      while (i--) {
+        value = linearGenerallyImpassableBarrierValuesArray()[i];
+        barrierKeyValue.push({'key': 'barrier', 'value': value})
+      }
+
+      returned.push({
+        'line_color': "black",
+        'line_width': 1,
+        'description': 'linear, generally impassable barrier',
+        'matches': barrierKeyValue,
+      })
+
+    returned.push(...[
         {
           'area_color': "#aaaaaa",
           'description': 'pedestrian square (using it for sidewalk areas is invalid!)',
@@ -337,16 +351,6 @@ function highZoomMapStyle() {
           'description': 'bare rock',
           'matches': [
             {'key': 'natural', 'value': 'bare_rock'},
-          ],
-        },
-        {
-          'line_color': "black",
-          'line_width': 1,
-          'description': 'raised barrier',
-          'matches': [
-            {'key': 'barrier', 'value': 'fence'},
-            {'key': 'barrier', 'value': 'wall'},
-            {'key': 'barrier', 'value': 'guard_rail'},
           ],
         },
         {

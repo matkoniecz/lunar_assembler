@@ -919,7 +919,7 @@ function highZoomLaserMapStyle() {
         var feature = geojson.features[i];
         const link = "https://www.openstreetmap.org/" + feature.id;
 
-        if (["fence", "wall", "hedge", "retaining_wall", "hedge_bank", "wire_fence"].includes(feature.properties["barrier"])) {
+        if (linearGenerallyImpassableBarrierValuesArray().includes(feature.properties["barrier"])) {
           var produced = turf.buffer(feature, 0.1 / 1000, { units: "kilometers" });
           var cloned = JSON.parse(JSON.stringify(produced));
           cloned.properties["generated_barrier_area"] = feature.properties["barrier"];

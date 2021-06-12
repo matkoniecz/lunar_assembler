@@ -63,3 +63,8 @@ function pedestrianWaysValuesArray() {
     "pedestrian",
   ];
 }
+
+function linearGenerallyImpassableBarrierValuesArray() {
+  // kerb intentionally skipped
+  return ["fence", "wall", "hedge", "retaining_wall", "hedge_bank", "wire_fence", "city_wall", "guard_rail"]
+}
