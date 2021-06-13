@@ -145,7 +145,7 @@ function addLegendEntriesForProcessedElements(rule) {
       if(actualFiters.length != 1){
         throw "unsupported to have multiple actual filters! - on " + JSON.stringify(match)
       }
-      returned += "<li>" + linkedAndDescribedTag(actualFiters[0]['key'], actualFiters[0]['value'], actualFiters[0]["role"]) + "</li>\n"
+      returned += "<li>" + linkedAndDescribedTag(actualFiters[0]['key'], actualFiters[0]['value'], actualFiters[0]["purpose"]) + "</li>\n"
     } else {
       // single key=* or key=value match
       returned += "<li>" + linkedAndDescribedTag(match['key'], match['value'], match["purpose"]) + "</li>\n"
