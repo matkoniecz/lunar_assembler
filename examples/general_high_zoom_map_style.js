@@ -50,6 +50,10 @@ function highZoomMapStyle() {
         var priority = 0.95;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
       }
+      if (feature.properties["aeroway"] == "runway" || feature.properties["aeroway"] == "taxiway") {
+        var priority = 0.94;
+        return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
+      }
       if (feature.properties["barrier"] != null) {
         var priority = 0.9;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
