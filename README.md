@@ -5,7 +5,7 @@ SVG maps from OpenStreetMap data in browser, can be used by marking area on a ma
 ## In action
 
 ### General high zoom map style
-[Publicly accessible generation of any location in this map style](https://mapsaregreat.com/osm_to_svg_in_browser/)
+[Publicly accessible generation of any location in this map style](https://mapsaregreat.com/osm_to_svg_in_browser/general_high_zoom)
 
 ![images_for_description/road_crossing_example.png](images_for_description/road_crossing_example.png)
 
