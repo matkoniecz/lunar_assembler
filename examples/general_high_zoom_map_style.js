@@ -92,7 +92,7 @@ function highZoomMapStyle() {
         var priority = 0.03;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
       }
-      if (feature.properties["landuse"] != null) {
+      if (feature.properties["landuse"] != null || feature.properties["aeroway"] == "aerodrome") {
         //better higher and trigger layering problems quickly that have something failing ONLY in parks
         var priority = 0.02;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
