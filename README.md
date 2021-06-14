@@ -7,16 +7,16 @@ SVG maps from OpenStreetMap data in browser, can be used by marking area on a ma
 ### General high zoom map style
 [Publicly accessible generation of any location in this map style](https://mapsaregreat.com/osm_to_svg_in_browser/general_high_zoom)
 
-![images_for_description/road_crossing_example.png](images_for_description/road_crossing_example.png)
+<a href="https://mapsaregreat.com/osm_to_svg_in_browser/general_high_zoom">![examples/general_high_zoom_-_road_crossing.png](examples/general_high_zoom_-_road_crossing.png)</a>
 
 [try it!](https://mapsaregreat.com/osm_to_svg_in_browser/)
 
 ![examples/lunar_assembler_in_action.gif](examples/lunar_assembler_in_action.gif)
 
-![images_for_description/airport_example.png](images_for_description/airport_example.png)
+<a href="https://mapsaregreat.com/osm_to_svg_in_browser/general_high_zoom">![examples/general_high_zoom_-_airport.png](examples/general_high_zoom_-_airport.png)</a>
 
 ### Generating design for laser cut tactile maps
-![images_for_description/laser_cut_design_example.png](images_for_description/laser_cut_design_example.png)
+<a href="https://mapsaregreat.com/osm_to_svg_in_browser/laser_neighbourhood">![examples/laser_neighbourhood_-_Madalińskiego.png](examples/laser_neighbourhood_-_Madalińskiego.png)</a>
 
 This map styles are designed for used in a laser cutter, to produce maps for blind.
 
