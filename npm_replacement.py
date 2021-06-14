@@ -19,7 +19,18 @@
 import os
 
 def main():
+    build_distribution_form_of_library()
+    generate_taginfo_files()
+
+def generate_taginfo_files():
     build_script_location = os.path.abspath(os.path.dirname(__file__))
+    os.chdir(os.path.join(build_script_location, "examples"))
+    os.system("node taginfo_file_generate.js")
+
+
+def build_distribution_form_of_library():
+    build_script_location = os.path.abspath(os.path.dirname(__file__))
+    os.chdir(build_script_location)
     dependency_folder_location = os.path.join(build_script_location, "lunar_assembler_dependencies")
 
     paths_for_merging = []

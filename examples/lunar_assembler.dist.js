@@ -711,6 +711,76 @@ function  generateLegend(styleRules){
   return returned;
 }
 
+function  generateTaginfoListing(styleRules){
+  var returned = []
+  var k = -1;
+  while (k+1 < styleRules.length) {
+    k++;
+    const rule = styleRules[k];
+
+    if("automatically_generated_using" in rule) {
+      returned.push(...addTaginfoListingForProcessedElements(rule));
+    } else {
+      returned.push(...addTaginfoListingForDataStraightFromOpenStreetMap(rule));
+    }
+
+  }
+  return returned;
+}
+
+function addTaginfoListingForDataStraightFromOpenStreetMap(rule) {
+  returned = []
+  var i = rule['matches'].length;
+  while (i--) {
+    var match = null;
+    if(Array.isArray(rule['matches'][i])) {
+      match = rule['matches'][i];
+    } else {
+      match = [rule['matches'][i]];
+    }
+    // multiple rules, all must be matched
+    var m = match.length;
+    while (m--) {
+      if(match[m]['role'] === 'supplementary_obvious_filter') {
+        continue;
+      }
+      var pushed = {'key': match[m]['key'], 'value': match[m]['value'], 'description': rule['description']}
+      if(('value' in match[m]) == false){
+        delete pushed['value']
+      }
+      returned.push(pushed)
+    }
+  }
+  return returned;
+}
+
+function addTaginfoListingForProcessedElements(rule) {
+  returned = []
+  var length = rule['automatically_generated_using'].length;
+  var i = -1;
+  while (i + 1 < length) {
+    i += 1;
+    var match = null 
+    if(Array.isArray(match)) {
+      match = rule['automatically_generated_using'][i];
+    } else {
+      match = [rule['automatically_generated_using'][i]];
+    }
+    var m = match.length;
+    while (m--) {
+      if(match[m]['role'] === 'supplementary_obvious_filter') {
+        continue;
+      }
+      var pushed = {'key': match[m]['key'], 'value': match[m]['value'], 'description': match[m]['purpose']}
+      if(('value' in match[m]) == false){
+        delete pushed['value']
+      }
+      returned.push(pushed)
+    }
+  }
+  return returned;
+}
+
 
 /* ------------------------ */
 
