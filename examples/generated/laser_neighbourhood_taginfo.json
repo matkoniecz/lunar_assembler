@@ -81,6 +81,11 @@
       },
       {
          "key": "barrier",
+         "value": "yes",
+         "description": "unknown barrier, assumed to be generally impassable barrier, for detecting where access is blocked"
+      },
+      {
+         "key": "barrier",
          "value": "haha",
          "description": "generally impassable barrier, for detecting where access is blocked"
       },
@@ -123,6 +128,11 @@
          "key": "barrier",
          "value": "fence",
          "description": "generally impassable barrier, for detecting where access is blocked"
+      },
+      {
+         "key": "barrier",
+         "value": "yes",
+         "description": "unknown barrier, assumed to be generally impassable barrier, for detecting where access is blocked"
       },
       {
          "key": "building",

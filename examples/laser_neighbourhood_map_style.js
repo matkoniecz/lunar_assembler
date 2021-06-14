@@ -78,6 +78,7 @@ function highZoomLaserMapStyle() {
         value = linearGenerallyImpassableBarrierValuesArray()[i];
         barriersKeyValue.push({'key': 'barrier', 'value': value, 'purpose': 'generally impassable barrier, for detecting where access is blocked'})
       }
+      barriersKeyValue.push({'key': 'barrier', 'value': 'yes', 'purpose': 'unknown barrier, assumed to be generally impassable barrier, for detecting where access is blocked'})
 
       returned.push({
         'area_color': "#b76b80",
@@ -1024,7 +1025,7 @@ function highZoomLaserMapStyle() {
         var feature = geojson.features[i];
         const link = "https://www.openstreetmap.org/" + feature.id;
 
-        if (linearGenerallyImpassableBarrierValuesArray().includes(feature.properties["barrier"])) {
+        if (linearGenerallyImpassableBarrierValuesArray().includes(feature.properties["barrier"]) || feature.properties["barrier"] == "yes") {
           var produced = turf.buffer(feature, 0.1 / 1000, { units: "kilometers" });
           var cloned = JSON.parse(JSON.stringify(produced));
           cloned.properties["generated_barrier_area"] = "yes";
