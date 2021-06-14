@@ -12,9 +12,9 @@ eval(fs.readFileSync('laser_road_area_map_style.js')+'');
 eval(fs.readFileSync('laser_neighbourhood_map_style.js')+'');
 
 
+// syntax_documentation: https://wiki.openstreetmap.org/wiki/Taginfo/Projects#Project_Files
 function infoDocsJSON(dataURL, projectName, projectDescription, projectDocs, tagList) {
     return {
-        "syntax_documentation": "https://wiki.openstreetmap.org/wiki/Taginfo/Projects#Project_Files",
         "data_format": 1,
         "data_url": dataURL,
         "project": {
