@@ -294,10 +294,8 @@ function rewind(geojson_that_is_7946_compliant_with_right_hand_winding_order) {
     ...geojson_that_is_7946_compliant_with_right_hand_winding_order,
   };
   d3_geojson.features = d3_geojson.features.map((f) => {
-    //console.log(f);
     return turf.rewind(f, { reverse: true });
   });
-  //alert(JSON.stringify(d3_geojson))
   return d3_geojson;
 }
 
@@ -352,9 +350,9 @@ function mergeAsRequestedByMapStyle(dataGeojson, mapStyle) {
       }
     } else {
       processeedFeatures.push(feature);
-      console.log("very unexpected " + feature.geometry.type + " appeared in mergeAsRequestedByMapStyle, logging its data <");
-      console.log(feature);
-      console.log("> LOGGED");
+      console.error("very unexpected " + feature.geometry.type + " appeared in mergeAsRequestedByMapStyle, logging its data <");
+      console.error(feature);
+      console.error("> LOGGED");
     }
   }
   keys = Object.keys(mergingGroups);
@@ -478,11 +476,9 @@ function dropDegenerateGeometrySegments(feature) {
     if (survivingGeometryParts.length == 0) {
       return null;
     } else {
-      //console.log(survivingGeometryParts);
       feature.geometry.coordinates = survivingGeometryParts;
     }
   }
-  //console.log(feature);
   return feature;
 }
 function renderUsingD3(readableBounds, dataGeojson, width, height, mapStyle, mapOutputHolderId) {

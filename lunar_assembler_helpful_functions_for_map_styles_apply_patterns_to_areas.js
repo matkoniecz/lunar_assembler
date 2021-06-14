@@ -112,9 +112,6 @@ function intersectGeometryWithPlaneHavingRectangularHoles(feature, holeVerticalI
   }
   var generatedVertical = polygonClipping.union(...collected);
   var generated = polygonClipping.union(generatedHorizontal, generatedVertical);
-  //console.warn("road pattern follows");
-  //console.warn(generated);
-  //console.warn("road pattern above");
 
   var cloned = JSON.parse(JSON.stringify(feature));
   cloned.geometry.coordinates = generated;
