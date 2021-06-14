@@ -31,10 +31,12 @@
 <body>
     <div id="main_content_wrap" class="outer">
     <section id="main_content" class="inner">
-        <p>Generation of vector maps from OpenStreetMap data.</p>
-        
         <p id="instruction_hidden_after_first_generation">Press the rectangle button, select a rectangle on a map and wait. Note that this tool will work well with small areas. Entire cities may work, but will require long processing. Processing entire countries will fail.</p>
 
+        <p>Generation of vector maps from OpenStreetMap data. Supports <a href="https://wiki.openstreetmap.org/wiki/Key:area%3Ahighway">area:highway</a> tagging, works well for tiny areas (single crossing), neighbourhood maps - or of a single forest/airport/etc. Will work for entire town, villages - maybe even entire cities.</p>
+
+        <p>See also <a href=".">other map styles</a>, allowing generation of other maps from the same OpenStreetMap data.</p>
+        
         <p>(there is more text below map, you can also see an <a href="lunar_assembler_in_action.gif">animation</a> showing how this tool is supposed to work)</p>
         
             <center><button id="download_generated_map" href="#" style="display: none; margin: 5px auto 5px auto">Download SVG</button></center>
