@@ -5,7 +5,7 @@
       "name": "laser SVG map of a crossing, based on area:highway",
       "description": "Map to produce tactile maps for blind. Generated maps are for use in a laser cutter. Lunar Assembler map style.",
       "project_url": "https://github.com/matkoniecz/lunar_assembler",
-      "doc_url": "https://matkoniecz.github.io/lunar_assembler/examples/laser_road_area.html",
+      "doc_url": "https://mapsaregreat.com/osm_to_svg_in_browser/laser_road_area.html",
       "contact_name": "Mateusz Konieczny",
       "contact_email": "matkoniecz@tutanota.com"
    },

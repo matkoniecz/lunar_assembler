@@ -50,7 +50,7 @@ taginfo = infoDocsJSON(
     "https://raw.githubusercontent.com/matkoniecz/lunar_assembler/master/examples/" + filename,
     "area:highway included, general map style for SVG maps of zoomed in areas (city and smaller)",
     "Map to produce SVG maps of tiny and small areas - from single crossing to a city. Lunar Assembler map style.",
-    "https://matkoniecz.github.io/lunar_assembler/examples/general_high_zoom.html", // should be mapsaregreat.com
+    "https://mapsaregreat.com/osm_to_svg_in_browser/general_high_zoom",
     generateTaginfoListing(highZoomMapStyle().unifiedStyling())
 )
 writeGeneratedTaginfoSummary(taginfo, filename)
@@ -61,7 +61,7 @@ taginfo = infoDocsJSON(
     "https://raw.githubusercontent.com/matkoniecz/lunar_assembler/master/examples/" + filename,
     "laser SVG map of a crossing, based on area:highway",
     "Map to produce tactile maps for blind. Generated maps are for use in a laser cutter. Lunar Assembler map style.",
-    "https://matkoniecz.github.io/lunar_assembler/examples/laser_road_area.html",// should be mapsaregreat.com
+    "https://mapsaregreat.com/osm_to_svg_in_browser/laser_road_area.html",
     generateTaginfoListing(laserRoadAreaMapStyle().unifiedStyling())
 )
 writeGeneratedTaginfoSummary(taginfo, filename)
@@ -72,7 +72,7 @@ taginfo = infoDocsJSON(
     "https://raw.githubusercontent.com/matkoniecz/lunar_assembler/master/examples/" + filename,
     "laser SVG map of a neighbourhood",
     "Map to produce tactile maps for blind. Generated maps are for use in a laser cutter. Lunar Assembler map style.",
-    "https://matkoniecz.github.io/lunar_assembler/examples/laser_neighbourhood.html",// should be mapsaregreat.com
+    "https://mapsaregreat.com/osm_to_svg_in_browser/laser_neighbourhood.html",
     generateTaginfoListing(highZoomLaserMapStyle().unifiedStyling())
 )
 writeGeneratedTaginfoSummary(taginfo, filename)

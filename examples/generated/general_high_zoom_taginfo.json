@@ -5,7 +5,7 @@
       "name": "area:highway included, general map style for SVG maps of zoomed in areas (city and smaller)",
       "description": "Map to produce SVG maps of tiny and small areas - from single crossing to a city. Lunar Assembler map style.",
       "project_url": "https://github.com/matkoniecz/lunar_assembler",
-      "doc_url": "https://matkoniecz.github.io/lunar_assembler/examples/general_high_zoom.html",
+      "doc_url": "https://mapsaregreat.com/osm_to_svg_in_browser/general_high_zoom",
       "contact_name": "Mateusz Konieczny",
       "contact_email": "matkoniecz@tutanota.com"
    },
