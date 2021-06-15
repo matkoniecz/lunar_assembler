@@ -34,6 +34,10 @@ function highZoomLaserMapStyle() {
       if (feature.properties["lunar_assembler_cloned_for_pattern_fill"] != undefined) {
         return 100; // patterns goes on top of unpatterned fill
       }
+      if (railwayLinearValuesArray().includes(feature.properties["railway"])) {
+        // draw railway lines on absolute top
+        return 200;
+      }
       return 0;
     },
 
