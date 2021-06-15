@@ -833,16 +833,22 @@ function showFatalError(message){
 }
 
 function showError(message) {
+  console.error(message)
   document.getElementById(logOutputIdConfig).innerHTML += '<p class="logged error">' + message + '</p>'
 
 }
 
 function showWarning(message) {
+  console.warn(message)
   document.getElementById(logOutputIdConfig).innerHTML += '<p class="logged warning">' + message + '</p>'
 }
 
 function reportBugMessage(){
   return " this is a bug, please report to https://github.com/matkoniecz/lunar_assembler/issues"
+}
+
+function reportBugMessageButGeodataMayBeWrong(){
+  return " something went wrong. If OpenStreetMap data is correct here, then this is a bug, please report to https://github.com/matkoniecz/lunar_assembler/issues"
 }
 //////////////////////////////////////////////////////////////////////////////////////////
 // progress bar fun
