@@ -32,7 +32,7 @@ function findMergeGroupObject(dataGeojson, code) {
     //lunar_assembler_merge_group is applied by lunar assembler, see mergeAsRequestedByMapStyle function
     if (feature.properties["lunar_assembler_merge_group"] == code) {
       if (found != undefined) {
-        alert("more than one area of " + code + " type what is unexpected, things may break. This is a bug, please report it on https://github.com/matkoniecz/lunar_assembler/issues");
+        showError("more than one area of " + code + " type what is unexpected, things may break. This is a bug, please report it on https://github.com/matkoniecz/lunar_assembler/issues");
       }
       found = feature;
     }
@@ -93,7 +93,6 @@ function unifiedMapStyleSegmentForSymbolicStepRepresentation() {
 }
 
 function programaticallyGenerateSymbolicStepParts(dataGeojson) {
-    //alert(JSON.stringify(dataGeojson))
     var pointsInSteps = dataToListOfPositionOfStepsNodes(dataGeojson);
     var i = dataGeojson.features.length;
     var generatedFeatures = [];
@@ -105,7 +104,7 @@ function programaticallyGenerateSymbolicStepParts(dataGeojson) {
       }
       const rings = feature.geometry.coordinates.length;
       if (rings != 1) {
-        alert(
+        showError(
           "untested for polygons with holes. And it seems that it should be represented as two highway=steps and two area:highway anyway. See " +
             link +
             "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
@@ -137,9 +136,9 @@ function programaticallyGenerateSymbolicStepParts(dataGeojson) {
         const link = "https://www.openstreetmap.org/" + feature.id;
         if (feature.properties["highway"] == "steps") {
           if (feature.properties["area"] == "yes" || feature.properties["type"] === "multipolygon") {
-            alert("steps mapped as an area should use area:highway=steps tagging, " + link + " needs fixing");
+            showFatalError("steps mapped as an area should use area:highway=steps tagging, " + link + " needs fixing");
           } else if (feature.geometry.type != "LineString") {
-            alert("Unexpected geometry for steps, expected a LineString, got " + feature.geometry.type + " " + link + " needs fixing");
+            showFatalError("Unexpected geometry for steps, expected a LineString, got " + feature.geometry.type + " " + link + " needs fixing");
           } else {
             var k = feature.geometry.coordinates.length;
             if (feature.properties["incline"] == "down") {
@@ -177,14 +176,11 @@ function programaticallyGenerateSymbolicStepParts(dataGeojson) {
         const link = "https://www.openstreetmap.org/" + feature.id;
         var matches = indexesOfPointsWhichAreConnectedToStepsWay(feature, pointsInSteps);
         if (matches === null) {
-          alert("unable to build steps pattern for " + link + " - please create an issue at https://github.com/matkoniecz/lunar_assembler/issues if that is unexpected and unwanted");
+          showFatalError("unable to build steps pattern for " + link + " - please create an issue at https://github.com/matkoniecz/lunar_assembler/issues if that is unexpected and unwanted");
           return null;
         }
         var nodeCountOnPolygon = feature.geometry.coordinates[0].length;
         expectStepsPolygonCountToBeSixNodes(nodeCountOnPolygon, link);
-  
-        //alert((matches[0].indexInObject-1) + " " + (matches[1].indexInObject+1))
-        //alert((matches[0].indexInObject+1) + " " + (matches[1].indexInObject-1))
   
         var pointBetweenStarts = feature.geometry.coordinates[0][matches[0].indexInObject];
         var pointBetweenEnds = feature.geometry.coordinates[0][matches[0].indexInObject];
@@ -193,13 +189,11 @@ function programaticallyGenerateSymbolicStepParts(dataGeojson) {
         var firstLineStart = feature.geometry.coordinates[0][firstLineStartIndex];
         var firstLineEndIndex = (matches[1].indexInObject + 1) % nodeCountOnPolygon;
         var firstLineEnd = feature.geometry.coordinates[0][firstLineEndIndex];
-        //alert(JSON.stringify({type: 'LineString', coordinates: [firstLineStart, firstLineEnd]}));
   
         var secondLineStartIndex = (matches[0].indexInObject + 1) % nodeCountOnPolygon;
         var secondLineStart = feature.geometry.coordinates[0][secondLineStartIndex];
         var secondLineEndIndex = (matches[1].indexInObject - 1) % nodeCountOnPolygon;
         var secondLineEnd = feature.geometry.coordinates[0][secondLineEndIndex];
-        //alert(JSON.stringify({type: 'LineString', coordinates: [secondLineStart, secondLineEnd]}));
   
         return buildAreasSplittingStepAreaIntoSymbolicStepsFromProvidedSkeletonLines(firstLineStart, firstLineEnd, secondLineStart, secondLineEnd, pointBetweenStarts, pointBetweenEnds);
       }
@@ -221,7 +215,7 @@ function programaticallyGenerateSymbolicStepParts(dataGeojson) {
       const expected = 6 + 1; // +1 as a border node is repeated
       if (nodeCountOnPolygon != expected) {
         if (nodeCountOnPolygon > expected) {
-          alert(
+          showError(
             "untested for large (" +
               nodeCountOnPolygon +
               " nodes) area:highway=steps geometries with more than 6 nodes. See " +
@@ -229,7 +223,7 @@ function programaticallyGenerateSymbolicStepParts(dataGeojson) {
               "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
           );
         } else {
-          alert("unexpectedly low node count ( " + nodeCountOnPolygon + "), is highway=steps attached to area:highway=steps? See " + link);
+          showFatalError("unexpectedly low node count ( " + nodeCountOnPolygon + "), is highway=steps attached to area:highway=steps? See " + link);
         }
       }
     }
@@ -237,7 +231,7 @@ function programaticallyGenerateSymbolicStepParts(dataGeojson) {
     function indexesOfPointsWhichAreConnectedToStepsWay(feature, pointsInSteps) {
       const link = "https://www.openstreetmap.org/" + feature.id;
       if (feature.geometry.type != "Polygon") {
-        alert(
+        showFatalError(
           "unsupported for " +
             feature.geometry.type +
             "! Skipping, see " +
@@ -257,18 +251,17 @@ function programaticallyGenerateSymbolicStepParts(dataGeojson) {
 
         indexOfMatchingPointInSteps = indexOfMatchingPointInArray(point, pointsInSteps);
         if (indexOfMatchingPointInSteps != -1) {
-          //alert(point + " found at index " + indexOfMatchingPointInSteps + "of steps array");
           if (theFirstIntersection == undefined) {
             theFirstIntersection = { indexInObject: nodeIndex, indexInStepsArray: indexOfMatchingPointInSteps };
           } else if (theSecondIntersection == undefined) {
             theSecondIntersection = { indexInObject: nodeIndex, indexInStepsArray: indexOfMatchingPointInSteps };
           } else {
-            alert("more than 2 intersections of area:highway=steps with highway=steps, at " + link + "\nOSM data needs fixing.");
+            showFatalError("more than 2 intersections of area:highway=steps with highway=steps, at " + link + "\nOSM data needs fixing.");
           }
         }
       }
       if (theFirstIntersection == undefined || theSecondIntersection == undefined) {
-        alert(
+        showFatalError(
           "expected 2 intersections of area:highway=steps with highway=steps, got less at " +
             link +
             "\nIt can happen when steps area is within range but steps way is outside, special step pattern will not be generated for this steps."
@@ -310,7 +303,6 @@ function programaticallyGenerateSymbolicStepParts(dataGeojson) {
         const coords = [cornerOnTopOfTheFirstLine, cornerOnTopOfTheSecondLine, cornerOnBottomOfTheSecondLine, cornerOnBottomOfTheFirstLine, cornerOnTopOfTheFirstLine];
         const geometry = { type: "Polygon", coordinates: [coords] };
         const generatedFeature = { type: "Feature", properties: { lunar_assembler_step_segment: "" + partIndex }, geometry: geometry };
-        //alert(JSON.stringify(generatedFeature));
         returned.push(generatedFeature);
 
         //winding :( TODO, lets ignore it for now
@@ -804,6 +796,7 @@ function addTaginfoListingForProcessedElements(rule) {
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+// TODO eliminate this global variables
 const predictedTimeInSeconds = 35;
 var completed = false;
 var doneInPercents = 0;
@@ -812,6 +805,9 @@ const updateCount = predictedTimeInSeconds / timeBetweenUpdatesInSeconds;
 const incrementOnUpdateBy = 100 / updateCount;
 let progressBar;
 let handleOfProgressBarAnimation;
+
+// TODO handle config in a better way
+var logOutputIdConfig;
 
 function initializeLunarAssembler({
   mapStyles,
@@ -828,8 +824,26 @@ function initializeLunarAssembler({
   initializeSelectorMap(mapStyles, mapDivId, lat, lon, zoom, downloadTriggerId, mapOutputHolderId);
   initilizeDownloadButton(downloadTriggerId, mapOutputHolderId);
   progressBar = document.getElementById(progressBarId);
+  logOutputIdConfig = logOutputId;
 }
 
+function showFatalError(message){
+  showError(message)
+  alert(message)
+}
+
+function showError(message) {
+  document.getElementById(logOutputIdConfig).innerHTML += '<p class="logged error">' + message + '</p>'
+
+}
+
+function showWarning(message) {
+  document.getElementById(logOutputIdConfig).innerHTML += '<p class="logged warning">' + message + '</p>'
+}
+
+function reportBugMessage(){
+  return " this is a bug, please report to https://github.com/matkoniecz/lunar_assembler/issues"
+}
 //////////////////////////////////////////////////////////////////////////////////////////
 // progress bar fun
 // TODO:
@@ -941,7 +955,7 @@ async function handleTriggerFromGUI(readableBounds, downloadTriggerId, mapOutput
   if (osmJSON == -1) {
     console.log("FAILURE of download!");
     markAsFailed();
-    alert(
+    showFatalError(
       "Overpass API refused to provide data. Either selected area was too large, or you exceed usage limit of that free service. Please wait a bit and retry. Overpass API is used to get data from OpenStreetMap for a given area."
     );
     return;
@@ -1015,7 +1029,7 @@ async function downloadOpenStreetMapData(readableBounds) {
     },
     body: new URLSearchParams({ data: query }),
   }).catch((err) => {
-    alert(err);
+    showFatalError(err);
     console.log(err.response.data);
     return -1;
   });
@@ -1037,8 +1051,8 @@ function isMultipolygonAsExpected(feature) {
     return false;
   }
   if (feature.geometry.type == "Polygon") {
-    alert(
-      "UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature) + "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
+    showError(
+      "UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature) + reportBugMessage()
     );
     return false;
   }
@@ -1047,17 +1061,17 @@ function isMultipolygonAsExpected(feature) {
 
 function isAreaAsExpected(feature) {
   if (feature == undefined) {
-    alert("UNEXPECTED undefined" + " in " + JSON.stringify(feature) + "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues");
+    showError("UNEXPECTED undefined" + " in " + JSON.stringify(feature) + reportBugMessage());
     return false;
   }
   if (feature.geometry.type == "Point" || feature.geometry.type === "MultiPoint") {
-    alert(
-      "UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature) + "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
+    showError(
+      "UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature) +  + reportBugMessage()
     );
     return false;
   } else if (feature.geometry.type == "LineString" || feature.geometry.type == "MultiLineString") {
-    alert(
-      "UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature) + "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
+    showError(
+      "UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature) +  + reportBugMessage()
     );
     return false;
   } else if (feature.geometry.type == "Polygon") {
@@ -1065,7 +1079,7 @@ function isAreaAsExpected(feature) {
   } else if (feature.geometry.type == "MultiPolygon") {
     return true;
   }
-  alert("UNEXPECTED GEOMETRY " + feature.geometry.type);
+  showError("UNEXPECTED GEOMETRY " + feature.geometry.type + reportBugMessage());
   return false;
 }
 // TODO: what kind of geojson is accepted here? will it crash when I pass a point here?
@@ -1106,7 +1120,7 @@ function validateGeometries(dataGeojson) {
     var feature = dataGeojson.features[i];
     if (feature.geometry == undefined) {
       var warning = "broken feature, geometry is missing!";
-      alert(warning + JSON.stringify(feature));
+      showError(warning + JSON.stringify(feature) + reportBugMessage());
       console.warn(warning);
       console.warn(feature);
     }

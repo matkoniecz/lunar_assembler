@@ -16,6 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+// TODO eliminate this global variables
 const predictedTimeInSeconds = 35;
 var completed = false;
 var doneInPercents = 0;
@@ -24,6 +25,9 @@ const updateCount = predictedTimeInSeconds / timeBetweenUpdatesInSeconds;
 const incrementOnUpdateBy = 100 / updateCount;
 let progressBar;
 let handleOfProgressBarAnimation;
+
+// TODO handle config in a better way
+var logOutputIdConfig;
 
 function initializeLunarAssembler({
   mapStyles,
@@ -40,8 +44,26 @@ function initializeLunarAssembler({
   initializeSelectorMap(mapStyles, mapDivId, lat, lon, zoom, downloadTriggerId, mapOutputHolderId);
   initilizeDownloadButton(downloadTriggerId, mapOutputHolderId);
   progressBar = document.getElementById(progressBarId);
+  logOutputIdConfig = logOutputId;
 }
 
+function showFatalError(message){
+  showError(message)
+  alert(message)
+}
+
+function showError(message) {
+  document.getElementById(logOutputIdConfig).innerHTML += '<p class="logged error">' + message + '</p>'
+
+}
+
+function showWarning(message) {
+  document.getElementById(logOutputIdConfig).innerHTML += '<p class="logged warning">' + message + '</p>'
+}
+
+function reportBugMessage(){
+  return " this is a bug, please report to https://github.com/matkoniecz/lunar_assembler/issues"
+}
 //////////////////////////////////////////////////////////////////////////////////////////
 // progress bar fun
 // TODO:
@@ -153,7 +175,7 @@ async function handleTriggerFromGUI(readableBounds, downloadTriggerId, mapOutput
   if (osmJSON == -1) {
     console.log("FAILURE of download!");
     markAsFailed();
-    alert(
+    showFatalError(
       "Overpass API refused to provide data. Either selected area was too large, or you exceed usage limit of that free service. Please wait a bit and retry. Overpass API is used to get data from OpenStreetMap for a given area."
     );
     return;
@@ -227,7 +249,7 @@ async function downloadOpenStreetMapData(readableBounds) {
     },
     body: new URLSearchParams({ data: query }),
   }).catch((err) => {
-    alert(err);
+    showFatalError(err);
     console.log(err.response.data);
     return -1;
   });
@@ -249,8 +271,8 @@ function isMultipolygonAsExpected(feature) {
     return false;
   }
   if (feature.geometry.type == "Polygon") {
-    alert(
-      "UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature) + "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
+    showError(
+      "UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature) + reportBugMessage()
     );
     return false;
   }
@@ -259,17 +281,17 @@ function isMultipolygonAsExpected(feature) {
 
 function isAreaAsExpected(feature) {
   if (feature == undefined) {
-    alert("UNEXPECTED undefined" + " in " + JSON.stringify(feature) + "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues");
+    showError("UNEXPECTED undefined" + " in " + JSON.stringify(feature) + reportBugMessage());
     return false;
   }
   if (feature.geometry.type == "Point" || feature.geometry.type === "MultiPoint") {
-    alert(
-      "UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature) + "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
+    showError(
+      "UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature) +  + reportBugMessage()
     );
     return false;
   } else if (feature.geometry.type == "LineString" || feature.geometry.type == "MultiLineString") {
-    alert(
-      "UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature) + "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
+    showError(
+      "UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature) +  + reportBugMessage()
     );
     return false;
   } else if (feature.geometry.type == "Polygon") {
@@ -277,7 +299,7 @@ function isAreaAsExpected(feature) {
   } else if (feature.geometry.type == "MultiPolygon") {
     return true;
   }
-  alert("UNEXPECTED GEOMETRY " + feature.geometry.type);
+  showError("UNEXPECTED GEOMETRY " + feature.geometry.type + reportBugMessage());
   return false;
 }
 // TODO: what kind of geojson is accepted here? will it crash when I pass a point here?
@@ -318,7 +340,7 @@ function validateGeometries(dataGeojson) {
     var feature = dataGeojson.features[i];
     if (feature.geometry == undefined) {
       var warning = "broken feature, geometry is missing!";
-      alert(warning + JSON.stringify(feature));
+      showError(warning + JSON.stringify(feature) + reportBugMessage());
       console.warn(warning);
       console.warn(feature);
     }

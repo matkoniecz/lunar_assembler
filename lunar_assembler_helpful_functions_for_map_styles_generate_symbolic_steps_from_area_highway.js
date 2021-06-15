@@ -43,7 +43,6 @@ function unifiedMapStyleSegmentForSymbolicStepRepresentation() {
 }
 
 function programaticallyGenerateSymbolicStepParts(dataGeojson) {
-    //alert(JSON.stringify(dataGeojson))
     var pointsInSteps = dataToListOfPositionOfStepsNodes(dataGeojson);
     var i = dataGeojson.features.length;
     var generatedFeatures = [];
@@ -55,7 +54,7 @@ function programaticallyGenerateSymbolicStepParts(dataGeojson) {
       }
       const rings = feature.geometry.coordinates.length;
       if (rings != 1) {
-        alert(
+        showError(
           "untested for polygons with holes. And it seems that it should be represented as two highway=steps and two area:highway anyway. See " +
             link +
             "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
@@ -87,9 +86,9 @@ function programaticallyGenerateSymbolicStepParts(dataGeojson) {
         const link = "https://www.openstreetmap.org/" + feature.id;
         if (feature.properties["highway"] == "steps") {
           if (feature.properties["area"] == "yes" || feature.properties["type"] === "multipolygon") {
-            alert("steps mapped as an area should use area:highway=steps tagging, " + link + " needs fixing");
+            showFatalError("steps mapped as an area should use area:highway=steps tagging, " + link + " needs fixing");
           } else if (feature.geometry.type != "LineString") {
-            alert("Unexpected geometry for steps, expected a LineString, got " + feature.geometry.type + " " + link + " needs fixing");
+            showFatalError("Unexpected geometry for steps, expected a LineString, got " + feature.geometry.type + " " + link + " needs fixing");
           } else {
             var k = feature.geometry.coordinates.length;
             if (feature.properties["incline"] == "down") {
@@ -127,14 +126,11 @@ function programaticallyGenerateSymbolicStepParts(dataGeojson) {
         const link = "https://www.openstreetmap.org/" + feature.id;
         var matches = indexesOfPointsWhichAreConnectedToStepsWay(feature, pointsInSteps);
         if (matches === null) {
-          alert("unable to build steps pattern for " + link + " - please create an issue at https://github.com/matkoniecz/lunar_assembler/issues if that is unexpected and unwanted");
+          showFatalError("unable to build steps pattern for " + link + " - please create an issue at https://github.com/matkoniecz/lunar_assembler/issues if that is unexpected and unwanted");
           return null;
         }
         var nodeCountOnPolygon = feature.geometry.coordinates[0].length;
         expectStepsPolygonCountToBeSixNodes(nodeCountOnPolygon, link);
-  
-        //alert((matches[0].indexInObject-1) + " " + (matches[1].indexInObject+1))
-        //alert((matches[0].indexInObject+1) + " " + (matches[1].indexInObject-1))
   
         var pointBetweenStarts = feature.geometry.coordinates[0][matches[0].indexInObject];
         var pointBetweenEnds = feature.geometry.coordinates[0][matches[0].indexInObject];
@@ -143,13 +139,11 @@ function programaticallyGenerateSymbolicStepParts(dataGeojson) {
         var firstLineStart = feature.geometry.coordinates[0][firstLineStartIndex];
         var firstLineEndIndex = (matches[1].indexInObject + 1) % nodeCountOnPolygon;
         var firstLineEnd = feature.geometry.coordinates[0][firstLineEndIndex];
-        //alert(JSON.stringify({type: 'LineString', coordinates: [firstLineStart, firstLineEnd]}));
   
         var secondLineStartIndex = (matches[0].indexInObject + 1) % nodeCountOnPolygon;
         var secondLineStart = feature.geometry.coordinates[0][secondLineStartIndex];
         var secondLineEndIndex = (matches[1].indexInObject - 1) % nodeCountOnPolygon;
         var secondLineEnd = feature.geometry.coordinates[0][secondLineEndIndex];
-        //alert(JSON.stringify({type: 'LineString', coordinates: [secondLineStart, secondLineEnd]}));
   
         return buildAreasSplittingStepAreaIntoSymbolicStepsFromProvidedSkeletonLines(firstLineStart, firstLineEnd, secondLineStart, secondLineEnd, pointBetweenStarts, pointBetweenEnds);
       }
@@ -171,7 +165,7 @@ function programaticallyGenerateSymbolicStepParts(dataGeojson) {
       const expected = 6 + 1; // +1 as a border node is repeated
       if (nodeCountOnPolygon != expected) {
         if (nodeCountOnPolygon > expected) {
-          alert(
+          showError(
             "untested for large (" +
               nodeCountOnPolygon +
               " nodes) area:highway=steps geometries with more than 6 nodes. See " +
@@ -179,7 +173,7 @@ function programaticallyGenerateSymbolicStepParts(dataGeojson) {
               "\nIf OSM data is correct and output is broken, please report to https://github.com/matkoniecz/lunar_assembler/issues"
           );
         } else {
-          alert("unexpectedly low node count ( " + nodeCountOnPolygon + "), is highway=steps attached to area:highway=steps? See " + link);
+          showFatalError("unexpectedly low node count ( " + nodeCountOnPolygon + "), is highway=steps attached to area:highway=steps? See " + link);
         }
       }
     }
@@ -187,7 +181,7 @@ function programaticallyGenerateSymbolicStepParts(dataGeojson) {
     function indexesOfPointsWhichAreConnectedToStepsWay(feature, pointsInSteps) {
       const link = "https://www.openstreetmap.org/" + feature.id;
       if (feature.geometry.type != "Polygon") {
-        alert(
+        showFatalError(
           "unsupported for " +
             feature.geometry.type +
             "! Skipping, see " +
@@ -207,18 +201,17 @@ function programaticallyGenerateSymbolicStepParts(dataGeojson) {
 
         indexOfMatchingPointInSteps = indexOfMatchingPointInArray(point, pointsInSteps);
         if (indexOfMatchingPointInSteps != -1) {
-          //alert(point + " found at index " + indexOfMatchingPointInSteps + "of steps array");
           if (theFirstIntersection == undefined) {
             theFirstIntersection = { indexInObject: nodeIndex, indexInStepsArray: indexOfMatchingPointInSteps };
           } else if (theSecondIntersection == undefined) {
             theSecondIntersection = { indexInObject: nodeIndex, indexInStepsArray: indexOfMatchingPointInSteps };
           } else {
-            alert("more than 2 intersections of area:highway=steps with highway=steps, at " + link + "\nOSM data needs fixing.");
+            showFatalError("more than 2 intersections of area:highway=steps with highway=steps, at " + link + "\nOSM data needs fixing.");
           }
         }
       }
       if (theFirstIntersection == undefined || theSecondIntersection == undefined) {
-        alert(
+        showFatalError(
           "expected 2 intersections of area:highway=steps with highway=steps, got less at " +
             link +
             "\nIt can happen when steps area is within range but steps way is outside, special step pattern will not be generated for this steps."
@@ -260,7 +253,6 @@ function programaticallyGenerateSymbolicStepParts(dataGeojson) {
         const coords = [cornerOnTopOfTheFirstLine, cornerOnTopOfTheSecondLine, cornerOnBottomOfTheSecondLine, cornerOnBottomOfTheFirstLine, cornerOnTopOfTheFirstLine];
         const geometry = { type: "Polygon", coordinates: [coords] };
         const generatedFeature = { type: "Feature", properties: { lunar_assembler_step_segment: "" + partIndex }, geometry: geometry };
-        //alert(JSON.stringify(generatedFeature));
         returned.push(generatedFeature);
 
         //winding :( TODO, lets ignore it for now
