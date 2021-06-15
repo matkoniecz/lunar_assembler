@@ -839,16 +839,16 @@ function highZoomLaserMapStyle() {
           // in case of lanes==1 it is likely that it is wide anyway due to parking lanes
           // supporting them would allow to drop this exception
           if (feature.properties["lanes"] != 1) {
-            return feature.properties["lanes"] * 2.5;
+            return feature.properties["lanes"] * 2.7;
           }
         }
         if (feature.properties["highway"] == "service" && ["driveway", "parking_aisle"].includes(feature.properties["service"])) {
           return undefined;
         }
         if (feature.properties["highway"] == "service") {
-          return 4.5;
+          return 4.6;
         }
-        return 5;
+        return 5.4;
       }
       if (["footway", "pedestrian", "path", "steps", "cycleway"].includes(feature.properties["highway"])) {
         if (mapStyle.isAreaMakingFreePedestrianMovementImpossible(feature)) {
