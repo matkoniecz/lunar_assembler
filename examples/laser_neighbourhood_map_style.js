@@ -497,6 +497,46 @@ function highZoomLaserMapStyle() {
         }
       }
 
+      // make areas consistent around 
+      // https://www.openstreetmap.org/?mlat=50.05236&mlon=19.92794#map=19/50.05236/19.92794
+      var blockedArea = findMergeGroupObject(dataGeojson, "generated_blocked_chunk");
+      if (blockedArea === undefined) {
+        // hmmmm... - but we are in manual patch mode, lets not complain
+      } else {
+        blockedArea.geometry.coordinates = polygonClipping.union(blockedArea.geometry.coordinates, [
+          [
+            [
+              19.927938580513,
+              50.05231079170669
+            ],
+            [
+              19.92798551917076,
+              50.052379680220405
+            ],
+            [
+              19.92795467376709,
+              50.0527335934005
+            ],
+            [
+              19.92753490805626,
+              50.05263887236723
+            ],
+            [
+              19.92733910679817,
+              50.05243737427453
+            ],
+            [
+              19.927931874990463,
+              50.05231165281373
+            ],
+            [
+              19.927938580513,
+              50.05231079170669
+            ]
+          ]
+        ]);
+      }
+
       dataGeojson = mapStyle.eraseFromFootwayGeometry(
         dataGeojson,
         [
