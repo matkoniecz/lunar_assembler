@@ -160,7 +160,7 @@ function laserRoadAreaMapStyle() {
       returned.push(...unifiedMapStyleSegmentForSymbolicStepRepresentation())
       returned.push(...[
         {
-          'area_color': "#B45A00",
+          'area_color': "black",
           'description': 'buildings',
           'matches': [
             {'key': 'building'},

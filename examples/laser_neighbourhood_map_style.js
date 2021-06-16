@@ -101,12 +101,12 @@ function highZoomLaserMapStyle() {
       blockDetection.push({'key': 'waterway', 'value': 'riverbank', 'purpose': 'generally impassable barrier, for detecting where access is blocked'})
 
       returned.push({
-        'area_color': "#808000",
+        'area_color': "black",
         'description': 'areas that are inaccessible, generated automatically',
         'automatically_generated_using': blockDetection,
       'matches': [
         {'key': 'generated_blocked_chunk', 'value': 'yes'},
-        {'key': 'native_blocked_chunk', 'value': 'yes'},
+        //{'key': 'native_blocked_chunk', 'value': 'yes'},
       ],
       })
       // generated_traversable_chunk=yes is not rendered
@@ -133,7 +133,7 @@ function highZoomLaserMapStyle() {
 
       returned.push(
         {
-          'area_color': "#F0B98D",
+          'area_color': "#004754", // color #27 in LightBurn, clearly visible on the map, rendered on top
           'description': 'bar on a pedestrian, to produce pattern distinguishing it from sidewalks by touch',
           'automatically_generated_using': [
             {'key': 'footway', 'value': 'crossing', 'purpose': 'detecting crossings'},
