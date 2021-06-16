@@ -379,6 +379,10 @@ function highZoomLaserMapStyle() {
             const link = "https://www.openstreetmap.org/" + feature.id;
             showFatalError(link + " is unexpectedly crossing with road area not exactly two times but " + startEndOfActualCrossing.features.length + " times, which is unhandled" + reportBugMessageButGeodataMayBeWrong())
           }
+          if(startEndOfActualCrossing.features.length < 2) {
+            // skipping, generation impossible
+            continue;
+          }
 
           // always three strips, change later if needed
           // so
