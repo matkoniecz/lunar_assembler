@@ -1244,8 +1244,6 @@ function highZoomLaserMapStyle() {
       var minLatitude = bbox[1];
       var maxLongitude = bbox[2];
       var maxLatitude = bbox[3];
-      var from = turf.point([bbox[0], bbox[1]]); // turf.point(longitude, latitude, properties)
-      var to = turf.point([bbox[2], bbox[3]]);
 
       var from_horizontal = turf.point([minLongitude, minLatitude]); // turf.point(longitude, latitude, properties)
       var to_horizontal = turf.point([maxLongitude, minLatitude]);
