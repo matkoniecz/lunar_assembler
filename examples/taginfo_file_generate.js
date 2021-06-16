@@ -34,7 +34,7 @@ function showErrorIfpresent(error) {
 }
 
 function geenratePrettyJsonString(json) {
-  return JSON.stringify(json, null, 2);
+  return JSON.stringify(json, null, 2) + "\n";
 }
 function writeGeneratedTaginfoSummary(taginfoData, filename) {
   fs.writeFile(filename, geenratePrettyJsonString(taginfoData), showErrorIfpresent);
