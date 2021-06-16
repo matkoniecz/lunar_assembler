@@ -19,6 +19,7 @@ There are some [known tools](https://wiki.openstreetmap.org/wiki/SVG) for that, 
 Some were potentially adaptable, but ignored due to having too interesting architecture. For example [Osmarender](https://wiki.openstreetmap.org/wiki/Osmarender/Convert_osm_data_from_OSM_file_to_an_SVG_image) using XSLT to transform OSM XML into SVG XML or compiling my Python scripts to JS using [pyodide](https://github.com/pyodide/pyodide) was considered and discarded.
 
 # Structure
+
 ## GUI for triggerring generation
 
 GUI for selecting rectangle that will be processed - Leaflet + Leaflet-draw plugin.
@@ -30,7 +31,6 @@ Gets bounding box as an argument, returns geojson for futher processing.
 Fetching OpenStreeMap data - [Overpass API](https://wiki.openstreetmap.org/wiki/Overpass_API)
 
 OpenStreetMap data from the Overpass into geojson - [osmtogeojson](http://tyrasd.github.io/osmtogeojson/)
-
 
 # Generating SVG
 
@@ -75,7 +75,6 @@ Fun fact: [https://docs.npmjs.com/getting-started](https://docs.npmjs.com/gettin
 > Once you have installed a package in node_modules, you can use it in your code.
 
 what explain exactly nothing how the heck I should do it
-
 
 # Feedback
 

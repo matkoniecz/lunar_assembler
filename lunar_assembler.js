@@ -47,28 +47,27 @@ function initializeLunarAssembler({
   logOutputIdConfig = logOutputId;
 }
 
-function showFatalError(message){
-  showError(message)
-  alert(message)
+function showFatalError(message) {
+  showError(message);
+  alert(message);
 }
 
 function showError(message) {
-  console.error(message)
-  document.getElementById(logOutputIdConfig).innerHTML += '<p class="logged error">' + message + '</p>'
-
+  console.error(message);
+  document.getElementById(logOutputIdConfig).innerHTML += '<p class="logged error">' + message + "</p>";
 }
 
 function showWarning(message) {
-  console.warn(message)
-  document.getElementById(logOutputIdConfig).innerHTML += '<p class="logged warning">' + message + '</p>'
+  console.warn(message);
+  document.getElementById(logOutputIdConfig).innerHTML += '<p class="logged warning">' + message + "</p>";
 }
 
-function reportBugMessage(){
-  return " this is a bug, please report to https://github.com/matkoniecz/lunar_assembler/issues"
+function reportBugMessage() {
+  return " this is a bug, please report to https://github.com/matkoniecz/lunar_assembler/issues";
 }
 
-function reportBugMessageButGeodataMayBeWrong(){
-  return " something went wrong. If OpenStreetMap data is correct here, then this is a bug, please report to https://github.com/matkoniecz/lunar_assembler/issues"
+function reportBugMessageButGeodataMayBeWrong() {
+  return " something went wrong. If OpenStreetMap data is correct here, then this is a bug, please report to https://github.com/matkoniecz/lunar_assembler/issues";
 }
 //////////////////////////////////////////////////////////////////////////////////////////
 // progress bar fun
@@ -162,8 +161,8 @@ function initializeSelectorMap(
   if (params.get("rerun_query") == "yes") {
     // parameters (technically still GUI, right) requested running query immediately
     const bounds = JSON.parse(params.get("bounds"));
-    const centerLat = (bounds["north"] + bounds["south"])/2;
-    const centerLon = (bounds["east"] + bounds["west"])/2;
+    const centerLat = (bounds["north"] + bounds["south"]) / 2;
+    const centerLon = (bounds["east"] + bounds["west"]) / 2;
     map.panTo(new L.LatLng(centerLat, centerLon));
     handleTriggerFromGUI(bounds, downloadTriggerId, mapOutputHolderId, mapStyles[0]);
   }
@@ -277,9 +276,7 @@ function isMultipolygonAsExpected(feature) {
     return false;
   }
   if (feature.geometry.type == "Polygon") {
-    showError(
-      "UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature) + reportBugMessage()
-    );
+    showError("UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature) + reportBugMessage());
     return false;
   }
   return true;
@@ -291,14 +288,10 @@ function isAreaAsExpected(feature) {
     return false;
   }
   if (feature.geometry.type == "Point" || feature.geometry.type === "MultiPoint") {
-    showError(
-      "UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature) +  + reportBugMessage()
-    );
+    showError("UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature) + +reportBugMessage());
     return false;
   } else if (feature.geometry.type == "LineString" || feature.geometry.type == "MultiLineString") {
-    showError(
-      "UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature) +  + reportBugMessage()
-    );
+    showError("UNEXPECTED " + feature.geometry.type + " in " + JSON.stringify(feature) + +reportBugMessage());
     return false;
   } else if (feature.geometry.type == "Polygon") {
     return true;
@@ -314,8 +307,8 @@ function rewind(geojson_that_is_7946_compliant_with_right_hand_winding_order) {
   // https://gis.stackexchange.com/questions/392452/why-d3-js-works-only-with-geojson-violating-right-hand-rule
   // I opened https://github.com/d3/d3-shape/issues/178
 
-  if(geojson_that_is_7946_compliant_with_right_hand_winding_order.length == 1) {
-    console.warn("one element! Is spread working as expected? See #68") // TODO - trigger and debug it
+  if (geojson_that_is_7946_compliant_with_right_hand_winding_order.length == 1) {
+    console.warn("one element! Is spread working as expected? See #68"); // TODO - trigger and debug it
   }
 
   const d3_geojson = {
@@ -391,19 +384,19 @@ function mergeAsRequestedByMapStyle(dataGeojson, mapStyle) {
     var produced = forMerging[0];
     var coordinatesForMerging = [];
     for (var k = 0; k < forMerging.length; k++) {
-      if(isAreaAsExpected(forMerging[k]) == false) {
-        console.error("================================")
-        console.error("expected area, got not area, something want wrong, this is a bug!")
-        console.error(forMerging[k])
-        console.error("please report it on https://github.com/matkoniecz/lunar_assembler/issues ")
-        console.error("================================")
+      if (isAreaAsExpected(forMerging[k]) == false) {
+        console.error("================================");
+        console.error("expected area, got not area, something want wrong, this is a bug!");
+        console.error(forMerging[k]);
+        console.error("please report it on https://github.com/matkoniecz/lunar_assembler/issues ");
+        console.error("================================");
       }
       coordinatesForMerging.push(forMerging[k].geometry.coordinates);
     }
     // it is union so output will be nonepty
     // https://github.com/mfogel/polygon-clipping#output
     produced.geometry.type = "MultiPolygon";
-    if(coordinatesForMerging.length == 1) {
+    if (coordinatesForMerging.length == 1) {
       // adding it fixed crashing on empty areas for laser map style and private/public areas
       // https://github.com/matkoniecz/lunar_assembler/issues/68
       // necessary as ... will go multiple levels deep to decompose single element array

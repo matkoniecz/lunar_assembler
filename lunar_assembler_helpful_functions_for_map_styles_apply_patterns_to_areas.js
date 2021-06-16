@@ -44,8 +44,8 @@ function intersectGeometryWithHorizontalStripes(feature, stripeSizeInDegrees, di
     }
     minLatitudeForStripe += stripeSizeInDegrees + distanceBetweenStripesInDegrees;
   }
-  if(collected.length == 1) {
-    console.warn("one element! Is spread working as expected? See #68") // TODO - trigger and debug it
+  if (collected.length == 1) {
+    console.warn("one element! Is spread working as expected? See #68"); // TODO - trigger and debug it
   }
   var generated = polygonClipping.union(...collected);
 
@@ -82,8 +82,8 @@ function intersectGeometryWithPlaneHavingRectangularHoles(feature, holeVerticalI
     }
     minLatitudeForStripe += spaceVerticalInDegrees + holeVerticalInDegrees;
   }
-  if(collected.length == 1) {
-    console.warn("one element! Is spread working as expected? See #68") // TODO - trigger and debug it
+  if (collected.length == 1) {
+    console.warn("one element! Is spread working as expected? See #68"); // TODO - trigger and debug it
   }
   // split in pairs due to https://github.com/mfogel/polygon-clipping/issues/118
   var generatedHorizontal = polygonClipping.union(...collected);
@@ -107,8 +107,8 @@ function intersectGeometryWithPlaneHavingRectangularHoles(feature, holeVerticalI
     }
     minLongitudeForStripe += spaceHorizontalInDegrees + holeHorizontalInDegrees;
   }
-  if(collected.length == 1) {
-    console.warn("one element! Is spread working as expected? See #68") // TODO - trigger and debug it
+  if (collected.length == 1) {
+    console.warn("one element! Is spread working as expected? See #68"); // TODO - trigger and debug it
   }
   var generatedVertical = polygonClipping.union(...collected);
   var generated = polygonClipping.union(generatedHorizontal, generatedVertical);
