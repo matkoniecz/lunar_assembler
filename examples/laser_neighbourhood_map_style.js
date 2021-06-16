@@ -368,39 +368,13 @@ function highZoomLaserMapStyle() {
         var i = crossingLines.length;
       while (i--) {
         var feature = crossingLines[i];
-          //console.log("====================")
-          //console.log(roadAreaWithCrossing)
-          //console.log(feature)
-          //console.error(turf.lineIntersect(roadAreaWithCrossing, feature));
-          var crossings = turf.lineIntersect(roadAreaWithCrossing, feature)
-          if(crossings.features.length != 2) {
-            showFatalError(link + " is unexpectedly crossing with road area not exactly two times but " + crossings.features.length + " times, which is unhandled" + reportBugMessageButGeodataMayBeWrong())
+          // startEndOfActualCrossing is necessary as sometimes footway=crossing is applied between sidewalks, including segment outside road area
+          // also, this allows to catch unsupported cases (one footway=crossing across independent crossings or split footway=crossing line)
+          // and invalid OpenStreetMap data (like footway=crossing shorter than actual crossing or footway=crossing outside crossings)
+          var startEndOfActualCrossing = turf.lineIntersect(roadAreaWithCrossing, feature)
+          if(startEndOfActualCrossing.features.length != 2) {
+            showFatalError(link + " is unexpectedly crossing with road area not exactly two times but " + startEndOfActualCrossing.features.length + " times, which is unhandled" + reportBugMessageButGeodataMayBeWrong())
           }
-          var crossingCenterlineGeometry = {'type': 'LineString', 'coordinates': [crossings.features[0].geometry.coordinates, crossings.features[1].geometry.coordinates]}
-          //console.log(crossingCenterlineGeometry)
-
-          var point1 = crossingCenterlineGeometry.coordinates[0]
-          var point2 = crossingCenterlineGeometry.coordinates[1]
-          var bearingOfCrossing = turf.bearing(point1, point2);
-          //console.log(bearing)
-    
-    
-          /*
-          var distance = 10;
-          var options = {units: 'meters'};
-
-          var offset1From = turf.destination(point1, distance, bearingOfCrossing+90, options);    
-          var offset1To = turf.destination(point2, distance, bearingOfCrossing+90, options);
-    
-          var offset2From = turf.destination(point1, distance, bearingOfCrossing-90, options);    
-          var offset2To = turf.destination(point2, distance, bearingOfCrossing-90, options);
-
-          var offsetLine1 = [offset1From.geometry.coordinates, offset1To.geometry.coordinates]
-          var offsetLine2 = [offset2From.geometry.coordinates, offset2To.geometry.coordinates]
-          console.log()
-          console.log("along")
-          console.log({'type': 'MultiLineString', 'coordinates': [crossingCenterlineGeometry.coordinates, offsetLine1, offsetLine2]})
-          */
 
           // always three strips, change later if needed
           // so
@@ -413,8 +387,10 @@ function highZoomLaserMapStyle() {
           // 4th empty space
           //
           // so we need to split distance in 7
+          var point1 = startEndOfActualCrossing.features[0].geometry.coordinates
+          var point2 = startEndOfActualCrossing.features[1].geometry.coordinates
+          var bearingOfCrossing = turf.bearing(point1, point2);
 
-          point1, point2
           //make strip
           var lonDiff = point2[0] - point1[0]
           var latDiff = point2[1] - point1[1]
@@ -438,7 +414,7 @@ function highZoomLaserMapStyle() {
           console.log()
           console.log("bar")
           var bar_of_zebra_crossing = {'type': 'LineString', 'coordinates':  [offset1From.geometry.coordinates, offset1To.geometry.coordinates, offset2To.geometry.coordinates, offset2From.geometry.coordinates, offset1From.geometry.coordinates]}
-          bar_of_zebra_crossing.coordinates = polygonClipping.intersection(bar_of_zebra_crossing.geometry.coordinates, roadAreaWithCrossing.geometry.coordinates);
+          bar_of_zebra_crossing.geometry.coordinates = polygonClipping.intersection(bar_of_zebra_crossing.geometry.coordinates, roadAreaWithCrossing.geometry.coordinates);
         }
   
   
