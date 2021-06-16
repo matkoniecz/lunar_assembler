@@ -429,7 +429,6 @@ function laserRoadAreaMapStyle() {
       // in created pattern it was 1mm for hole and 1.5 mm for space between giles
 
       // Returns BBox bbox extent in [minX, minY, maxX, maxY] order
-      var kilometers = { units: "kilometers" };
 
       bbox = turf.bbox(dataGeojson);
       var minLongitude = bbox[0];
@@ -439,13 +438,13 @@ function laserRoadAreaMapStyle() {
 
       var from_horizontal = turf.point([minLongitude, minLatitude]); // turf.point(longitude, latitude, properties)
       var to_horizontal = turf.point([maxLongitude, minLatitude]);
-      var distanceHorizontalInMeters = 1000 * turf.distance(from_horizontal, to_horizontal, kilometers);
+      var distanceHorizontalInMeters = turf.distance(from_horizontal, to_horizontal, { units: "meters" });
       var distanceHorizontalInDegrees = maxLongitude - minLongitude;
       var metersInDegreeHorizontal = distanceHorizontalInMeters / distanceHorizontalInDegrees;
 
       var from_vertical = turf.point([minLongitude, minLatitude]); // turf.point(longitude, latitude, properties)
       var to_vertical = turf.point([minLongitude, maxLatitude]);
-      var distanceVerticalInMeters = 1000 * turf.distance(from_vertical, to_vertical, kilometers);
+      var distanceVerticalInMeters = turf.distance(from_vertical, to_vertical, { units: "meters" });
       var distanceVerticalInDegrees = maxLatitude - minLatitude;
       var metersInDegreeVertical = distanceVerticalInMeters / distanceVerticalInDegrees;
 
