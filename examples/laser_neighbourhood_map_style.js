@@ -1345,8 +1345,11 @@ function highZoomLaserMapStyle() {
       const spaceVerticalInMeters = roadSpaceBetweenInMeters;
       const spaceHorizontalInMeters = roadSpaceBetweenInMeters;
 
-      const waterSpaceBetweenRowsInMeters = 0.9;
-      const waterRowSizeInMeters = 0.9;
+      // on produced map it seems that 3mm are minimu for pair of unburned line and burned line
+      // I tested versions with 60.4mm for 19 lines, with also higher density up to 19 lines for 17.5mm
+      // lowest density was considered as the best
+      const waterSpaceBetweenRowsInMeters = 1;
+      const waterRowSizeInMeters = 1;
 
       // generate pattern for road surface by intersecting it with a prepared pattern
       var i = dataGeojson.features.length;

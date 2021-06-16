@@ -454,6 +454,7 @@ function laserRoadAreaMapStyle() {
       const spaceVerticalInMeters = roadSpaceBetweenInMeters;
       const spaceHorizontalInMeters = roadSpaceBetweenInMeters;
 
+      // for density consideration see notes in applyPatternsToCarriagewaysAndWater in laser_neighbourhood_map_style file
       const waterSpaceBetweenRowsInMeters = 0.3;
       const waterRowSizeInMeters = 0.3;
 
