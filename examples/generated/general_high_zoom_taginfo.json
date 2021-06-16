@@ -1,598 +1,598 @@
 {
-   "data_format": 1,
-   "data_url": "https://raw.githubusercontent.com/matkoniecz/lunar_assembler/master/examples/generated/general_high_zoom_taginfo.json",
-   "project": {
-      "name": "area:highway included, general map style for SVG maps of zoomed in areas (city and smaller)",
-      "description": "Map to produce SVG maps of tiny and small areas - from single crossing to a city. Lunar Assembler map style.",
-      "project_url": "https://github.com/matkoniecz/lunar_assembler",
-      "doc_url": "https://mapsaregreat.com/osm_to_svg_in_browser/general_high_zoom",
-      "contact_name": "Mateusz Konieczny",
-      "contact_email": "matkoniecz@tutanota.com"
-   },
-   "tags": [
-      {
-         "key": "area:highway",
-         "value": "living_street",
-         "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
-      },
-      {
-         "key": "highway",
-         "value": "living_street",
-         "description": "linear representation of a motorized road"
-      },
-      {
-         "key": "area:highway",
-         "value": "escape",
-         "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
-      },
-      {
-         "key": "highway",
-         "value": "escape",
-         "description": "linear representation of a motorized road"
-      },
-      {
-         "key": "area:highway",
-         "value": "raceway",
-         "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
-      },
-      {
-         "key": "highway",
-         "value": "raceway",
-         "description": "linear representation of a motorized road"
-      },
-      {
-         "key": "area:highway",
-         "value": "busway",
-         "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
-      },
-      {
-         "key": "highway",
-         "value": "busway",
-         "description": "linear representation of a motorized road"
-      },
-      {
-         "key": "area:highway",
-         "value": "road",
-         "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
-      },
-      {
-         "key": "highway",
-         "value": "road",
-         "description": "linear representation of a motorized road"
-      },
-      {
-         "key": "area:highway",
-         "value": "track",
-         "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
-      },
-      {
-         "key": "highway",
-         "value": "track",
-         "description": "linear representation of a motorized road"
-      },
-      {
-         "key": "area:highway",
-         "value": "service",
-         "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
-      },
-      {
-         "key": "highway",
-         "value": "service",
-         "description": "linear representation of a motorized road"
-      },
-      {
-         "key": "area:highway",
-         "value": "residential",
-         "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
-      },
-      {
-         "key": "highway",
-         "value": "residential",
-         "description": "linear representation of a motorized road"
-      },
-      {
-         "key": "area:highway",
-         "value": "unclassified",
-         "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
-      },
-      {
-         "key": "highway",
-         "value": "unclassified",
-         "description": "linear representation of a motorized road"
-      },
-      {
-         "key": "area:highway",
-         "value": "tertiary_link",
-         "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
-      },
-      {
-         "key": "highway",
-         "value": "tertiary_link",
-         "description": "linear representation of a motorized road"
-      },
-      {
-         "key": "area:highway",
-         "value": "tertiary",
-         "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
-      },
-      {
-         "key": "highway",
-         "value": "tertiary",
-         "description": "linear representation of a motorized road"
-      },
-      {
-         "key": "area:highway",
-         "value": "secondary_link",
-         "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
-      },
-      {
-         "key": "highway",
-         "value": "secondary_link",
-         "description": "linear representation of a motorized road"
-      },
-      {
-         "key": "area:highway",
-         "value": "secondary",
-         "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
-      },
-      {
-         "key": "highway",
-         "value": "secondary",
-         "description": "linear representation of a motorized road"
-      },
-      {
-         "key": "area:highway",
-         "value": "primary_link",
-         "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
-      },
-      {
-         "key": "highway",
-         "value": "primary_link",
-         "description": "linear representation of a motorized road"
-      },
-      {
-         "key": "area:highway",
-         "value": "primary",
-         "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
-      },
-      {
-         "key": "highway",
-         "value": "primary",
-         "description": "linear representation of a motorized road"
-      },
-      {
-         "key": "area:highway",
-         "value": "trunk_link",
-         "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
-      },
-      {
-         "key": "highway",
-         "value": "trunk_link",
-         "description": "linear representation of a motorized road"
-      },
-      {
-         "key": "area:highway",
-         "value": "trunk",
-         "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
-      },
-      {
-         "key": "highway",
-         "value": "trunk",
-         "description": "linear representation of a motorized road"
-      },
-      {
-         "key": "area:highway",
-         "value": "motorway_link",
-         "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
-      },
-      {
-         "key": "highway",
-         "value": "motorway_link",
-         "description": "linear representation of a motorized road"
-      },
-      {
-         "key": "area:highway",
-         "value": "motorway",
-         "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
-      },
-      {
-         "key": "highway",
-         "value": "motorway",
-         "description": "linear representation of a motorized road"
-      },
-      {
-         "key": "railway",
-         "value": "monorail",
-         "description": "linear representation of a single railway track"
-      },
-      {
-         "key": "railway",
-         "value": "miniature",
-         "description": "linear representation of a single railway track"
-      },
-      {
-         "key": "railway",
-         "value": "construction",
-         "description": "linear representation of a single railway track"
-      },
-      {
-         "key": "railway",
-         "value": "preserved",
-         "description": "linear representation of a single railway track"
-      },
-      {
-         "key": "railway",
-         "value": "light_rail",
-         "description": "linear representation of a single railway track"
-      },
-      {
-         "key": "railway",
-         "value": "narrow_gauge",
-         "description": "linear representation of a single railway track"
-      },
-      {
-         "key": "railway",
-         "value": "subway",
-         "description": "linear representation of a single railway track"
-      },
-      {
-         "key": "railway",
-         "value": "tram",
-         "description": "linear representation of a single railway track"
-      },
-      {
-         "key": "railway",
-         "value": "disused",
-         "description": "linear representation of a single railway track"
-      },
-      {
-         "key": "railway",
-         "value": "rail",
-         "description": "linear representation of a single railway track"
-      },
-      {
-         "key": "area:highway",
-         "value": "pedestrian",
-         "description": "area of a pedestrian way (linear representation must be also present! Using only area representation is invalid!)"
-      },
-      {
-         "key": "highway",
-         "value": "pedestrian",
-         "description": "linear representation of a pedestrian way"
-      },
-      {
-         "key": "area:highway",
-         "value": "steps",
-         "description": "area of a pedestrian way (linear representation must be also present! Using only area representation is invalid!)"
-      },
-      {
-         "key": "highway",
-         "value": "steps",
-         "description": "linear representation of a pedestrian way"
-      },
-      {
-         "key": "area:highway",
-         "value": "path",
-         "description": "area of a pedestrian way (linear representation must be also present! Using only area representation is invalid!)"
-      },
-      {
-         "key": "highway",
-         "value": "path",
-         "description": "linear representation of a pedestrian way"
-      },
-      {
-         "key": "area:highway",
-         "value": "footway",
-         "description": "area of a pedestrian way (linear representation must be also present! Using only area representation is invalid!)"
-      },
-      {
-         "key": "highway",
-         "value": "footway",
-         "description": "linear representation of a pedestrian way"
-      },
-      {
-         "key": "barrier",
-         "value": "fence",
-         "description": "linear, generally impassable barrier"
-      },
-      {
-         "key": "barrier",
-         "value": "wall",
-         "description": "linear, generally impassable barrier"
-      },
-      {
-         "key": "barrier",
-         "value": "hedge",
-         "description": "linear, generally impassable barrier"
-      },
-      {
-         "key": "barrier",
-         "value": "retaining_wall",
-         "description": "linear, generally impassable barrier"
-      },
-      {
-         "key": "barrier",
-         "value": "hedge_bank",
-         "description": "linear, generally impassable barrier"
-      },
-      {
-         "key": "barrier",
-         "value": "wire_fence",
-         "description": "linear, generally impassable barrier"
-      },
-      {
-         "key": "barrier",
-         "value": "city_wall",
-         "description": "linear, generally impassable barrier"
-      },
-      {
-         "key": "barrier",
-         "value": "guard_rail",
-         "description": "linear, generally impassable barrier"
-      },
-      {
-         "key": "barrier",
-         "value": "haha",
-         "description": "linear, generally impassable barrier"
-      },
-      {
-         "key": "highway",
-         "value": "pedestrian",
-         "description": "pedestrian square (using it for sidewalk areas is invalid!)"
-      },
-      {
-         "key": "highway",
-         "value": "pedestrian",
-         "description": "pedestrian square (using it for sidewalk areas is invalid!)"
-      },
-      {
-         "key": "area:highway",
-         "value": "taxi_stop",
-         "description": "road area of a taxi stop (used in addition to amenity=taxi)"
-      },
-      {
-         "key": "area:highway",
-         "value": "bus_stop",
-         "description": "road area of a bus stop (used in addition to highway=bus_stop)"
-      },
-      {
-         "key": "highway",
-         "value": "cycleway",
-         "description": "linear representation of a cycleway"
-      },
-      {
-         "key": "area:highway",
-         "value": "cycleway",
-         "description": "area of a cycleway (linear representation must be also present! Using only area representation is invalid!)"
-      },
-      {
-         "key": "area:highway",
-         "value": "crossing",
-         "description": "pedestrian crossing through a road (area used in addition to area representing road)"
-      },
-      {
-         "key": "area:highway",
-         "value": "bicycle_crossing",
-         "description": "bicycle crossing through a road (area used in addition to area representing road)"
-      },
-      {
-         "key": "waterway",
-         "value": "riverbank",
-         "description": "water"
-      },
-      {
-         "key": "natural",
-         "value": "water",
-         "description": "water"
-      },
-      {
-         "key": "waterway",
-         "value": "river",
-         "description": "linear representation of a river"
-      },
-      {
-         "key": "waterway",
-         "value": "canal",
-         "description": "linear representation of a canal, assumed to be large"
-      },
-      {
-         "key": "waterway",
-         "value": "stream",
-         "description": "linear representation of a stream"
-      },
-      {
-         "key": "waterway",
-         "value": "stream",
-         "description": "linear representation of a ditch/drain"
-      },
-      {
-         "key": "waterway",
-         "value": "ditch",
-         "description": "linear representation of a ditch/drain"
-      },
-      {
-         "key": "building",
-         "description": "buildings"
-      },
-      {
-         "key": "landuse",
-         "value": "forest",
-         "description": "tree-covered land"
-      },
-      {
-         "key": "natural",
-         "value": "wood",
-         "description": "tree-covered land"
-      },
-      {
-         "key": "aeroway",
-         "value": "aerodrome",
-         "description": "part of general military-industrial land"
-      },
-      {
-         "key": "landuse",
-         "value": "military",
-         "description": "part of general military-industrial land"
-      },
-      {
-         "key": "landuse",
-         "value": "construction",
-         "description": "part of general military-industrial land"
-      },
-      {
-         "key": "landuse",
-         "value": "quarry",
-         "description": "part of general military-industrial land"
-      },
-      {
-         "key": "landuse",
-         "value": "railway",
-         "description": "part of general military-industrial land"
-      },
-      {
-         "key": "landuse",
-         "value": "industrial",
-         "description": "part of general military-industrial land"
-      },
-      {
-         "key": "amenity",
-         "value": "university",
-         "description": "part of general builtup land"
-      },
-      {
-         "key": "amenity",
-         "value": "kidergarten",
-         "description": "part of general builtup land"
-      },
-      {
-         "key": "amenity",
-         "value": "school",
-         "description": "part of general builtup land"
-      },
-      {
-         "key": "landuse",
-         "value": "education",
-         "description": "part of general builtup land"
-      },
-      {
-         "key": "landuse",
-         "value": "farmyard",
-         "description": "part of general builtup land"
-      },
-      {
-         "key": "landuse",
-         "value": "garages",
-         "description": "part of general builtup land"
-      },
-      {
-         "key": "landuse",
-         "value": "commercial",
-         "description": "part of general builtup land"
-      },
-      {
-         "key": "landuse",
-         "value": "retail",
-         "description": "part of general builtup land"
-      },
-      {
-         "key": "landuse",
-         "value": "highway",
-         "description": "part of general builtup land"
-      },
-      {
-         "key": "landuse",
-         "value": "residential",
-         "description": "part of general builtup land"
-      },
-      {
-         "key": "landuse",
-         "value": "orchard",
-         "description": "plants on an agriculture land"
-      },
-      {
-         "key": "landuse",
-         "value": "vineyard",
-         "description": "plants on an agriculture land"
-      },
-      {
-         "key": "landuse",
-         "value": "farmland",
-         "description": "plants on an agriculture land"
-      },
-      {
-         "key": "landuse",
-         "value": "village_green",
-         "description": "recreation land"
-      },
-      {
-         "key": "leisure",
-         "value": "playground",
-         "description": "recreation land"
-      },
-      {
-         "key": "leisure",
-         "value": "pitch",
-         "description": "recreation land"
-      },
-      {
-         "key": "leisure",
-         "value": "park",
-         "description": "recreation land"
-      },
-      {
-         "key": "leisure",
-         "value": "garden",
-         "description": "vegetation that is not agriculture or forest"
-      },
-      {
-         "key": "natural",
-         "value": "heath",
-         "description": "vegetation that is not agriculture or forest"
-      },
-      {
-         "key": "natural",
-         "value": "scrub",
-         "description": "vegetation that is not agriculture or forest"
-      },
-      {
-         "key": "natural",
-         "value": "grassland",
-         "description": "vegetation that is not agriculture or forest"
-      },
-      {
-         "key": "landuse",
-         "value": "meadow",
-         "description": "vegetation that is not agriculture or forest"
-      },
-      {
-         "key": "landuse",
-         "value": "allotments",
-         "description": "vegetation that is not agriculture or forest"
-      },
-      {
-         "key": "landuse",
-         "value": "grass",
-         "description": "vegetation that is not agriculture or forest"
-      },
-      {
-         "key": "man_made",
-         "value": "bridge",
-         "description": "bridge outline"
-      },
-      {
-         "key": "natural",
-         "value": "bare_rock",
-         "description": "bare rock"
-      },
-      {
-         "key": "aeroway",
-         "value": "runway",
-         "description": "runway"
-      },
-      {
-         "key": "aeroway",
-         "value": "taxiway",
-         "description": "taxiway"
-      }
-   ]
+  "data_format": 1,
+  "data_url": "https://raw.githubusercontent.com/matkoniecz/lunar_assembler/master/examples/generated/general_high_zoom_taginfo.json",
+  "project": {
+    "name": "area:highway included, general map style for SVG maps of zoomed in areas (city and smaller)",
+    "description": "Map to produce SVG maps of tiny and small areas - from single crossing to a city. Lunar Assembler map style.",
+    "project_url": "https://github.com/matkoniecz/lunar_assembler",
+    "doc_url": "https://mapsaregreat.com/osm_to_svg_in_browser/general_high_zoom",
+    "contact_name": "Mateusz Konieczny",
+    "contact_email": "matkoniecz@tutanota.com"
+  },
+  "tags": [
+    {
+      "key": "area:highway",
+      "value": "living_street",
+      "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
+    },
+    {
+      "key": "highway",
+      "value": "living_street",
+      "description": "linear representation of a motorized road"
+    },
+    {
+      "key": "area:highway",
+      "value": "escape",
+      "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
+    },
+    {
+      "key": "highway",
+      "value": "escape",
+      "description": "linear representation of a motorized road"
+    },
+    {
+      "key": "area:highway",
+      "value": "raceway",
+      "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
+    },
+    {
+      "key": "highway",
+      "value": "raceway",
+      "description": "linear representation of a motorized road"
+    },
+    {
+      "key": "area:highway",
+      "value": "busway",
+      "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
+    },
+    {
+      "key": "highway",
+      "value": "busway",
+      "description": "linear representation of a motorized road"
+    },
+    {
+      "key": "area:highway",
+      "value": "road",
+      "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
+    },
+    {
+      "key": "highway",
+      "value": "road",
+      "description": "linear representation of a motorized road"
+    },
+    {
+      "key": "area:highway",
+      "value": "track",
+      "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
+    },
+    {
+      "key": "highway",
+      "value": "track",
+      "description": "linear representation of a motorized road"
+    },
+    {
+      "key": "area:highway",
+      "value": "service",
+      "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
+    },
+    {
+      "key": "highway",
+      "value": "service",
+      "description": "linear representation of a motorized road"
+    },
+    {
+      "key": "area:highway",
+      "value": "residential",
+      "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
+    },
+    {
+      "key": "highway",
+      "value": "residential",
+      "description": "linear representation of a motorized road"
+    },
+    {
+      "key": "area:highway",
+      "value": "unclassified",
+      "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
+    },
+    {
+      "key": "highway",
+      "value": "unclassified",
+      "description": "linear representation of a motorized road"
+    },
+    {
+      "key": "area:highway",
+      "value": "tertiary_link",
+      "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
+    },
+    {
+      "key": "highway",
+      "value": "tertiary_link",
+      "description": "linear representation of a motorized road"
+    },
+    {
+      "key": "area:highway",
+      "value": "tertiary",
+      "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
+    },
+    {
+      "key": "highway",
+      "value": "tertiary",
+      "description": "linear representation of a motorized road"
+    },
+    {
+      "key": "area:highway",
+      "value": "secondary_link",
+      "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
+    },
+    {
+      "key": "highway",
+      "value": "secondary_link",
+      "description": "linear representation of a motorized road"
+    },
+    {
+      "key": "area:highway",
+      "value": "secondary",
+      "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
+    },
+    {
+      "key": "highway",
+      "value": "secondary",
+      "description": "linear representation of a motorized road"
+    },
+    {
+      "key": "area:highway",
+      "value": "primary_link",
+      "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
+    },
+    {
+      "key": "highway",
+      "value": "primary_link",
+      "description": "linear representation of a motorized road"
+    },
+    {
+      "key": "area:highway",
+      "value": "primary",
+      "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
+    },
+    {
+      "key": "highway",
+      "value": "primary",
+      "description": "linear representation of a motorized road"
+    },
+    {
+      "key": "area:highway",
+      "value": "trunk_link",
+      "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
+    },
+    {
+      "key": "highway",
+      "value": "trunk_link",
+      "description": "linear representation of a motorized road"
+    },
+    {
+      "key": "area:highway",
+      "value": "trunk",
+      "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
+    },
+    {
+      "key": "highway",
+      "value": "trunk",
+      "description": "linear representation of a motorized road"
+    },
+    {
+      "key": "area:highway",
+      "value": "motorway_link",
+      "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
+    },
+    {
+      "key": "highway",
+      "value": "motorway_link",
+      "description": "linear representation of a motorized road"
+    },
+    {
+      "key": "area:highway",
+      "value": "motorway",
+      "description": "area of a motorized road (linear representation must be also present! Using only area representation is invalid!)"
+    },
+    {
+      "key": "highway",
+      "value": "motorway",
+      "description": "linear representation of a motorized road"
+    },
+    {
+      "key": "railway",
+      "value": "monorail",
+      "description": "linear representation of a single railway track"
+    },
+    {
+      "key": "railway",
+      "value": "miniature",
+      "description": "linear representation of a single railway track"
+    },
+    {
+      "key": "railway",
+      "value": "construction",
+      "description": "linear representation of a single railway track"
+    },
+    {
+      "key": "railway",
+      "value": "preserved",
+      "description": "linear representation of a single railway track"
+    },
+    {
+      "key": "railway",
+      "value": "light_rail",
+      "description": "linear representation of a single railway track"
+    },
+    {
+      "key": "railway",
+      "value": "narrow_gauge",
+      "description": "linear representation of a single railway track"
+    },
+    {
+      "key": "railway",
+      "value": "subway",
+      "description": "linear representation of a single railway track"
+    },
+    {
+      "key": "railway",
+      "value": "tram",
+      "description": "linear representation of a single railway track"
+    },
+    {
+      "key": "railway",
+      "value": "disused",
+      "description": "linear representation of a single railway track"
+    },
+    {
+      "key": "railway",
+      "value": "rail",
+      "description": "linear representation of a single railway track"
+    },
+    {
+      "key": "area:highway",
+      "value": "pedestrian",
+      "description": "area of a pedestrian way (linear representation must be also present! Using only area representation is invalid!)"
+    },
+    {
+      "key": "highway",
+      "value": "pedestrian",
+      "description": "linear representation of a pedestrian way"
+    },
+    {
+      "key": "area:highway",
+      "value": "steps",
+      "description": "area of a pedestrian way (linear representation must be also present! Using only area representation is invalid!)"
+    },
+    {
+      "key": "highway",
+      "value": "steps",
+      "description": "linear representation of a pedestrian way"
+    },
+    {
+      "key": "area:highway",
+      "value": "path",
+      "description": "area of a pedestrian way (linear representation must be also present! Using only area representation is invalid!)"
+    },
+    {
+      "key": "highway",
+      "value": "path",
+      "description": "linear representation of a pedestrian way"
+    },
+    {
+      "key": "area:highway",
+      "value": "footway",
+      "description": "area of a pedestrian way (linear representation must be also present! Using only area representation is invalid!)"
+    },
+    {
+      "key": "highway",
+      "value": "footway",
+      "description": "linear representation of a pedestrian way"
+    },
+    {
+      "key": "barrier",
+      "value": "fence",
+      "description": "linear, generally impassable barrier"
+    },
+    {
+      "key": "barrier",
+      "value": "wall",
+      "description": "linear, generally impassable barrier"
+    },
+    {
+      "key": "barrier",
+      "value": "hedge",
+      "description": "linear, generally impassable barrier"
+    },
+    {
+      "key": "barrier",
+      "value": "retaining_wall",
+      "description": "linear, generally impassable barrier"
+    },
+    {
+      "key": "barrier",
+      "value": "hedge_bank",
+      "description": "linear, generally impassable barrier"
+    },
+    {
+      "key": "barrier",
+      "value": "wire_fence",
+      "description": "linear, generally impassable barrier"
+    },
+    {
+      "key": "barrier",
+      "value": "city_wall",
+      "description": "linear, generally impassable barrier"
+    },
+    {
+      "key": "barrier",
+      "value": "guard_rail",
+      "description": "linear, generally impassable barrier"
+    },
+    {
+      "key": "barrier",
+      "value": "haha",
+      "description": "linear, generally impassable barrier"
+    },
+    {
+      "key": "highway",
+      "value": "pedestrian",
+      "description": "pedestrian square (using it for sidewalk areas is invalid!)"
+    },
+    {
+      "key": "highway",
+      "value": "pedestrian",
+      "description": "pedestrian square (using it for sidewalk areas is invalid!)"
+    },
+    {
+      "key": "area:highway",
+      "value": "taxi_stop",
+      "description": "road area of a taxi stop (used in addition to amenity=taxi)"
+    },
+    {
+      "key": "area:highway",
+      "value": "bus_stop",
+      "description": "road area of a bus stop (used in addition to highway=bus_stop)"
+    },
+    {
+      "key": "highway",
+      "value": "cycleway",
+      "description": "linear representation of a cycleway"
+    },
+    {
+      "key": "area:highway",
+      "value": "cycleway",
+      "description": "area of a cycleway (linear representation must be also present! Using only area representation is invalid!)"
+    },
+    {
+      "key": "area:highway",
+      "value": "crossing",
+      "description": "pedestrian crossing through a road (area used in addition to area representing road)"
+    },
+    {
+      "key": "area:highway",
+      "value": "bicycle_crossing",
+      "description": "bicycle crossing through a road (area used in addition to area representing road)"
+    },
+    {
+      "key": "waterway",
+      "value": "riverbank",
+      "description": "water"
+    },
+    {
+      "key": "natural",
+      "value": "water",
+      "description": "water"
+    },
+    {
+      "key": "waterway",
+      "value": "river",
+      "description": "linear representation of a river"
+    },
+    {
+      "key": "waterway",
+      "value": "canal",
+      "description": "linear representation of a canal, assumed to be large"
+    },
+    {
+      "key": "waterway",
+      "value": "stream",
+      "description": "linear representation of a stream"
+    },
+    {
+      "key": "waterway",
+      "value": "stream",
+      "description": "linear representation of a ditch/drain"
+    },
+    {
+      "key": "waterway",
+      "value": "ditch",
+      "description": "linear representation of a ditch/drain"
+    },
+    {
+      "key": "building",
+      "description": "buildings"
+    },
+    {
+      "key": "landuse",
+      "value": "forest",
+      "description": "tree-covered land"
+    },
+    {
+      "key": "natural",
+      "value": "wood",
+      "description": "tree-covered land"
+    },
+    {
+      "key": "aeroway",
+      "value": "aerodrome",
+      "description": "part of general military-industrial land"
+    },
+    {
+      "key": "landuse",
+      "value": "military",
+      "description": "part of general military-industrial land"
+    },
+    {
+      "key": "landuse",
+      "value": "construction",
+      "description": "part of general military-industrial land"
+    },
+    {
+      "key": "landuse",
+      "value": "quarry",
+      "description": "part of general military-industrial land"
+    },
+    {
+      "key": "landuse",
+      "value": "railway",
+      "description": "part of general military-industrial land"
+    },
+    {
+      "key": "landuse",
+      "value": "industrial",
+      "description": "part of general military-industrial land"
+    },
+    {
+      "key": "amenity",
+      "value": "university",
+      "description": "part of general builtup land"
+    },
+    {
+      "key": "amenity",
+      "value": "kidergarten",
+      "description": "part of general builtup land"
+    },
+    {
+      "key": "amenity",
+      "value": "school",
+      "description": "part of general builtup land"
+    },
+    {
+      "key": "landuse",
+      "value": "education",
+      "description": "part of general builtup land"
+    },
+    {
+      "key": "landuse",
+      "value": "farmyard",
+      "description": "part of general builtup land"
+    },
+    {
+      "key": "landuse",
+      "value": "garages",
+      "description": "part of general builtup land"
+    },
+    {
+      "key": "landuse",
+      "value": "commercial",
+      "description": "part of general builtup land"
+    },
+    {
+      "key": "landuse",
+      "value": "retail",
+      "description": "part of general builtup land"
+    },
+    {
+      "key": "landuse",
+      "value": "highway",
+      "description": "part of general builtup land"
+    },
+    {
+      "key": "landuse",
+      "value": "residential",
+      "description": "part of general builtup land"
+    },
+    {
+      "key": "landuse",
+      "value": "orchard",
+      "description": "plants on an agriculture land"
+    },
+    {
+      "key": "landuse",
+      "value": "vineyard",
+      "description": "plants on an agriculture land"
+    },
+    {
+      "key": "landuse",
+      "value": "farmland",
+      "description": "plants on an agriculture land"
+    },
+    {
+      "key": "landuse",
+      "value": "village_green",
+      "description": "recreation land"
+    },
+    {
+      "key": "leisure",
+      "value": "playground",
+      "description": "recreation land"
+    },
+    {
+      "key": "leisure",
+      "value": "pitch",
+      "description": "recreation land"
+    },
+    {
+      "key": "leisure",
+      "value": "park",
+      "description": "recreation land"
+    },
+    {
+      "key": "leisure",
+      "value": "garden",
+      "description": "vegetation that is not agriculture or forest"
+    },
+    {
+      "key": "natural",
+      "value": "heath",
+      "description": "vegetation that is not agriculture or forest"
+    },
+    {
+      "key": "natural",
+      "value": "scrub",
+      "description": "vegetation that is not agriculture or forest"
+    },
+    {
+      "key": "natural",
+      "value": "grassland",
+      "description": "vegetation that is not agriculture or forest"
+    },
+    {
+      "key": "landuse",
+      "value": "meadow",
+      "description": "vegetation that is not agriculture or forest"
+    },
+    {
+      "key": "landuse",
+      "value": "allotments",
+      "description": "vegetation that is not agriculture or forest"
+    },
+    {
+      "key": "landuse",
+      "value": "grass",
+      "description": "vegetation that is not agriculture or forest"
+    },
+    {
+      "key": "man_made",
+      "value": "bridge",
+      "description": "bridge outline"
+    },
+    {
+      "key": "natural",
+      "value": "bare_rock",
+      "description": "bare rock"
+    },
+    {
+      "key": "aeroway",
+      "value": "runway",
+      "description": "runway"
+    },
+    {
+      "key": "aeroway",
+      "value": "taxiway",
+      "description": "taxiway"
+    }
+  ]
 }

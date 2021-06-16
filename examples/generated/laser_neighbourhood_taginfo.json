@@ -1,757 +1,757 @@
 {
-   "data_format": 1,
-   "data_url": "https://raw.githubusercontent.com/matkoniecz/lunar_assembler/master/examples/generated/laser_neighbourhood_taginfo.json",
-   "project": {
-      "name": "laser SVG map of a neighbourhood",
-      "description": "Map to produce tactile maps for blind. Generated maps are for use in a laser cutter. Lunar Assembler map style.",
-      "project_url": "https://github.com/matkoniecz/lunar_assembler",
-      "doc_url": "https://mapsaregreat.com/osm_to_svg_in_browser/laser_neighbourhood.html",
-      "contact_name": "Mateusz Konieczny",
-      "contact_email": "matkoniecz@tutanota.com"
-   },
-   "tags": [
-      {
-         "key": "building",
-         "description": "buildings"
-      },
-      {
-         "key": "waterway",
-         "value": "riverbank",
-         "description": "water - pattern, part expected to be engraved"
-      },
-      {
-         "key": "natural",
-         "value": "water",
-         "description": "water - pattern, part expected to be engraved"
-      },
-      {
-         "key": "waterway",
-         "value": "riverbank",
-         "description": "water - entire area, expected to be cut at outline to separate element for easier painting (or used solely for orientation)"
-      },
-      {
-         "key": "natural",
-         "value": "water",
-         "description": "water - entire area, expected to be cut at outline to separate element for easier painting (or used solely for orientation)"
-      },
-      {
-         "key": "barrier",
-         "value": "haha",
-         "description": "generally impassable barrier, for detecting where access is blocked"
-      },
-      {
-         "key": "barrier",
-         "value": "guard_rail",
-         "description": "generally impassable barrier, for detecting where access is blocked"
-      },
-      {
-         "key": "barrier",
-         "value": "city_wall",
-         "description": "generally impassable barrier, for detecting where access is blocked"
-      },
-      {
-         "key": "barrier",
-         "value": "wire_fence",
-         "description": "generally impassable barrier, for detecting where access is blocked"
-      },
-      {
-         "key": "barrier",
-         "value": "hedge_bank",
-         "description": "generally impassable barrier, for detecting where access is blocked"
-      },
-      {
-         "key": "barrier",
-         "value": "retaining_wall",
-         "description": "generally impassable barrier, for detecting where access is blocked"
-      },
-      {
-         "key": "barrier",
-         "value": "hedge",
-         "description": "generally impassable barrier, for detecting where access is blocked"
-      },
-      {
-         "key": "barrier",
-         "value": "wall",
-         "description": "generally impassable barrier, for detecting where access is blocked"
-      },
-      {
-         "key": "barrier",
-         "value": "fence",
-         "description": "generally impassable barrier, for detecting where access is blocked"
-      },
-      {
-         "key": "barrier",
-         "value": "yes",
-         "description": "unknown barrier, assumed to be generally impassable barrier, for detecting where access is blocked"
-      },
-      {
-         "key": "barrier",
-         "value": "haha",
-         "description": "generally impassable barrier, for detecting where access is blocked"
-      },
-      {
-         "key": "barrier",
-         "value": "guard_rail",
-         "description": "generally impassable barrier, for detecting where access is blocked"
-      },
-      {
-         "key": "barrier",
-         "value": "city_wall",
-         "description": "generally impassable barrier, for detecting where access is blocked"
-      },
-      {
-         "key": "barrier",
-         "value": "wire_fence",
-         "description": "generally impassable barrier, for detecting where access is blocked"
-      },
-      {
-         "key": "barrier",
-         "value": "hedge_bank",
-         "description": "generally impassable barrier, for detecting where access is blocked"
-      },
-      {
-         "key": "barrier",
-         "value": "retaining_wall",
-         "description": "generally impassable barrier, for detecting where access is blocked"
-      },
-      {
-         "key": "barrier",
-         "value": "hedge",
-         "description": "generally impassable barrier, for detecting where access is blocked"
-      },
-      {
-         "key": "barrier",
-         "value": "wall",
-         "description": "generally impassable barrier, for detecting where access is blocked"
-      },
-      {
-         "key": "barrier",
-         "value": "fence",
-         "description": "generally impassable barrier, for detecting where access is blocked"
-      },
-      {
-         "key": "barrier",
-         "value": "yes",
-         "description": "unknown barrier, assumed to be generally impassable barrier, for detecting where access is blocked"
-      },
-      {
-         "key": "building",
-         "description": "generally impassable barrier, for detecting where access is blocked"
-      },
-      {
-         "key": "natural",
-         "value": "water",
-         "description": "generally impassable barrier, for detecting where access is blocked"
-      },
-      {
-         "key": "waterway",
-         "value": "riverbank",
-         "description": "generally impassable barrier, for detecting where access is blocked"
-      },
-      {
-         "key": "footway",
-         "value": "crossing",
-         "description": "detecting crossings"
-      },
-      {
-         "key": "footway",
-         "value": "crossing",
-         "description": "detecting crossings"
-      },
-      {
-         "key": "area:highway",
-         "value": "pedestrian",
-         "description": "area of a pedestrian way (linear representation must be also present! Using only area representation is invalid!)"
-      },
-      {
-         "key": "area:highway",
-         "value": "steps",
-         "description": "area of a pedestrian way (linear representation must be also present! Using only area representation is invalid!)"
-      },
-      {
-         "key": "area:highway",
-         "value": "path",
-         "description": "area of a pedestrian way (linear representation must be also present! Using only area representation is invalid!)"
-      },
-      {
-         "key": "area:highway",
-         "value": "footway",
-         "description": "area of a pedestrian way (linear representation must be also present! Using only area representation is invalid!)"
-      },
-      {
-         "key": "highway",
-         "value": "pedestrian",
-         "description": "pedestrian square (using it for sidewalk areas is invalid!)"
-      },
-      {
-         "key": "highway",
-         "value": "pedestrian",
-         "description": "pedestrian square (using it for sidewalk areas is invalid!)"
-      },
-      {
-         "key": "area:highway",
-         "value": "steps",
-         "description": "area representation of steps (used in addition to linear highway=steps)"
-      },
-      {
-         "key": "area:highway",
-         "value": "steps",
-         "description": "area of steps, for an automatic generation of a symbolic representation"
-      },
-      {
-         "key": "highway",
-         "value": "steps",
-         "description": "detecting upper/lower side of steps, for an automatic generation of a symbolic representation"
-      },
-      {
-         "key": "incline",
-         "value": "up",
-         "description": "detecting upper/lower side of steps, for an automatic generation of a symbolic representation"
-      },
-      {
-         "key": "incline",
-         "value": "down",
-         "description": "detecting upper/lower side of steps, for an automatic generation of a symbolic representation"
-      },
-      {
-         "key": "area:highway",
-         "value": "steps",
-         "description": "area of steps, for an automatic generation of a symbolic representation"
-      },
-      {
-         "key": "highway",
-         "value": "steps",
-         "description": "detecting upper/lower side of steps, for an automatic generation of a symbolic representation"
-      },
-      {
-         "key": "incline",
-         "value": "up",
-         "description": "detecting upper/lower side of steps, for an automatic generation of a symbolic representation"
-      },
-      {
-         "key": "incline",
-         "value": "down",
-         "description": "detecting upper/lower side of steps, for an automatic generation of a symbolic representation"
-      },
-      {
-         "key": "area:highway",
-         "value": "steps",
-         "description": "area of steps, for an automatic generation of a symbolic representation"
-      },
-      {
-         "key": "highway",
-         "value": "steps",
-         "description": "detecting upper/lower side of steps, for an automatic generation of a symbolic representation"
-      },
-      {
-         "key": "incline",
-         "value": "up",
-         "description": "detecting upper/lower side of steps, for an automatic generation of a symbolic representation"
-      },
-      {
-         "key": "incline",
-         "value": "down",
-         "description": "detecting upper/lower side of steps, for an automatic generation of a symbolic representation"
-      },
-      {
-         "key": "area:highway",
-         "value": "steps",
-         "description": "area of steps, for an automatic generation of a symbolic representation"
-      },
-      {
-         "key": "highway",
-         "value": "steps",
-         "description": "detecting upper/lower side of steps, for an automatic generation of a symbolic representation"
-      },
-      {
-         "key": "incline",
-         "value": "up",
-         "description": "detecting upper/lower side of steps, for an automatic generation of a symbolic representation"
-      },
-      {
-         "key": "incline",
-         "value": "down",
-         "description": "detecting upper/lower side of steps, for an automatic generation of a symbolic representation"
-      },
-      {
-         "key": "highway",
-         "value": "living_street",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "living_street",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "escape",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "escape",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "raceway",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "raceway",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "busway",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "busway",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "road",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "road",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "track",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "track",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "service",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "service",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "residential",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "residential",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "unclassified",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "unclassified",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "tertiary_link",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "tertiary_link",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "tertiary",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "tertiary",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "secondary_link",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "secondary_link",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "secondary",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "secondary",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "primary_link",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "primary_link",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "primary",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "primary",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "trunk_link",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "trunk_link",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "trunk",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "trunk",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "motorway_link",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "motorway_link",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "motorway",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "motorway",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "cycleway",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "cycleway",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "area:highway",
-         "value": "taxi_stop",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "area:highway",
-         "value": "bus_stop",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "amenity",
-         "value": "parking_space",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "living_street",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "living_street",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "escape",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "escape",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "raceway",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "raceway",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "busway",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "busway",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "road",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "road",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "track",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "track",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "service",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "service",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "residential",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "residential",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "unclassified",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "unclassified",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "tertiary_link",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "tertiary_link",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "tertiary",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "tertiary",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "secondary_link",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "secondary_link",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "secondary",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "secondary",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "primary_link",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "primary_link",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "primary",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "primary",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "trunk_link",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "trunk_link",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "trunk",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "trunk",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "motorway_link",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "motorway_link",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "motorway",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "motorway",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "highway",
-         "value": "cycleway",
-         "description": "road centerline used for generating road areas"
-      },
-      {
-         "key": "area:highway",
-         "value": "cycleway",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "area:highway",
-         "value": "taxi_stop",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "area:highway",
-         "value": "bus_stop",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "amenity",
-         "value": "parking_space",
-         "description": "merged with areas generated from centerlines"
-      },
-      {
-         "key": "railway",
-         "value": "monorail",
-         "description": "linear representation of a single railway track"
-      },
-      {
-         "key": "railway",
-         "value": "miniature",
-         "description": "linear representation of a single railway track"
-      },
-      {
-         "key": "railway",
-         "value": "construction",
-         "description": "linear representation of a single railway track"
-      },
-      {
-         "key": "railway",
-         "value": "preserved",
-         "description": "linear representation of a single railway track"
-      },
-      {
-         "key": "railway",
-         "value": "light_rail",
-         "description": "linear representation of a single railway track"
-      },
-      {
-         "key": "railway",
-         "value": "narrow_gauge",
-         "description": "linear representation of a single railway track"
-      },
-      {
-         "key": "railway",
-         "value": "subway",
-         "description": "linear representation of a single railway track"
-      },
-      {
-         "key": "railway",
-         "value": "tram",
-         "description": "linear representation of a single railway track"
-      },
-      {
-         "key": "railway",
-         "value": "disused",
-         "description": "linear representation of a single railway track"
-      },
-      {
-         "key": "railway",
-         "value": "rail",
-         "description": "linear representation of a single railway track"
-      }
-   ]
+  "data_format": 1,
+  "data_url": "https://raw.githubusercontent.com/matkoniecz/lunar_assembler/master/examples/generated/laser_neighbourhood_taginfo.json",
+  "project": {
+    "name": "laser SVG map of a neighbourhood",
+    "description": "Map to produce tactile maps for blind. Generated maps are for use in a laser cutter. Lunar Assembler map style.",
+    "project_url": "https://github.com/matkoniecz/lunar_assembler",
+    "doc_url": "https://mapsaregreat.com/osm_to_svg_in_browser/laser_neighbourhood.html",
+    "contact_name": "Mateusz Konieczny",
+    "contact_email": "matkoniecz@tutanota.com"
+  },
+  "tags": [
+    {
+      "key": "building",
+      "description": "buildings"
+    },
+    {
+      "key": "waterway",
+      "value": "riverbank",
+      "description": "water - pattern, part expected to be engraved"
+    },
+    {
+      "key": "natural",
+      "value": "water",
+      "description": "water - pattern, part expected to be engraved"
+    },
+    {
+      "key": "waterway",
+      "value": "riverbank",
+      "description": "water - entire area, expected to be cut at outline to separate element for easier painting (or used solely for orientation)"
+    },
+    {
+      "key": "natural",
+      "value": "water",
+      "description": "water - entire area, expected to be cut at outline to separate element for easier painting (or used solely for orientation)"
+    },
+    {
+      "key": "barrier",
+      "value": "haha",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "guard_rail",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "city_wall",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "wire_fence",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "hedge_bank",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "retaining_wall",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "hedge",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "wall",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "fence",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "yes",
+      "description": "unknown barrier, assumed to be generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "haha",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "guard_rail",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "city_wall",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "wire_fence",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "hedge_bank",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "retaining_wall",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "hedge",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "wall",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "fence",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "yes",
+      "description": "unknown barrier, assumed to be generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "building",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "natural",
+      "value": "water",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "waterway",
+      "value": "riverbank",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "footway",
+      "value": "crossing",
+      "description": "detecting crossings"
+    },
+    {
+      "key": "footway",
+      "value": "crossing",
+      "description": "detecting crossings"
+    },
+    {
+      "key": "area:highway",
+      "value": "pedestrian",
+      "description": "area of a pedestrian way (linear representation must be also present! Using only area representation is invalid!)"
+    },
+    {
+      "key": "area:highway",
+      "value": "steps",
+      "description": "area of a pedestrian way (linear representation must be also present! Using only area representation is invalid!)"
+    },
+    {
+      "key": "area:highway",
+      "value": "path",
+      "description": "area of a pedestrian way (linear representation must be also present! Using only area representation is invalid!)"
+    },
+    {
+      "key": "area:highway",
+      "value": "footway",
+      "description": "area of a pedestrian way (linear representation must be also present! Using only area representation is invalid!)"
+    },
+    {
+      "key": "highway",
+      "value": "pedestrian",
+      "description": "pedestrian square (using it for sidewalk areas is invalid!)"
+    },
+    {
+      "key": "highway",
+      "value": "pedestrian",
+      "description": "pedestrian square (using it for sidewalk areas is invalid!)"
+    },
+    {
+      "key": "area:highway",
+      "value": "steps",
+      "description": "area representation of steps (used in addition to linear highway=steps)"
+    },
+    {
+      "key": "area:highway",
+      "value": "steps",
+      "description": "area of steps, for an automatic generation of a symbolic representation"
+    },
+    {
+      "key": "highway",
+      "value": "steps",
+      "description": "detecting upper/lower side of steps, for an automatic generation of a symbolic representation"
+    },
+    {
+      "key": "incline",
+      "value": "up",
+      "description": "detecting upper/lower side of steps, for an automatic generation of a symbolic representation"
+    },
+    {
+      "key": "incline",
+      "value": "down",
+      "description": "detecting upper/lower side of steps, for an automatic generation of a symbolic representation"
+    },
+    {
+      "key": "area:highway",
+      "value": "steps",
+      "description": "area of steps, for an automatic generation of a symbolic representation"
+    },
+    {
+      "key": "highway",
+      "value": "steps",
+      "description": "detecting upper/lower side of steps, for an automatic generation of a symbolic representation"
+    },
+    {
+      "key": "incline",
+      "value": "up",
+      "description": "detecting upper/lower side of steps, for an automatic generation of a symbolic representation"
+    },
+    {
+      "key": "incline",
+      "value": "down",
+      "description": "detecting upper/lower side of steps, for an automatic generation of a symbolic representation"
+    },
+    {
+      "key": "area:highway",
+      "value": "steps",
+      "description": "area of steps, for an automatic generation of a symbolic representation"
+    },
+    {
+      "key": "highway",
+      "value": "steps",
+      "description": "detecting upper/lower side of steps, for an automatic generation of a symbolic representation"
+    },
+    {
+      "key": "incline",
+      "value": "up",
+      "description": "detecting upper/lower side of steps, for an automatic generation of a symbolic representation"
+    },
+    {
+      "key": "incline",
+      "value": "down",
+      "description": "detecting upper/lower side of steps, for an automatic generation of a symbolic representation"
+    },
+    {
+      "key": "area:highway",
+      "value": "steps",
+      "description": "area of steps, for an automatic generation of a symbolic representation"
+    },
+    {
+      "key": "highway",
+      "value": "steps",
+      "description": "detecting upper/lower side of steps, for an automatic generation of a symbolic representation"
+    },
+    {
+      "key": "incline",
+      "value": "up",
+      "description": "detecting upper/lower side of steps, for an automatic generation of a symbolic representation"
+    },
+    {
+      "key": "incline",
+      "value": "down",
+      "description": "detecting upper/lower side of steps, for an automatic generation of a symbolic representation"
+    },
+    {
+      "key": "highway",
+      "value": "living_street",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "living_street",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "escape",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "escape",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "raceway",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "raceway",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "busway",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "busway",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "road",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "road",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "track",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "track",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "service",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "service",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "residential",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "residential",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "unclassified",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "unclassified",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "tertiary_link",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "tertiary_link",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "tertiary",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "tertiary",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "secondary_link",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "secondary_link",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "secondary",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "secondary",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "primary_link",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "primary_link",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "primary",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "primary",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "trunk_link",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "trunk_link",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "trunk",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "trunk",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "motorway_link",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "motorway_link",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "motorway",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "motorway",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "cycleway",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "cycleway",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "area:highway",
+      "value": "taxi_stop",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "area:highway",
+      "value": "bus_stop",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "amenity",
+      "value": "parking_space",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "living_street",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "living_street",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "escape",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "escape",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "raceway",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "raceway",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "busway",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "busway",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "road",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "road",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "track",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "track",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "service",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "service",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "residential",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "residential",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "unclassified",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "unclassified",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "tertiary_link",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "tertiary_link",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "tertiary",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "tertiary",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "secondary_link",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "secondary_link",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "secondary",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "secondary",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "primary_link",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "primary_link",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "primary",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "primary",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "trunk_link",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "trunk_link",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "trunk",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "trunk",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "motorway_link",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "motorway_link",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "motorway",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "motorway",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "highway",
+      "value": "cycleway",
+      "description": "road centerline used for generating road areas"
+    },
+    {
+      "key": "area:highway",
+      "value": "cycleway",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "area:highway",
+      "value": "taxi_stop",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "area:highway",
+      "value": "bus_stop",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "amenity",
+      "value": "parking_space",
+      "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "railway",
+      "value": "monorail",
+      "description": "linear representation of a single railway track"
+    },
+    {
+      "key": "railway",
+      "value": "miniature",
+      "description": "linear representation of a single railway track"
+    },
+    {
+      "key": "railway",
+      "value": "construction",
+      "description": "linear representation of a single railway track"
+    },
+    {
+      "key": "railway",
+      "value": "preserved",
+      "description": "linear representation of a single railway track"
+    },
+    {
+      "key": "railway",
+      "value": "light_rail",
+      "description": "linear representation of a single railway track"
+    },
+    {
+      "key": "railway",
+      "value": "narrow_gauge",
+      "description": "linear representation of a single railway track"
+    },
+    {
+      "key": "railway",
+      "value": "subway",
+      "description": "linear representation of a single railway track"
+    },
+    {
+      "key": "railway",
+      "value": "tram",
+      "description": "linear representation of a single railway track"
+    },
+    {
+      "key": "railway",
+      "value": "disused",
+      "description": "linear representation of a single railway track"
+    },
+    {
+      "key": "railway",
+      "value": "rail",
+      "description": "linear representation of a single railway track"
+    }
+  ]
 }
