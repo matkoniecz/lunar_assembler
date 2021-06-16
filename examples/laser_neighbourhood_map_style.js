@@ -338,6 +338,147 @@ function highZoomLaserMapStyle() {
 
       dataGeojson = mapStyle.applyManualPatchesAfterGeometryErasings(dataGeojson);
 
+
+      var roadAreaWithCrossing = findMergeGroupObject(dataGeojson, "area:highway_crossing");
+      // check is roadAreaWithCrossing defined
+      var i = dataGeojson.features.length;
+      var crossingLines = []
+      while (i--) {
+        var feature = dataGeojson.features[i];
+        if(feature.properties["footway"] == "crossing" && feature.properties["area:highway_generated_automatically"] != "yes") {
+          crossingLines.push(JSON.parse(JSON.stringify(feature)));
+        }
+      }
+
+      /*
+      // TODO - merge split crossings to prevent warnings above
+      var l = crossingLines.length;
+      var i = 0;
+      while (i + 1 < l) {
+        i++;
+        var k = crossingLines.length;
+        while (k--) {
+          var feature = crossingLines[i];
+          var possiblyMatching = crossingLines[k];
+          if(feature.geometry.coordinates[0])
+  
+        dataGeojson.features.splice(i, 1); // remove matching element
+      */
+
+        var i = crossingLines.length;
+      while (i--) {
+        var feature = crossingLines[i];
+          //console.log("====================")
+          //console.log(roadAreaWithCrossing)
+          //console.log(feature)
+          //console.error(turf.lineIntersect(roadAreaWithCrossing, feature));
+          var crossings = turf.lineIntersect(roadAreaWithCrossing, feature)
+          if(crossings.features.length != 2) {
+            showFatalError(link + " is unexpectedly crossing with road area not exactly two times but " + crossings.features.length + " times, which is unhandled" + reportBugMessageButGeodataMayBeWrong())
+          }
+          var crossingCenterlineGeometry = {'type': 'LineString', 'coordinates': [crossings.features[0].geometry.coordinates, crossings.features[1].geometry.coordinates]}
+          //console.log(crossingCenterlineGeometry)
+
+          var point1 = crossingCenterlineGeometry.coordinates[0]
+          var point2 = crossingCenterlineGeometry.coordinates[1]
+          var bearingOfCrossing = turf.bearing(point1, point2);
+          //console.log(bearing)
+    
+    
+          /*
+          var distance = 10;
+          var options = {units: 'meters'};
+
+          var offset1From = turf.destination(point1, distance, bearingOfCrossing+90, options);    
+          var offset1To = turf.destination(point2, distance, bearingOfCrossing+90, options);
+    
+          var offset2From = turf.destination(point1, distance, bearingOfCrossing-90, options);    
+          var offset2To = turf.destination(point2, distance, bearingOfCrossing-90, options);
+
+          var offsetLine1 = [offset1From.geometry.coordinates, offset1To.geometry.coordinates]
+          var offsetLine2 = [offset2From.geometry.coordinates, offset2To.geometry.coordinates]
+          console.log()
+          console.log("along")
+          console.log({'type': 'MultiLineString', 'coordinates': [crossingCenterlineGeometry.coordinates, offsetLine1, offsetLine2]})
+          */
+
+          // always three strips, change later if needed
+          // so
+          // 1st empty space
+          // 1st strip
+          // 2nd empty space
+          // 2nd strip
+          // 3rd empty space
+          // 3rd strip
+          // 4th empty space
+          //
+          // so we need to split distance in 7
+
+          point1, point2
+          //make strip
+          var lonDiff = point2[0] - point1[0]
+          var latDiff = point2[1] - point1[1]
+
+          // the first strip is from 1/7 to 2/7
+          var startOnCenterline = JSON.parse(JSON.stringify(point1))
+          startOnCenterline[0] += lonDiff * 1/7;
+          startOnCenterline[1] += latDiff * 1/7;
+  
+          var endOnCenterline = JSON.parse(JSON.stringify(point1))
+          endOnCenterline[0] += lonDiff * 2/7;
+          endOnCenterline[1] += latDiff * 2/7;
+
+          var distance = 10;
+          var options = {units: 'meters'};
+          var offset1From = turf.destination(startOnCenterline, distance, bearingOfCrossing+90, options);    
+          var offset1To = turf.destination(endOnCenterline, distance, bearingOfCrossing+90, options);
+    
+          var offset2From = turf.destination(startOnCenterline, distance, bearingOfCrossing-90, options);    
+          var offset2To = turf.destination(endOnCenterline, distance, bearingOfCrossing-90, options);
+          console.log()
+          console.log("bar")
+          var bar_of_zebra_crossing = {'type': 'LineString', 'coordinates':  [offset1From.geometry.coordinates, offset1To.geometry.coordinates, offset2To.geometry.coordinates, offset2From.geometry.coordinates, offset1From.geometry.coordinates]}
+          bar_of_zebra_crossing.coordinates = polygonClipping.intersection(bar_of_zebra_crossing.geometry.coordinates, roadAreaWithCrossing.geometry.coordinates);
+
+
+
+          /*
+          var a = turf.lineOffset(crossingCenterlineGeometry, 5, {units: 'meters'})
+          var b = turf.lineOffset(crossingCenterlineGeometry, -5, {units: 'meters'})
+          crossingCenterlineGeometry.type = "MultiLineString"
+          crossingCenterlineGeometry.coordinates = [crossingCenterlineGeometry.coordinates, a.geometry.coordinates, b.geometry.coordinates]
+          console.warn(crossingCenterlineGeometry)
+          */
+
+          /*
+          console.log("====================")
+          console.log(feature)
+          console.log(turf.lineOffset(feature.geometry, 3, {units: 'meters'}))
+          console.log(turf.lineOffset(feature.geometry, -3, {units: 'meters'}))
+
+          var cloned = JSON.parse(JSON.stringify(feature))
+          var a = turf.lineOffset(feature.geometry, 3, {units: 'meters'})
+          var b = turf.lineOffset(feature.geometry, -3, {units: 'meters'})
+          cloned.geometry.type = "MultiLineString"
+          cloned.geometry.coordinates = [cloned.geometry.coordinates, a.geometry.coordinates, b.geometry.coordinates]
+          console.warn(cloned)
+
+          var cloned = JSON.parse(JSON.stringify(feature))
+          var firstPointInLine = cloned.geometry.coordinates[0]
+          var lastPointInLine = cloned.geometry.coordinates[cloned.geometry.coordinates.length - 1]
+          cloned.geometry.coordinates = [firstPointInLine, lastPointInLine] 
+          var a = turf.lineOffset(feature.geometry, 3, {units: 'meters'})
+          var b = turf.lineOffset(feature.geometry, -3, {units: 'meters'})
+          cloned.geometry.type = "MultiLineString"
+          cloned.geometry.coordinates = [cloned.geometry.coordinates, a.geometry.coordinates, b.geometry.coordinates]
+          console.warn(cloned)
+          console.log("====================")
+          continue;
+          */
+        }
+  
+  
+
       dataGeojson = mapStyle.fillSliversAroundFootways(dataGeojson, readableBounds);
 
       // last one - after that there are two carriageways and two waterways areas
