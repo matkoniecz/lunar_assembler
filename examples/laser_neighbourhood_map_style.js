@@ -439,42 +439,6 @@ function highZoomLaserMapStyle() {
           console.log("bar")
           var bar_of_zebra_crossing = {'type': 'LineString', 'coordinates':  [offset1From.geometry.coordinates, offset1To.geometry.coordinates, offset2To.geometry.coordinates, offset2From.geometry.coordinates, offset1From.geometry.coordinates]}
           bar_of_zebra_crossing.coordinates = polygonClipping.intersection(bar_of_zebra_crossing.geometry.coordinates, roadAreaWithCrossing.geometry.coordinates);
-
-
-
-          /*
-          var a = turf.lineOffset(crossingCenterlineGeometry, 5, {units: 'meters'})
-          var b = turf.lineOffset(crossingCenterlineGeometry, -5, {units: 'meters'})
-          crossingCenterlineGeometry.type = "MultiLineString"
-          crossingCenterlineGeometry.coordinates = [crossingCenterlineGeometry.coordinates, a.geometry.coordinates, b.geometry.coordinates]
-          console.warn(crossingCenterlineGeometry)
-          */
-
-          /*
-          console.log("====================")
-          console.log(feature)
-          console.log(turf.lineOffset(feature.geometry, 3, {units: 'meters'}))
-          console.log(turf.lineOffset(feature.geometry, -3, {units: 'meters'}))
-
-          var cloned = JSON.parse(JSON.stringify(feature))
-          var a = turf.lineOffset(feature.geometry, 3, {units: 'meters'})
-          var b = turf.lineOffset(feature.geometry, -3, {units: 'meters'})
-          cloned.geometry.type = "MultiLineString"
-          cloned.geometry.coordinates = [cloned.geometry.coordinates, a.geometry.coordinates, b.geometry.coordinates]
-          console.warn(cloned)
-
-          var cloned = JSON.parse(JSON.stringify(feature))
-          var firstPointInLine = cloned.geometry.coordinates[0]
-          var lastPointInLine = cloned.geometry.coordinates[cloned.geometry.coordinates.length - 1]
-          cloned.geometry.coordinates = [firstPointInLine, lastPointInLine] 
-          var a = turf.lineOffset(feature.geometry, 3, {units: 'meters'})
-          var b = turf.lineOffset(feature.geometry, -3, {units: 'meters'})
-          cloned.geometry.type = "MultiLineString"
-          cloned.geometry.coordinates = [cloned.geometry.coordinates, a.geometry.coordinates, b.geometry.coordinates]
-          console.warn(cloned)
-          console.log("====================")
-          continue;
-          */
         }
   
   

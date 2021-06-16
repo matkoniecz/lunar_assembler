@@ -74,59 +74,7 @@
     <!-- actual code -->
     <script src="laser_neighbourhood_map_style.js"></script>
     <script>
-
-        /*
-      var line = {'type': 'LineString', 'coordinates': [
-        [
-          19.925,
-          50.0555
-        ],
-        [
-          19.924,
-          50.055
-        ]
-      ]}
-
-      var point1 = line.coordinates[0]
-          var point2 = line.coordinates[1]
-          var bearingOfCrossing = turf.bearing(point1, point2);
-      var distance = 10;
-        var options = {units: 'meters'};
-
-        var offset1From = turf.destination(point1, distance, bearingOfCrossing+90, options);    
-        var offset1To = turf.destination(point2, distance, bearingOfCrossing+90, options);
-
-        var offset2From = turf.destination(point1, distance, bearingOfCrossing-90, options);    
-        var offset2To = turf.destination(point2, distance, bearingOfCrossing-90, options);
-
-        var offsetLine1 = [offset1From.geometry.coordinates, offset1To.geometry.coordinates]
-          var offsetLine2 = [offset2From.geometry.coordinates, offset2To.geometry.coordinates]
-          console.log({'type': 'MultiLineString', 'coordinates': [line.coordinates, offsetLine1, offsetLine2]})
-
-          
-          var point1 = turf.point(line['coordinates'][0]);
-      var point2 = turf.point(line['coordinates'][1]);
-      var bearing = turf.bearing(point1, point2);
-      console.log(bearing)
-
-      var distance = 50;
-      var options = {units: 'meters'};
-
-      var destination1 = turf.destination(point1, distance, bearing+90, options);
-      console.log(destination1)
-
-      var destination2 = turf.destination(point2, distance, bearing+90, options);
-      console.log(destination2)
-
-      console.warn({'type': 'MultiLineString', 'coordinates': [line.coordinates, [destination1.geometry.coordinates, destination2.geometry.coordinates]]})
-
-      var a = turf.lineOffset(line, 50/1000, {units: 'kilometers'})
-      var b = turf.lineOffset(line, -50/1000, {units: 'kilometers'})
-      console.warn({'type': 'MultiLineString', 'coordinates': [line.coordinates, a.geometry.coordinates, b.geometry.coordinates]})
-      */
-
-
-      document.getElementById("automatically_generated_legend").innerHTML = generateLegend(highZoomLaserMapStyle().unifiedStyling())
+         document.getElementById("automatically_generated_legend").innerHTML = generateLegend(highZoomLaserMapStyle().unifiedStyling())
         // must be executed after imports and once passed ids exist -->
         initializeLunarAssembler({mapStyles: [highZoomLaserMapStyle()], mapDivId: 'map', downloadTriggerId: "download_generated_map", progressBarId: "progress_bar", mapOutputHolderId: "generated_svg_within", logOutputId: "log_messages_within", lat: 50.05156, lon: 19.92787, zoom: 18});
     </script>
