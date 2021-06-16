@@ -34,6 +34,9 @@ function highZoomLaserMapStyle() {
       if (feature.properties["lunar_assembler_cloned_for_pattern_fill"] != undefined) {
         return 100; // patterns goes on top of unpatterned fill
       }
+      if (feature.properties["zebra_crossing_bar_generated_by_lunar_assembler"] == "yes") {
+        return 110; // patterns goes on top of unpatterned crossing
+      }
       if (railwayLinearValuesArray().includes(feature.properties["railway"])) {
         // draw railway lines on absolute top
         return 200;
@@ -124,6 +127,19 @@ function highZoomLaserMapStyle() {
               {'key': 'footway', 'value': 'crossing'},
               {'key': 'area:highway', 'value': 'path', 'role': 'supplementary_obvious_filter'}, // paint only inflated paths, not from original linear source 
             ],
+          ],
+        }
+      )
+
+      returned.push(
+        {
+          'area_color': "#F0B98D",
+          'description': 'bar on a pedestrian, to produce pattern distinguishing it from sidewalks by touch',
+          'automatically_generated_using': [
+            {'key': 'footway', 'value': 'crossing', 'purpose': 'detecting crossings'},
+          ],
+          'matches': [
+            {'key': 'zebra_crossing_bar_generated_by_lunar_assembler', 'value': 'yes'},
           ],
         }
       )
@@ -338,33 +354,20 @@ function highZoomLaserMapStyle() {
 
       dataGeojson = mapStyle.applyManualPatchesAfterGeometryErasings(dataGeojson);
 
+      dataGeojson = mapStyle.generateZebraBarCrossings(dataGeojson);  
+      dataGeojson = mapStyle.fillSliversAroundFootways(dataGeojson, readableBounds);
 
+      // last one - after that there are two carriageways and two waterways areas
+      // with one being interection with a pattern
+      dataGeojson = mapStyle.applyPatternsToCarriagewaysAndWater(dataGeojson);
+
+      return dataGeojson;
+    },
+
+    generateZebraBarCrossings(dataGeojson) {
       var roadAreaWithCrossing = findMergeGroupObject(dataGeojson, "area:highway_crossing");
       // check is roadAreaWithCrossing defined
-      var i = dataGeojson.features.length;
-      var crossingLines = []
-      while (i--) {
-        var feature = dataGeojson.features[i];
-        if(feature.properties["footway"] == "crossing" && feature.properties["area:highway_generated_automatically"] != "yes") {
-          crossingLines.push(JSON.parse(JSON.stringify(feature)));
-        }
-      }
-
-      /*
-      // TODO - merge split crossings to prevent warnings above
-      var l = crossingLines.length;
-      var i = 0;
-      while (i + 1 < l) {
-        i++;
-        var k = crossingLines.length;
-        while (k--) {
-          var feature = crossingLines[i];
-          var possiblyMatching = crossingLines[k];
-          if(feature.geometry.coordinates[0])
-  
-        dataGeojson.features.splice(i, 1); // remove matching element
-      */
-
+      crossingLines = this.listUnifiedCrossingLines(dataGeojson);
         var i = crossingLines.length;
       while (i--) {
         var feature = crossingLines[i];
@@ -373,6 +376,7 @@ function highZoomLaserMapStyle() {
           // and invalid OpenStreetMap data (like footway=crossing shorter than actual crossing or footway=crossing outside crossings)
           var startEndOfActualCrossing = turf.lineIntersect(roadAreaWithCrossing, feature)
           if(startEndOfActualCrossing.features.length != 2) {
+            const link = "https://www.openstreetmap.org/" + feature.id;
             showFatalError(link + " is unexpectedly crossing with road area not exactly two times but " + startEndOfActualCrossing.features.length + " times, which is unhandled" + reportBugMessageButGeodataMayBeWrong())
           }
 
@@ -389,43 +393,141 @@ function highZoomLaserMapStyle() {
           // so we need to split distance in 7
           var point1 = startEndOfActualCrossing.features[0].geometry.coordinates
           var point2 = startEndOfActualCrossing.features[1].geometry.coordinates
-          var bearingOfCrossing = turf.bearing(point1, point2);
-
-          //make strip
-          var lonDiff = point2[0] - point1[0]
-          var latDiff = point2[1] - point1[1]
-
-          // the first strip is from 1/7 to 2/7
-          var startOnCenterline = JSON.parse(JSON.stringify(point1))
-          startOnCenterline[0] += lonDiff * 1/7;
-          startOnCenterline[1] += latDiff * 1/7;
-  
-          var endOnCenterline = JSON.parse(JSON.stringify(point1))
-          endOnCenterline[0] += lonDiff * 2/7;
-          endOnCenterline[1] += latDiff * 2/7;
-
-          var distance = 10;
-          var options = {units: 'meters'};
-          var offset1From = turf.destination(startOnCenterline, distance, bearingOfCrossing+90, options);    
-          var offset1To = turf.destination(endOnCenterline, distance, bearingOfCrossing+90, options);
-    
-          var offset2From = turf.destination(startOnCenterline, distance, bearingOfCrossing-90, options);    
-          var offset2To = turf.destination(endOnCenterline, distance, bearingOfCrossing-90, options);
-          console.log()
-          console.log("bar")
-          var bar_of_zebra_crossing = {'type': 'LineString', 'coordinates':  [offset1From.geometry.coordinates, offset1To.geometry.coordinates, offset2To.geometry.coordinates, offset2From.geometry.coordinates, offset1From.geometry.coordinates]}
-          bar_of_zebra_crossing.geometry.coordinates = polygonClipping.intersection(bar_of_zebra_crossing.geometry.coordinates, roadAreaWithCrossing.geometry.coordinates);
+          dataGeojson.features.push(this.makeBarOfZebraCrossing(roadAreaWithCrossing, point1, point2, 1/7, 2/7))
+          dataGeojson.features.push(this.makeBarOfZebraCrossing(roadAreaWithCrossing, point1, point2, 3/7, 4/7))
+          dataGeojson.features.push(this.makeBarOfZebraCrossing(roadAreaWithCrossing, point1, point2, 5/7, 6/7))
         }
-  
-  
+        return dataGeojson;
+    },
 
-      dataGeojson = mapStyle.fillSliversAroundFootways(dataGeojson, readableBounds);
+    listUnifiedCrossingLines(dataGeojson) {
+      var i = dataGeojson.features.length;
+      var crossingLines = []
+      while (i--) {
+        var feature = dataGeojson.features[i];
+        if(feature.properties["footway"] == "crossing" && feature.properties["area:highway_generated_automatically"] != "yes") {
+          crossingLines.push(JSON.parse(JSON.stringify(feature)));
+        }
+      }
+      var oldCount = undefined;
+      while(oldCount != crossingLines.length) {
+        // lets imagine case
+        // aaaa x cccc x bbbb
+        // aaaa joins cccc
+        // cccc joins bbbb
+        // aaaa is not merged with bbbb
+        // aaaa is merged with cccc
+        // end of a single run is
+        // aaaaaaaaa x bbbbb
+        //
+        // so either smarter algorithm or rerunning is needed
+        oldCount = crossingLines.length
+        crossingLines = this.unifyCrossings(crossingLines)
+      }
+      return crossingLines;
+    },
 
-      // last one - after that there are two carriageways and two waterways areas
-      // with one being interection with a pattern
-      dataGeojson = mapStyle.applyPatternsToCarriagewaysAndWater(dataGeojson);
+    unifyCrossings(crossingLines) {
+      // TODO - merge split crossings to prevent warnings above
+      var i = -1;
+      while (i + 1 < crossingLines.length) {
+        i++;
+        var k = i;
+        while (k + 1 < crossingLines.length) {
+          k++;
+          var feature = crossingLines[i];
+          var possiblyMatching = crossingLines[k];
+          const link1 = "https://www.openstreetmap.org/" + feature.id;
+          const link2 = "https://www.openstreetmap.org/" + possiblyMatching.id;
+          var coordsOfCandidate = possiblyMatching.geometry.coordinates
+        if(this.isTheSameJSON(feature.geometry.coordinates[0], coordsOfCandidate[0])) {
+            feature.geometry.coordinates.reverse()
+            coordsOfCandidate.shift()
+            feature.geometry.coordinates.push(...coordsOfCandidate)
+            crossingLines.splice(k, 1); // remove matching element
+            //showFatalError("merge 0-0 " + link1 + " " + link2 + " " + JSON.stringify(feature))
+        }
+          else if(this.isTheSameJSON(feature.geometry.coordinates[0], coordsOfCandidate[coordsOfCandidate.length - 1])) {
+            feature.geometry.coordinates.reverse()
+            coordsOfCandidate.reverse()
+            coordsOfCandidate.shift()
+            feature.geometry.coordinates.push(...coordsOfCandidate)
+            crossingLines.splice(k, 1); // remove matching element
+            //showFatalError("merge 0-last " + link1 + " " + link2 + " " + JSON.stringify(feature))
+          }
+          else if(this.isTheSameJSON(feature.geometry.coordinates[feature.geometry.coordinates.length - 1], coordsOfCandidate[coordsOfCandidate.length - 1])) {
+            coordsOfCandidate.reverse()
+            coordsOfCandidate.shift()
+            feature.geometry.coordinates.push(...coordsOfCandidate)
+            crossingLines.splice(k, 1); // remove matching element
+            //showFatalError("merge last-last " + link1 + " " + link2 + " " + JSON.stringify(feature))
+          }
+          else if(this.isTheSameJSON(feature.geometry.coordinates[feature.geometry.coordinates.length - 1], coordsOfCandidate[0])) {
+            coordsOfCandidate.shift()
+            feature.geometry.coordinates.push(...coordsOfCandidate)
+            crossingLines.splice(k, 1); // remove matching element
+            //showFatalError("merge last-0 " + link1 + " " + link2 + " " + JSON.stringify(feature))
+          }
+          else {
+            /*
+            showError("================")
+            showWarning((feature.geometry.coordinates[0] == coordsOfCandidate[0]) )
+            showError("-------------------")
+            showWarning(feature.geometry.coordinates[0] == coordsOfCandidate[coordsOfCandidate.length - 1])
+            showWarning(feature.geometry.coordinates[0][0] == coordsOfCandidate[coordsOfCandidate.length - 1][0])
+            showWarning(feature.geometry.coordinates[0][1] == coordsOfCandidate[coordsOfCandidate.length - 1][1])
+            showError("-------------------")
+            showWarning(feature.geometry.coordinates[feature.geometry.coordinates.length - 1] == coordsOfCandidate[coordsOfCandidate.length - 1])
+            showError("-------------------")
+            showWarning(feature.geometry.coordinates[feature.geometry.coordinates.length - 1] == coordsOfCandidate[0])
+            showError("-------------------")
+            showError("")
+            showWarning(link1)
+            showError(feature.geometry.coordinates[0])
+            showError(feature.geometry.coordinates[feature.geometry.coordinates.length - 1])
+            showError("")
+            showWarning(link2)
+            showError(coordsOfCandidate[0])
+            showError(coordsOfCandidate[coordsOfCandidate.length - 1])
+            showError("================")
+            */
+          }
+        }
+      }
+      return crossingLines;
+    },
 
-      return dataGeojson;
+    isTheSameJSON(pointA, pointB){
+      return JSON.stringify(pointA) === JSON.stringify(pointB);
+    },
+
+    makeBarOfZebraCrossing(roadAreaWithCrossing, start, end, fractionOfCrossingForBarStart, fractionOfCrossingForBarEnd) {
+      var bearingOfCrossing = turf.bearing(start, end);
+      var lonDiff = end[0] - start[0]
+      var latDiff = end[1] - start[1]
+
+      var startOnCenterline = JSON.parse(JSON.stringify(start))
+      startOnCenterline[0] += lonDiff * fractionOfCrossingForBarStart;
+      startOnCenterline[1] += latDiff * fractionOfCrossingForBarStart;
+
+      var endOnCenterline = JSON.parse(JSON.stringify(start))
+      endOnCenterline[0] += lonDiff * fractionOfCrossingForBarEnd;
+      endOnCenterline[1] += latDiff * fractionOfCrossingForBarEnd
+
+      var distance = 10;
+      var options = {units: 'meters'};
+      var offset1From = turf.destination(startOnCenterline, distance, bearingOfCrossing+90, options);    
+      var offset1To = turf.destination(endOnCenterline, distance, bearingOfCrossing+90, options);
+
+      var offset2From = turf.destination(startOnCenterline, distance, bearingOfCrossing-90, options);    
+      var offset2To = turf.destination(endOnCenterline, distance, bearingOfCrossing-90, options);
+      console.log()
+      console.log("bar")
+      var geometry_of_bar = {'type': 'Polygon', 'coordinates':  [[offset1From.geometry.coordinates, offset1To.geometry.coordinates, offset2To.geometry.coordinates, offset2From.geometry.coordinates, offset1From.geometry.coordinates]]}
+      geometry_of_bar.coordinates = polygonClipping.intersection(geometry_of_bar.coordinates, roadAreaWithCrossing.geometry.coordinates);
+      geometry_of_bar.type= "MultiPolygon"
+      console.log(geometry_of_bar)           
+      return {'type': 'Feature', 'geometry': geometry_of_bar, 'properties': {'zebra_crossing_bar_generated_by_lunar_assembler': 'yes'}};
     },
 
     applyManualPatchesAtStart(dataGeojson) {
