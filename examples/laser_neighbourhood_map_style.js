@@ -1165,7 +1165,7 @@ function highZoomLaserMapStyle() {
         const link = "https://www.openstreetmap.org/" + feature.id;
 
         if (linearGenerallyImpassableBarrierValuesArray().includes(feature.properties["barrier"]) || feature.properties["barrier"] == "yes") {
-          var produced = turf.buffer(feature, 0.1 / 1000, { units: "kilometers" });
+          var produced = turf.buffer(feature, 0.1, { units: "meters" });
           var cloned = JSON.parse(JSON.stringify(produced));
           cloned.properties["generated_barrier_area"] = "yes";
           generated.push(cloned);
@@ -1189,7 +1189,7 @@ function highZoomLaserMapStyle() {
         var width = mapStyle.widthOfRoadGeometryInMeters(feature);
         if (width != undefined) {
           {
-            var produced = turf.buffer(feature, width / 2 / 1000, { units: "kilometers" });
+            var produced = turf.buffer(feature, width / 2, { units: "meters" });
             var cloned = JSON.parse(JSON.stringify(produced));
             cloned.properties["area:highway"] = feature.properties["highway"];
             cloned.properties["area:highway_generated_automatically"] = "yes";
@@ -1215,7 +1215,7 @@ function highZoomLaserMapStyle() {
             if (["footway", "pedestrian", "path", "steps", "cycleway"].includes(feature.properties["highway"])) {
               width = width * 0.7;
             }
-            var produced = turf.buffer(feature, (width / 2 / 1000) * 3 + 1 / 1000, { units: "kilometers" });
+            var produced = turf.buffer(feature, (width / 2) * 3 + 1, { units: "meters" });
             var cloned = JSON.parse(JSON.stringify(produced));
             cloned.properties["area:highway_extra_size"] = feature.properties["highway"];
             cloned.properties["area:highway_generated_automatically"] = "yes";
@@ -1238,7 +1238,6 @@ function highZoomLaserMapStyle() {
       // in created pattern it was 1mm for hole and 1.5 mm for space between giles
 
       // Returns BBox bbox extent in [minX, minY, maxX, maxY] order
-      var kilometers = { units: "kilometers" };
 
       bbox = turf.bbox(dataGeojson);
       var minLongitude = bbox[0];
@@ -1247,17 +1246,16 @@ function highZoomLaserMapStyle() {
       var maxLatitude = bbox[3];
       var from = turf.point([bbox[0], bbox[1]]); // turf.point(longitude, latitude, properties)
       var to = turf.point([bbox[2], bbox[3]]);
-      var distanceInMeters = turf.distance(from, to, kilometers) * 1000;
 
       var from_horizontal = turf.point([minLongitude, minLatitude]); // turf.point(longitude, latitude, properties)
       var to_horizontal = turf.point([maxLongitude, minLatitude]);
-      var distanceHorizontalInMeters = 1000 * turf.distance(from_horizontal, to_horizontal, kilometers);
+      var distanceHorizontalInMeters = turf.distance(from_horizontal, to_horizontal, { units: "meters" });
       var distanceHorizontalInDegrees = maxLongitude - minLongitude;
       var metersInDegreeHorizontal = distanceHorizontalInMeters / distanceHorizontalInDegrees;
 
       var from_vertical = turf.point([minLongitude, minLatitude]); // turf.point(longitude, latitude, properties)
       var to_vertical = turf.point([minLongitude, maxLatitude]);
-      var distanceVerticalInMeters = 1000 * turf.distance(from_vertical, to_vertical, kilometers);
+      var distanceVerticalInMeters = turf.distance(from_vertical, to_vertical, { units: "meters" });
       var distanceVerticalInDegrees = maxLatitude - minLatitude;
       var metersInDegreeVertical = distanceVerticalInMeters / distanceVerticalInDegrees;
 
