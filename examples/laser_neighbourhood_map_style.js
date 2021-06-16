@@ -106,7 +106,7 @@ function highZoomLaserMapStyle() {
         'automatically_generated_using': blockDetection,
       'matches': [
         {'key': 'generated_blocked_chunk', 'value': 'yes'},
-        //{'key': 'native_blocked_chunk', 'value': 'yes'},
+        {'key': 'native_blocked_chunk', 'value': 'yes'},
       ],
       })
       // generated_traversable_chunk=yes is not rendered
