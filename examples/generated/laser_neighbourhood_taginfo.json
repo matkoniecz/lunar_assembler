@@ -154,6 +154,11 @@
          "description": "detecting crossings"
       },
       {
+         "key": "footway",
+         "value": "crossing",
+         "description": "detecting crossings"
+      },
+      {
          "key": "area:highway",
          "value": "pedestrian",
          "description": "area of a pedestrian way (linear representation must be also present! Using only area representation is invalid!)"
