@@ -1,0 +1,145 @@
+<!--
+    lunar_assembler - tool for generating SVG files from OpenStreetMap data. Available as a website.
+    Copyright (C) 2021 Mateusz Konieczny
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, under version 3 of the
+    License only.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://mapsaregreat.com/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple map style - SVG map from OpenStreetMap data</title>
+    <link 
+        rel="stylesheet" 
+        href="lunar_assembler.dist.css"
+    />
+    <script src="lunar_assembler.dist.js"></script>
+</head>
+<body>
+    <div id="main_content_wrap" class="outer">
+    <section id="main_content" class="inner">
+        <p id="instruction_hidden_after_first_generation">Press the rectangle button, select a rectangle on a map and wait. It will generate map from OpenStreetMap data It is an example of a very simple map style, showing water, forest, buildings and marinas.</p>
+        
+            <center><button id="download_generated_map" href="#" style="display: none; margin: 5px auto 5px auto">Download SVG</button></center>
+            <div class="generated_svg_map_within" id="generated_svg_within"></div><!-- styling background of this as white is recommended-->
+            <progress id="progress_bar" value="0" max="100" style="width: 100%"></progress>
+            <div id="log_messages_within"></div>
+            <div id="map" class="leaflet_interactive_map_not_hiding_further_content"></div>
+    
+
+        <h2>Even more info</h2>
+        <p>Have fun with using OpenStreetMap data for interesting and/or useful purposes! Just remember that you must mention source of data in way visible to whoever will be using it. See <a href="https://www.openstreetmap.org/copyright">this page</a> for details, including cases where it is legally allowed to avoid giving a clear credit (but I encourage to do this in all cases).</p>
+
+        <p>If you liked this tool, something was confusing - you are welcomed to comment about it <a href="https://github.com/matkoniecz/lunar_assembler/issues/new">by creating a public issue</a> or by sending me an <a href="mailto:matkoniecz@tutanota.com">email</a>. You can also post comment in <a href="https://www.openstreetmap.org/user/Mateusz%20Konieczny/diary/396309">OSM diary entry</a>.</p>
+            
+        <p>You can visit <a href="https://github.com/matkoniecz/lunar_assembler">matkoniecz/lunar_assembler</a> to see code, obtain code or contribute. This software as <a href="https://www.gnu.org/licenses/agpl-3.0.html">AGPLv3</a> licenced.</p>
+
+        <h2>Legend</h2>
+
+        <p id="automatically_generated_legend"></p>
+
+        
+    </section>
+
+    <!-- actual code -->
+    <script src="general_high_zoom_map_style.js"></script>
+    <script>
+        function simpleMapStyle() {
+            var mapStyle = {
+                paintOrder(feature) {
+                    // higher values: more on top
+
+                    if (feature.properties["building"] != null) {
+                        //show building in forest rather than obscuring it
+                        return 1000;
+                    }
+                    if (feature.properties["leisure"] == "marina") {
+                        //render it on top of water, but below buildings
+                        return 900;
+                    }
+                    return 0;
+                },
+
+                unifiedStyling() {
+                    returned = []
+                    returned.push({
+                        area_color: "black",
+                        description: "buildings",
+                        matches: [
+                            { key: "building" },
+                        ]
+                    });
+                    returned.push({
+                        line_color: "purple",
+                        line_width: 3,
+                        description: "marina",
+                        matches: [
+                            { key: "leisure", value: "marina" },
+                        ]
+                    });
+                    returned.push({
+                        area_color: "blue",
+                        description: "water",
+                        matches: [
+                            { key: "natural", value: "water" },
+                            { key: "waterway", value: "riverbank" },
+                        ],
+                    })
+                    returned.push({
+                        area_color: "#ADD19E",
+                        description: "tree-covered area",
+                        matches: [
+                            { key: "natural", value: "wood" },
+                            { key: "landuse", value: "forest" },
+                        ],
+                    })
+                    return returned;
+                },
+
+                fillColoring(feature) {
+                    if (["Point"].includes(feature.geometry.type)) {
+                        //no rendering of points, for start size seems to randomly differ
+                        // and leaves ugly circles - see building=* areas
+                        return "none";
+                    }
+                    // more complex rules can be used here in addition - or instead of unified styling
+                    return getMatchFromUnifiedStyling(feature, "area_color", mapStyle.unifiedStyling());
+                },
+
+                strokeColoring(feature) {
+                    if (["Point"].includes(feature.geometry.type)) {
+                    //no rendering of points, for start size seems to randomly differ
+                    // and leaves ugly circles - see building=* areas
+                        return "none";
+                    }
+                    // more complex rules can be used here in addition - or instead of unified styling
+                    return getMatchFromUnifiedStyling(feature, "line_color", mapStyle.unifiedStyling());
+                },
+
+                strokeWidth(feature) {
+                    // more complex rules can be used here in addition - or instead of unified styling
+                    return getMatchFromUnifiedStyling(feature, "line_width", mapStyle.unifiedStyling());
+                },
+            };
+            return mapStyle;
+        }
+
+        document.getElementById("automatically_generated_legend").innerHTML = generateLegend(simpleMapStyle().unifiedStyling())
+        // must be executed after imports and once passed ids exist -->
+        initializeLunarAssembler({mapStyles: [simpleMapStyle()], mapDivId: 'map', downloadTriggerId: "download_generated_map", progressBarId: "progress_bar", mapOutputHolderId: "generated_svg_within", logOutputId: "log_messages_within", lat: 54.12856, lon: 21.67968, zoom: 15});
+    </script>
+</body>
+</html>
