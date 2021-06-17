@@ -1110,6 +1110,9 @@ function validateGeometries(dataGeojson) {
 }
 
 function mergeAsRequestedByMapStyle(dataGeojson, mapStyle) {
+  if (("mergeIntoGroup" in mapStyle) == false) {
+    return dataGeojson;
+  }
   var i = dataGeojson.features.length;
   var processeedFeatures = [];
   var mergingGroups = {};
