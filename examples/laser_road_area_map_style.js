@@ -42,6 +42,10 @@ function laserRoadAreaMapStyle() {
         var priority = 0.99;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
       }
+      if (feature.properties["zebra_crossing_bar_generated_by_lunar_assembler"] != undefined) {
+        var priority = 0.58;
+        return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
+      }
       if (feature.properties["lunar_assembler_cloned_for_pattern_fill"] != undefined) {
         var priority = 0.48;
         return valueRangeForOneLayer * priority + valueRangeForOneLayer * layer;
@@ -145,12 +149,19 @@ function laserRoadAreaMapStyle() {
             description: "pedestrian crossing through a road (area used in addition to area representing road)",
             matches: [{ key: "area:highway", value: "crossing" }],
           },
-          {
-            area_color: "orange",
-            description: "area representation of steps (used in addition to linear highway=steps)",
-            matches: [{ key: "area:highway", value: "steps" }],
-          },
-        ]
+        ])
+      returned.push({
+        area_color: "#004754", // color #27 in LightBurn, clearly visible on the map, rendered on top
+        description: "bar on a pedestrian, to produce pattern distinguishing it from sidewalks by touch",
+        automatically_generated_using: [{ key: "footway", value: "crossing", purpose: "detecting crossings" }],
+        matches: [{ key: "zebra_crossing_bar_generated_by_lunar_assembler", value: "yes" }],
+      });
+
+      returned.push({
+          area_color: "orange",
+          description: "area representation of steps (used in addition to linear highway=steps)",
+          matches: [{ key: "area:highway", value: "steps" }],
+        }
       );
       returned.push(...unifiedMapStyleSegmentForSymbolicStepRepresentation());
       returned.push(
@@ -348,6 +359,28 @@ function laserRoadAreaMapStyle() {
     transformGeometryAtFinalStep(dataGeojson, readableBounds) {
       dataGeojson = mapStyle.eraseCrossingAreasFromRoads(dataGeojson);
       dataGeojson = mapStyle.eraseWaterWhereIntersectingBridge(dataGeojson);
+
+      var roadAreasWithCrossing;
+      var i = dataGeojson.features.length;
+      while (i--) {
+        var feature = dataGeojson.features[i];
+        if (feature.properties["area:highway"] === "crossing") {
+          if(roadAreasWithCrossing == undefined) {
+            roadAreasWithCrossing = JSON.parse(JSON.stringify(feature.geometry.coordinates))
+          } else {
+            roadAreasWithCrossing = polygonClipping.union(feature.geometry.coordinates, roadAreasWithCrossing);
+          }
+        }
+      }
+      console.log(roadAreasWithCrossing)
+      if(roadAreasWithCrossing == undefined){
+        showError("no mappeed crossing areas here at all!")
+      } else {
+        var geometry = mergeArrayOfAreaCoordinatesIntoMultipolygon(roadAreasWithCrossing)
+        console.log(geometry)
+        generateZebraBarCrossings(dataGeojson, {'type': 'Feature', 'geometry': geometry}) 
+      }
+
       dataGeojson = mapStyle.applyPatternsToCarriagewaysAndWater(dataGeojson);
       return dataGeojson;
     },

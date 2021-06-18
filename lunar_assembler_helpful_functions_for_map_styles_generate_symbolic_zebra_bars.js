@@ -17,6 +17,12 @@
 */
 
 function generateZebraBarCrossings(dataGeojson, roadAreaWithCrossing) {
+  if(roadAreaWithCrossing == undefined) {
+    showWarning("zebra crossing bars not generated as undefined was passed as crossing geometry - please report bug if crossing is mapped here")
+  }
+  if(roadAreaWithCrossing.type != "Feature") {
+    showFatalError("roadAreaWithCrossing is of wrong type: " + roadAreaWithCrossing.type + " " + reportBugMessage())
+  }
   // check is roadAreaWithCrossing defined
   crossingLines = listUnifiedCrossingLines(dataGeojson);
   var i = crossingLines.length;
@@ -25,12 +31,15 @@ function generateZebraBarCrossings(dataGeojson, roadAreaWithCrossing) {
     // startEndOfActualCrossing is necessary as sometimes footway=crossing is applied between sidewalks, including segment outside road area
     // also, this allows to catch unsupported cases (one footway=crossing across independent crossings or split footway=crossing line)
     // and invalid OpenStreetMap data (like footway=crossing shorter than actual crossing or footway=crossing outside crossings)
+    console.log()
+    console.log(feature)
+    console.log(roadAreaWithCrossing)
     var startEndOfActualCrossing = turf.lineIntersect(roadAreaWithCrossing, feature);
-    if (startEndOfActualCrossing.features.length != 2) {
+    if (startEndOfActualCrossing.features.length < 2 || startEndOfActualCrossing.features.length % 2 == 1) {
       const link = "https://www.openstreetmap.org/" + feature.id;
       showFatalError(
         link +
-          " is unexpectedly crossing with road area not exactly two times but " +
+          " and touching crossing ways is/are unexpectedly crossing with road area not exactly two times (or even even count) but " +
           startEndOfActualCrossing.features.length +
           " times, which is unhandled" +
           reportBugMessageButGeodataMayBeWrong()
@@ -40,7 +49,17 @@ function generateZebraBarCrossings(dataGeojson, roadAreaWithCrossing) {
       // skipping, generation impossible
       continue;
     }
+    console.log("startEndOfActualCrossing.features.length")
+    console.log(startEndOfActualCrossing.features.length)
+    var k = startEndOfActualCrossing.features.length - 1;
+    while(k>=0) {
+      console.log(k)
+      generateGroupOfZebraBars(startEndOfActualCrossing.features[k-1].geometry.coordinates, startEndOfActualCrossing.features[k].geometry.coordinates);
+      k -= 2;
+    }
+  }
 
+function generateGroupOfZebraBars(point1, point2) {
     // always three strips, change later if needed
     // so
     // 1st empty space
@@ -52,8 +71,6 @@ function generateZebraBarCrossings(dataGeojson, roadAreaWithCrossing) {
     // 4th empty space
     //
     // so we need to split distance in 7
-    var point1 = startEndOfActualCrossing.features[0].geometry.coordinates;
-    var point2 = startEndOfActualCrossing.features[1].geometry.coordinates;
     dataGeojson.features.push(makeBarOfZebraCrossing(roadAreaWithCrossing, point1, point2, 1 / 7, 2 / 7));
     dataGeojson.features.push(makeBarOfZebraCrossing(roadAreaWithCrossing, point1, point2, 3 / 7, 4 / 7));
     dataGeojson.features.push(makeBarOfZebraCrossing(roadAreaWithCrossing, point1, point2, 5 / 7, 6 / 7));

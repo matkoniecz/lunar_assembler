@@ -41,6 +41,11 @@
       "description": "pedestrian crossing through a road (area used in addition to area representing road)"
     },
     {
+      "key": "footway",
+      "value": "crossing",
+      "description": "detecting crossings"
+    },
+    {
       "key": "area:highway",
       "value": "steps",
       "description": "area representation of steps (used in addition to linear highway=steps)"

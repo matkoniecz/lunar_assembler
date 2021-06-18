@@ -396,27 +396,32 @@ function mergeAsRequestedByMapStyle(dataGeojson, mapStyle) {
       }
       coordinatesForMerging.push(forMerging[k].geometry.coordinates);
     }
-    // it is union so output will be nonepty
-    // https://github.com/mfogel/polygon-clipping#output
-    produced.geometry.type = "MultiPolygon";
-    if (coordinatesForMerging.length == 1) {
-      // adding it fixed crashing on empty areas for laser map style and private/public areas
-      // https://github.com/matkoniecz/lunar_assembler/issues/68
-      // necessary as ... will go multiple levels deep to decompose single element array
-      // for some Godforsaken reason
-      produced.geometry.coordinates = polygonClipping.union(coordinatesForMerging);
-      // uncomment below code to crash again
-      // console.log(coordinatesForMerging)
-      // console.log(...coordinatesForMerging)
-      //produced.geometry.coordinates = polygonClipping.union(...coordinatesForMerging);
-    } else {
-      produced.geometry.coordinates = polygonClipping.union(...coordinatesForMerging);
-    }
+    produced.geometry = mergeArrayOfAreaCoordinatesIntoMultipolygon(coordinatesForMerging)
     produced.properties["lunar_assembler_merge_group"] = key;
     processeedFeatures.push(produced);
   }
   dataGeojson.features = processeedFeatures;
   return dataGeojson;
+}
+
+function mergeArrayOfAreaCoordinatesIntoMultipolygon(coordinatesForMerging) {
+  // it is union so output will be nonepty
+  // https://github.com/mfogel/polygon-clipping#output
+  producedGeometry = {"type": "MultiPolygon", "coordinates": undefined}
+  if (coordinatesForMerging.length == 1) {
+    // adding it fixed crashing on empty areas for laser map style and private/public areas
+    // https://github.com/matkoniecz/lunar_assembler/issues/68
+    // necessary as ... will go multiple levels deep to decompose single element array
+    // for some Godforsaken reason
+    producedGeometry.coordinates = polygonClipping.union(coordinatesForMerging);
+    // uncomment below code to crash again
+    // console.log(coordinatesForMerging)
+    // console.log(...coordinatesForMerging)
+    //produced.geometry.coordinates = polygonClipping.union(...coordinatesForMerging);
+  } else {
+    producedGeometry.coordinates = polygonClipping.union(...coordinatesForMerging);
+  }
+  return producedGeometry;
 }
 
 // for searching: crop
