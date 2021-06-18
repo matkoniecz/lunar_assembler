@@ -48,6 +48,24 @@ function findMergeGroupObject(dataGeojson, code) {
 
 /*lunar_assembler_helpful_functions_for_map_styles_generate_symbolic_steps_from_area_highway.js*/
 
+/*
+    lunar_assembler - tool for generating SVG files from OpenStreetMap data. Available as a website.
+    Copyright (C) 2021 Mateusz Konieczny
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, under version 3 of the
+    License only.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 // for use in unified map style, this allows to avoid a pointess duplications
 function unifiedMapStyleSegmentForSymbolicStepRepresentation() {
   const stepGenerationExplanation = [
