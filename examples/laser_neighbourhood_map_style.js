@@ -338,7 +338,8 @@ function highZoomLaserMapStyle() {
 
       dataGeojson = mapStyle.applyManualPatchesAfterGeometryErasings(dataGeojson);
 
-      dataGeojson = generateZebraBarCrossings(dataGeojson);
+      var roadAreaWithCrossing = findMergeGroupObject(dataGeojson, "area:highway_crossing");
+      dataGeojson = generateZebraBarCrossings(dataGeojson, roadAreaWithCrossing);
       dataGeojson = mapStyle.fillSliversAroundFootways(dataGeojson, readableBounds);
 
       // last one - after that there are two carriageways and two waterways areas

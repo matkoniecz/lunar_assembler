@@ -16,8 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-function generateZebraBarCrossings(dataGeojson) {
-  var roadAreaWithCrossing = findMergeGroupObject(dataGeojson, "area:highway_crossing");
+function generateZebraBarCrossings(dataGeojson, roadAreaWithCrossing) {
   // check is roadAreaWithCrossing defined
   crossingLines = listUnifiedCrossingLines(dataGeojson);
   var i = crossingLines.length;
