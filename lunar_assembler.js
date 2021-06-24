@@ -231,20 +231,28 @@ async function downloadOpenStreetMapData(readableBounds) {
   // note: extra filters will break data in case of some bad/poor/substandard tagging or where someone want this kind of data
   // extra filters are useful to reduce data overload during debugging, often bug is reproducible in their presence
   var extra_filters = "[type!=site][type!=route][type!=parking_fee][type!=waterway][type!=boundary][boundary!=administrative][boundary!=religious_administration]";
-  query += "[out:json][timeout:25];nwr" + extra_filters + "(";
-  query += readableBounds["south"];
-  query += ",";
-  query += readableBounds["west"];
-  query += ",";
-  query += readableBounds["north"];
-  query += ",";
-  query += readableBounds["east"];
-  query += ");";
+  var bbox = "(" + readableBounds["south"] + "," + readableBounds["west"] + "," + readableBounds["north"] + "," + readableBounds["east"] + ")";
+
+  query += "[out:json][timeout:25];";
+
+  // sadly, French overpass server is outdated and not supporting nwr...
+  // this section start here
+  query += "("
+  query += "node" + extra_filters + bbox + ";";
+  query += "way" + extra_filters + bbox + ";";
+  query += "relation" + extra_filters + bbox + ";";
+  query += ");"
+  // and is to be replaced by 
+  // query += "nwr" + extra_filters + bbox + ";";
+
   query += "out body;>;out skel qt;";
   console.log("overpass query in the next line:");
   console.log(query);
 
-  const response = await fetch("https://overpass-api.de/api/interpreter", {
+  // https://overpass.nchc.org.tw/api/interpreter has broken CORS setup (but it should pass with simple requests? Apparently not.)
+  var overpassServers = ["https://overpass.openstreetmap.fr/api/interpreter", "https://overpass-api.de/api/interpreter"]
+  const selectedServer = overpassServers[Math.floor(Math.random() * overpassServers.length)];
+  const response = await fetch(selectedServer, {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
