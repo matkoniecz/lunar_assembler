@@ -60,21 +60,30 @@
                 <li>Use this for something!</li>
             </ul>
         </p>      
-        <p>Map style is generating SVG design files for ue in laset cutter. As orientation maps for blind people of a very small area, such as a single road crossing.</p>
-        <p>laser parameters that I used are given, but this is a solely example! You will need to test it on laser cutter you use which parameters are optimal. Yes, it is time consuming</p>
-        <p>
-            It generates a single SVG that is intended to be used for multiple cuts:
-            <ol>
-                <li>separate cut, splitting road surface with own pattern and everything else (separate colours for cut lines around entire area and for engraving) - engraving was 400 speed 40 power 0.08 line interval on my laser.
-                    <ul>
-                        <li>
-                            This allows easy painting of the road area - otherwise paint will travel within plywood
-                        </li>
-                    </ul>
-                </li>
+        <p>Map style is generating SVG design files for use in laset cutter. Intended for making orientation maps for blind people of a very small area, such as a single road crossing.</p>
 
-                <li>separate cuts of footway areas and crossing - I cut them into plexiglass to achive clearly different surface in touch. I considered using leather or cork. For transparent plexiglass it is possible to spray-paint its bottom to change it colour to a desired one</li>
-                <li>separate cut for buildings, I used two layers of thick plywood to make it clearly distinct</li>
+        <p>Have fun with using OpenStreetMap data for interesting and/or useful purposes! Just remember that you must mention source of data in way visible to whoever will be using it. See <a href="https://www.openstreetmap.org/copyright">this page</a> for details, including cases where it is legally allowed to avoid giving a clear credit (but I encourage to do this in all cases).</p>
+
+        <p>If you liked this tool, something was confusing - you are welcomed to comment about it <a href="https://github.com/matkoniecz/lunar_assembler/issues/new">by creating a public issue</a> or by sending me an <a href="mailto:matkoniecz@tutanota.com">email</a>. You can also post comment in <a href="https://www.openstreetmap.org/user/Mateusz%20Konieczny/diary/396309">OSM diary entry</a>.</p>
+    
+        <p>If you want to help mapping and you are unsure how to start - you can try <a href="https://github.com/streetcomplete/StreetComplete#download">StreetComplete</a> (an Android app) allowing contributions, with sole requirements being (1) ability to read (2) ability to see things (3) ability to create an OpenStreetMap acount.</p>
+        
+        <p>If you want to map something (map missing objects, fix mistake) and you are unsure how to start - visit <a href="https://www.openstreetmap.org/">openstreetmap.org</a>, zoom in to interesting area and press "edit" button and follow instructions. You can contact OpenStreetMap community using one of global or local channels listed at <a href="https://community.osm.be/">community.osm.be</a>.</p>
+        
+        You can visit <a href="https://github.com/matkoniecz/lunar_assembler">matkoniecz/lunar_assembler</a> to see code, obtain code or contribute. This software as <a href="https://www.gnu.org/licenses/agpl-3.0.html">AGPLv3</a> licenced.
+
+        <h2>Legend</h2>
+        <p id="automatically_generated_legend"></p>
+        <h2>Laser parameters</h2>
+        <p>laser parameters that I used are given below, but this is a solely example! You will need to test it on laser cutter you use which parameters are optimal.</p>
+        <p>
+            Produced SVG is intended to be copied and used for multiple cuts:
+            <ol>
+                <li>engraving road areas surface with own pattern - 400 speed 40 power 0.08mm line interval on laser that I used</li>
+                <li>cutting road areas from other areas (necessary to paint it properly) - ??? </li>
+                <li>Everything else - quick delicate burn to indicate where given elements should be glued - ?????</li>
+                <li>separate cuts of footway areas and crossing - I cut them into plexiglass to achieve clearly different surface in touch. I considered using leather or cork. For transparent plexiglass it is possible to spray-paint its bottom to change it colour to a desired one</li>
+                <li>separate cut for buildings, I used thick plywood to make it clearly distinct</li>
                 <li>separate cut for steps. This is a a quite tricky layer: first of all <a href="https://wiki.openstreetmap.org/wiki/Tag:area:highway%3Dsteps">area:highway</a> is processed and split into symbolic areas
                   <ul>
                       <li>outer shape surrounding entire steps area: should cut through to produce a separate piece</li>
@@ -90,19 +99,6 @@
                 </li>
             </ol>
         </p>
-
-        <p>Have fun with using OpenStreetMap data for interesting and/or useful purposes! Just remember that you must mention source of data in way visible to whoever will be using it. See <a href="https://www.openstreetmap.org/copyright">this page</a> for details, including cases where it is legally allowed to avoid giving a clear credit (but I encourage to do this in all cases).</p>
-
-        <p>If you liked this tool, something was confusing - you are welcomed to comment about it <a href="https://github.com/matkoniecz/lunar_assembler/issues/new">by creating a public issue</a> or by sending me an <a href="mailto:matkoniecz@tutanota.com">email</a>. You can also post comment in <a href="https://www.openstreetmap.org/user/Mateusz%20Konieczny/diary/396309">OSM diary entry</a>.</p>
-    
-        <p>If you want to help mapping and you are unsure how to start - you can try <a href="https://github.com/streetcomplete/StreetComplete#download">StreetComplete</a> (an Android app) allowing contributions, with sole requirements being (1) ability to read (2) ability to see things (3) ability to create an OpenStreetMap acount.</p>
-        
-        <p>If you want to map something (map missing objects, fix mistake) and you are unsure how to start - visit <a href="https://www.openstreetmap.org/">openstreetmap.org</a>, zoom in to interesting area and press "edit" button and follow instructions. You can contact OpenStreetMap community using one of global or local channels listed at <a href="https://community.osm.be/">community.osm.be</a>.</p>
-        
-        You can visit <a href="https://github.com/matkoniecz/lunar_assembler">matkoniecz/lunar_assembler</a> to see code, obtain code or contribute. This software as <a href="https://www.gnu.org/licenses/agpl-3.0.html">AGPLv3</a> licenced.
-
-        <h2>Legend</h2>
-        <p id="automatically_generated_legend"></p>
     </section>
 
     <!-- actual code -->
