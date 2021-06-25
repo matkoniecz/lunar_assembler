@@ -59,7 +59,7 @@ You will need to copy [examples/lunar_assembler.dist.css](examples/lunar_assembl
 
 Fully functional examples are in an [example](example/) folder.
 
-There is a very simple but also working map style that can show water area, forests, buildings and marinas. See [this fully functional example](https://github.com/matkoniecz/lunar_assembler/blob/master/examples/laser_neighbourhood.html), available at .
+There is a very simple but also working map style that can show water area, forests, buildings and marinas. See [this simple example](https://github.com/matkoniecz/lunar_assembler/blob/master/examples/simple.html#L59), this page is hosted and shown [here](https://mapsaregreat.com/osm_to_svg_in_browser/simple).
 
 ![examples/simple_map_style_-_Sztynort.png](examples/simple_map_style_-_Sztynort.png)
 
