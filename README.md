@@ -116,7 +116,9 @@ I know that documentation may be far better, but I am not sure what kind of addi
 
 ## Alternatives
 
-As usual [OSM Wiki documentation](https://wiki.openstreetmap.org/wiki/SVG#Ways_to_create_an_SVG_map_from_OpenStreetMap) is useful.
+As usual [OSM Wiki documentation](https://wiki.openstreetmap.org/wiki/SVG#Ways_to_create_an_SVG_map_from_OpenStreetMap) is useful - there are also other ways to [make SVG maps from OpenStreetMap data](https://wiki.openstreetmap.org/wiki/SVG#Ways_to_create_an_SVG_map_from_OpenStreetMap).
+
+[hapticke.mapy.cz](https://hapticke.mapy.cz/?lang=en) may be useful if you need tactile maps.
 
 ## Skipped and rejected features
 
