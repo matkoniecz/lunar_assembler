@@ -128,7 +128,7 @@ function highZoomLaserMapStyle() {
 
       returned.push({
         area_color: "#004754", // color #27 in LightBurn, clearly visible on the map, rendered on top
-        description: "bar on a pedestrian, to produce pattern distinguishing it from sidewalks by touch",
+        description: "bar on a pedestrian, to produce a pattern distinguishing it from sidewalks by touch",
         automatically_generated_using: [{ key: "footway", value: "crossing", purpose: "detecting crossings" }],
         matches: [{ key: "zebra_crossing_bar_generated_by_lunar_assembler", value: "yes" }],
       });
