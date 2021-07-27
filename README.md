@@ -118,6 +118,8 @@ I know that documentation may be far better, but I am not sure what kind of addi
 
 As usual [OSM Wiki documentation](https://wiki.openstreetmap.org/wiki/SVG#Ways_to_create_an_SVG_map_from_OpenStreetMap) is useful - there are also other ways to [make SVG maps from OpenStreetMap data](https://wiki.openstreetmap.org/wiki/SVG#Ways_to_create_an_SVG_map_from_OpenStreetMap).
 
+[https://touch-mapper.org/en/](Touch Mapper) is another OSM based tool for making tactile maps. It differs by relying on a 3D printing and by more complex infrastructure. It requires Amazon Web Services to run. Inability to put limit on spending there scared me away from basing my work on it. I do not accept idea that bug in my code may result in a 100 000$ bill that may or may not be waived.
+
 [hapticke.mapy.cz](https://hapticke.mapy.cz/?lang=en) may be useful if you need tactile maps.
 
 ## Skipped and rejected features
