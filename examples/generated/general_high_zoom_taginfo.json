@@ -2,8 +2,8 @@
   "data_format": 1,
   "data_url": "https://raw.githubusercontent.com/matkoniecz/lunar_assembler/master/examples/generated/general_high_zoom_taginfo.json",
   "project": {
-    "name": "area:highway included, general map style for SVG maps of zoomed in areas (city and smaller)",
-    "description": "Map to produce SVG maps of tiny and small areas - from single crossing to a city. Lunar Assembler map style.",
+    "name": "general SVG maps with area:highway, for zoomed in areas (city and smaller)",
+    "description": "Map style to produce SVG maps of tiny and small areas - from single crossing to a city. Lunar Assembler map style.",
     "icon_url": "https://mapsaregreat.com/favicon.svg",
     "project_url": "https://github.com/matkoniecz/lunar_assembler",
     "doc_url": "https://mapsaregreat.com/osm_to_svg_in_browser/general_high_zoom",

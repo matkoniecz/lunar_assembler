@@ -45,8 +45,8 @@ var taginfo, filename;
 filename = "generated/general_high_zoom_taginfo.json";
 taginfo = infoDocsJSON(
   "https://raw.githubusercontent.com/matkoniecz/lunar_assembler/master/examples/" + filename,
-  "area:highway included, general map style for SVG maps of zoomed in areas (city and smaller)",
-  "Map to produce SVG maps of tiny and small areas - from single crossing to a city. Lunar Assembler map style.",
+  "general SVG maps with area:highway, for zoomed in areas (city and smaller)",
+  "Map style to produce SVG maps of tiny and small areas - from single crossing to a city. Lunar Assembler map style.",
   "https://mapsaregreat.com/osm_to_svg_in_browser/general_high_zoom",
   generateTaginfoListing(highZoomMapStyle().unifiedStyling())
 );
@@ -55,8 +55,8 @@ writeGeneratedTaginfoSummary(taginfo, filename);
 filename = "generated/laser_road_area_taginfo.json";
 taginfo = infoDocsJSON(
   "https://raw.githubusercontent.com/matkoniecz/lunar_assembler/master/examples/" + filename,
-  "laser SVG map of a crossing, based on area:highway",
-  "Map to produce tactile maps for blind. Generated maps are for use in a laser cutter. Lunar Assembler map style.",
+  "for tactile map made with laser cutter - SVG map of a crossing (area:highway)",
+  "Map style to produce tactile maps for blind. Generated maps are for use in a laser cutter. Lunar Assembler map style.",
   "https://mapsaregreat.com/osm_to_svg_in_browser/laser_road_area.html",
   generateTaginfoListing(laserRoadAreaMapStyle().unifiedStyling())
 );
@@ -65,8 +65,8 @@ writeGeneratedTaginfoSummary(taginfo, filename);
 filename = "generated/laser_neighbourhood_taginfo.json";
 taginfo = infoDocsJSON(
   "https://raw.githubusercontent.com/matkoniecz/lunar_assembler/master/examples/" + filename,
-  "laser SVG map of a neighbourhood",
-  "Map to produce tactile maps for blind. Generated maps are for use in a laser cutter. Lunar Assembler map style.",
+  "for tactile map made with laser cutter - SVG map of a neighbourhood",
+  "Map style to produce tactile maps for blind. Generated maps are for use in a laser cutter. Lunar Assembler map style.",
   "https://mapsaregreat.com/osm_to_svg_in_browser/laser_neighbourhood.html",
   generateTaginfoListing(highZoomLaserMapStyle().unifiedStyling())
 );
