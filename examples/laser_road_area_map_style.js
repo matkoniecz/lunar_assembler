@@ -357,6 +357,12 @@ function laserRoadAreaMapStyle() {
     // called after areas were merged, before sorting of areas
     // gets full data and can freely edit it
     transformGeometryAtFinalStep(dataGeojson, readableBounds) {
+      var roadArea = findMergeGroupObject(dataGeojson, "area:highway_carriageway_layer");
+      var footwayArea = findMergeGroupObject(dataGeojson, "area:highway_footway");
+      if(roadArea == undefined && footwayArea == undefined) {
+        showFatalError("Neither roads nor footways are mapped here with area:highway, and this map style requires area:highway mapping. Please use another map styly or map area:highway shapes or select a different area.")
+      }
+
       dataGeojson = mapStyle.eraseCrossingAreasFromRoads(dataGeojson);
       dataGeojson = mapStyle.eraseWaterWhereIntersectingBridge(dataGeojson);
 
