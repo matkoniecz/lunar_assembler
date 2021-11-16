@@ -582,17 +582,9 @@ function makeCompareFunctionForLayering(paintOrderFunction) {
 }
 
 function update3Map(geoGenerator, used_data, selector, mapStyle) {
-  var u = d3
-    .select(selector)
-    .selectAll("path")
-    .data(used_data.features);
+  var u = d3.select(selector).selectAll("path").data(used_data.features);
 
-  u.enter()
-    .append("path")
-    .attr("d", geoGenerator)
-    .attr("stroke", mapStyle.strokeColoring)
-    .attr("stroke-width", mapStyle.strokeWidth)
-    .attr("fill", mapStyle.fillColoring);
+  u.enter().append("path").attr("d", geoGenerator).attr("stroke", mapStyle.strokeColoring).attr("stroke-width", mapStyle.strokeWidth).attr("fill", mapStyle.fillColoring);
   //.attr("name", mapStyle.name) - note that passing name with & breaks SVG (at least more fragile ones) - TODO: fix and reenable or drop that
 }
 
