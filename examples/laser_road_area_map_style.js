@@ -374,7 +374,7 @@ function laserRoadAreaMapStyle() {
       }
       console.log(roadAreasWithCrossing)
       if(roadAreasWithCrossing == undefined){
-        showError("no mappeed crossing areas here at all!")
+        showError("no mapped crossing areas here at all!")
       } else {
         var geometry = mergeArrayOfAreaCoordinatesIntoMultipolygon(roadAreasWithCrossing)
         console.log(geometry)
