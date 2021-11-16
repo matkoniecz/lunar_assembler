@@ -878,29 +878,32 @@ function highZoomLaserMapStyle() {
     },
 
     isFeatureMakingFreePedestrianMovementPossible(feature) {
-      if (motorizedRoadValuesArray().includes(feature.properties["highway"]) || ["footway", "pedestrian", "path", "steps", "cycleway"].includes(feature.properties["highway"])) {
-        if (mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
+      var highway = feature.properties["highway"];
+      var foot = feature.properties["foot"];
+      var access = feature.properties["access"];
+      if (motorizedRoadValuesArray().includes(highway) || ["footway", "pedestrian", "path", "steps", "cycleway"].includes(highway)) {
+        if (mapStyle.isAccessValueRestrictive(foot)) {
           return false;
         }
-        if (feature.properties["highway"] == "motorway" && feature.properties["foot"] == null) {
+        if (highway == "motorway" && foot == null) {
           // assume no for motorways, but do not discard them completely: some can be walked on foot (yes really)
           return false;
         }
-        if (feature.properties["highway"] == "service" && feature.properties["service"] == "driveway") {
-          if (feature.properties["foot"] != null && !mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
+        if (highway == "service" && feature.properties["service"] == "driveway") {
+          if (foot != null && !mapStyle.isAccessValueRestrictive(foot)) {
             return true;
           }
-          if (feature.properties["access"] != null && !mapStyle.isAccessValueRestrictive(feature.properties["access"])) {
+          if (access != null && !mapStyle.isAccessValueRestrictive(access)) {
             return true;
           }
           return false; // assume false for driveways
         }
 
-        if (!mapStyle.isAccessValueRestrictive(feature.properties["access"]) && !mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
+        if (!mapStyle.isAccessValueRestrictive(access) && !mapStyle.isAccessValueRestrictive(foot)) {
           return true;
         }
-        if (mapStyle.isAccessValueRestrictive(feature.properties["access"])) {
-          if (feature.properties["foot"] != null && !mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
+        if (mapStyle.isAccessValueRestrictive(access)) {
+          if (foot != null && !mapStyle.isAccessValueRestrictive(foot)) {
             return true;
           } else {
             return false;
