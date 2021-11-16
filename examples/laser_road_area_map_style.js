@@ -128,9 +128,7 @@ function laserRoadAreaMapStyle() {
         });
       }
 
-      returned.push(
-        ...[
-          {
+      returned.push({
             area_color: "green",
             description: "pedestrian square (using it for sidewalk areas is invalid!)",
             matches: [
@@ -143,13 +141,12 @@ function laserRoadAreaMapStyle() {
                 { key: "type", value: "multipolygon", role: "supplementary_obvious_filter" },
               ],
             ],
-          },
-          {
+      });
+      returned.push({
             area_color: "yellow",
             description: "pedestrian crossing through a road (area used in addition to area representing road)",
             matches: [{ key: "area:highway", value: "crossing" }],
-          },
-        ])
+      });
       returned.push({
         area_color: "#004754", // color #27 in LightBurn, clearly visible on the map, rendered on top
         description: "bar on a pedestrian, to produce pattern distinguishing it from sidewalks by touch",
@@ -164,14 +161,12 @@ function laserRoadAreaMapStyle() {
         }
       );
       returned.push(...unifiedMapStyleSegmentForSymbolicStepRepresentation());
-      returned.push(
-        ...[
-          {
+      returned.push({
             area_color: "black",
             description: "buildings",
             matches: [{ key: "building" }],
-          },
-          {
+      });
+      returned.push({
             area_color: "#00FFFF",
             description: "water - pattern, part expected to be engraved",
             matches: [
@@ -184,17 +179,15 @@ function laserRoadAreaMapStyle() {
                 { key: "lunar_assembler_cloned_for_pattern_fill", value: "yes", role: "supplementary_obvious_filter" },
               ],
             ],
-          },
-          {
+        });
+        returned.push({
             area_color: "blue",
             description: "water - entire area, expected to be cut at outline to separate element for easier painting (or used solely for orientation)",
             matches: [
               { key: "natural", value: "water" },
               { key: "waterway", value: "riverbank" },
             ],
-          },
-        ]
-      );
+      });
       var i = motorizedRoadValuesArray().length;
       while (i--) {
         value = motorizedRoadValuesArray()[i];
