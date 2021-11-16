@@ -485,7 +485,7 @@ function laserRoadAreaMapStyle() {
         if (feature.properties["lunar_assembler_merge_group"] == "water") {
           var generated = intersectGeometryWithHorizontalStripes(feature, waterRowSizeInMeters / metersInDegreeHorizontal, waterSpaceBetweenRowsInMeters / metersInDegreeHorizontal);
           generated.properties["lunar_assembler_cloned_for_pattern_fill"] = "yes";
-          dataGeojson.features.push(generated); // added at the ned, and iterating from end to 0 so will not trigger infinite loop
+          dataGeojson.features.push(generated); // added at the end, and iterating from end to 0 so will not trigger infinite loop
         }
         //console.warn(feature.properties["lunar_assembler_merge_group"]);
         if (feature.properties["lunar_assembler_merge_group"] == "area:highway_carriageway_layer") {
@@ -497,7 +497,7 @@ function laserRoadAreaMapStyle() {
             spaceHorizontalInMeters / metersInDegreeHorizontal
           );
           generated.properties["lunar_assembler_cloned_for_pattern_fill"] = "yes";
-          dataGeojson.features.push(generated); // added at the ned, and iterating from end to 0 so will not trigger infinite loop
+          dataGeojson.features.push(generated); // added at the end, and iterating from end to 0 so will not trigger infinite loop
         }
       }
       return dataGeojson;

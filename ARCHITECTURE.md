@@ -26,7 +26,7 @@ GUI for selecting rectangle that will be processed - Leaflet + Leaflet-draw plug
 
 ## Obtaining OSM data
 
-Gets bounding box as an argument, returns geojson for futher processing.
+Gets bounding box as an argument, returns geojson for further processing.
 
 Fetching OpenStreeMap data - [Overpass API](https://wiki.openstreetmap.org/wiki/Overpass_API)
 

@@ -521,7 +521,7 @@ function dropDegenerateGeometrySegments(feature) {
 function renderUsingD3(readableBounds, dataGeojson, width, height, mapStyle, mapOutputHolderId) {
   var geoJSONRepresentingBoundaries = geoJSONPolygonRepresentingBBox(readableBounds);
   // rewinding is sometimes needed, sometimes not
-  // rewinding is sometimes broken in my code (at least in oce case it was borked by my bug in futher processing!), sometimes not
+  // rewinding is sometimes broken in my code (at least in one case it was borked by my bug in further processing!), sometimes not
   // see https://gis.stackexchange.com/questions/392452/why-d3-js-works-only-with-geojson-violating-right-hand-rule
   // not sure what is going on here
 

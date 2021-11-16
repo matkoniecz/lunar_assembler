@@ -41,7 +41,6 @@ function writeGeneratedTaginfoSummary(taginfoData, filename) {
 }
 var taginfo, filename;
 
-// general high zoom
 filename = "generated/general_high_zoom_taginfo.json";
 taginfo = infoDocsJSON(
   "https://raw.githubusercontent.com/matkoniecz/lunar_assembler/master/examples/" + filename,
@@ -52,7 +51,6 @@ taginfo = infoDocsJSON(
 );
 writeGeneratedTaginfoSummary(taginfo, filename);
 
-// road area for a single crossing
 filename = "generated/laser_road_area_taginfo.json";
 taginfo = infoDocsJSON(
   "https://raw.githubusercontent.com/matkoniecz/lunar_assembler/master/examples/" + filename,
@@ -63,7 +61,6 @@ taginfo = infoDocsJSON(
 );
 writeGeneratedTaginfoSummary(taginfo, filename);
 
-// neigbourhood
 filename = "generated/laser_neighbourhood_taginfo.json";
 taginfo = infoDocsJSON(
   "https://raw.githubusercontent.com/matkoniecz/lunar_assembler/master/examples/" + filename,

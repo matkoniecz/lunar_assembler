@@ -10,11 +10,11 @@ Bug reports, pull requests are welcomed and invited.
 
 For bigger changes I strongly encourage to create an issue first to review the idea.
 
-Issues with scatching criticism of code quality are also welcomed, as long as you are specific and clear what is wrong and how it can be improved.
+Issues with scathing criticism of code quality are also welcomed, as long as you are specific and clear what is wrong and how it can be improved.
 
 # License
 
-Note that by contributing code you are licensing it to license used by this reporitory (AGPL).
+Note that by contributing code you are licensing it to license used by this repository (AGPL).
 
 # Installing development dependencies
 

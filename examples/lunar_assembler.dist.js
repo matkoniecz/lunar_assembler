@@ -179,7 +179,7 @@ function buildAreasSplittingStepAreaIntoSymbolicSteps(feature, pointsInSteps) {
   // so, for given feature we can detect skeleton with two ways forming sides of steps
   // this can be split into parts and form the expected steps
   //
-  // it wil fail for more complicated steps!
+  // it will fail for more complicated steps!
   // unit testing would be useful...
   // write just standalone code for now? not with some testing framework?
 
@@ -1523,7 +1523,7 @@ function dropDegenerateGeometrySegments(feature) {
 function renderUsingD3(readableBounds, dataGeojson, width, height, mapStyle, mapOutputHolderId) {
   var geoJSONRepresentingBoundaries = geoJSONPolygonRepresentingBBox(readableBounds);
   // rewinding is sometimes needed, sometimes not
-  // rewinding is sometimes broken in my code (at least in oce case it was borked by my bug in futher processing!), sometimes not
+  // rewinding is sometimes broken in my code (at least in one case it was borked by my bug in further processing!), sometimes not
   // see https://gis.stackexchange.com/questions/392452/why-d3-js-works-only-with-geojson-violating-right-hand-rule
   // not sure what is going on here
 

@@ -100,7 +100,7 @@ it means that servers only delivers HTML site, code then runs on client. It stil
 
 ## Potential uses
 
-SVG files may be much more accessible for futher processing than alternatives formats of OSM data.
+SVG files may be much more accessible for further processing than alternatives formats of OSM data.
 
 SVG files may be directly usable for some purposes, for example in laser cutters.
 
