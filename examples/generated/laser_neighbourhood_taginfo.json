@@ -4,6 +4,7 @@
   "project": {
     "name": "laser SVG map of a neighbourhood",
     "description": "Map to produce tactile maps for blind. Generated maps are for use in a laser cutter. Lunar Assembler map style.",
+    "icon_url": "https://mapsaregreat.com/favicon.svg",
     "project_url": "https://github.com/matkoniecz/lunar_assembler",
     "doc_url": "https://mapsaregreat.com/osm_to_svg_in_browser/laser_neighbourhood.html",
     "contact_name": "Mateusz Konieczny",

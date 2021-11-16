@@ -18,6 +18,7 @@ function infoDocsJSON(dataURL, projectName, projectDescription, projectDocs, tag
     project: {
       name: projectName,
       description: projectDescription,
+      icon_url: "https://mapsaregreat.com/favicon.svg",
       project_url: "https://github.com/matkoniecz/lunar_assembler",
       doc_url: projectDocs,
       contact_name: "Mateusz Konieczny",
