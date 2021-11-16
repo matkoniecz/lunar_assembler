@@ -367,7 +367,9 @@ function generateZebraBarCrossings(dataGeojson, roadAreaWithCrossing) {
         link +
           " and touching crossing ways is/are unexpectedly crossing with road area not exactly two times (or even even count) but " +
           startEndOfActualCrossing.features.length +
-          " times, which is unhandled" +
+          " times, which is unhandled.\n" + 
+          "Road area:\n" + JSON.stringify(roadAreaWithCrossing) + "\n\n" +
+          "crossingLine:\n" + JSON.stringify(feature) + "\n\n" +
           reportBugMessageButGeodataMayBeWrong()
       );
     }
