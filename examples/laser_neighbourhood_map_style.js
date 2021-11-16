@@ -985,7 +985,11 @@ function highZoomLaserMapStyle() {
 
     generateRestrictedAcccessArea(geojson, readableBounds) {
       var entireArea = mapStyle.boundsToGeojsonGeometry(readableBounds);
-      var freelyTraversableArea = entireArea;
+
+      // clipping with empty area is done here to ensure that multipolygon
+      // is always produced, also when no forbidden areas are present
+      var areaOfUnknownState = polygonClipping.difference(entireArea, []);
+
       generated = [];
       featuresGivingAccess = [];
       var i = geojson.features.length;
@@ -999,7 +1003,7 @@ function highZoomLaserMapStyle() {
           continue;
         }
         if (mapStyle.isAreaMakingFreePedestrianMovementImpossible(feature)) {
-          var freelyTraversableArea = polygonClipping.difference(freelyTraversableArea, feature.geometry.coordinates);
+          var areaOfUnknownState = polygonClipping.difference(areaOfUnknownState, feature.geometry.coordinates);
           if (feature.properties["natural"] != "water" && feature.properties["waterway"] != "riverbank") {
             // water has its own special rendering and does not need this
             var cloned = JSON.parse(JSON.stringify(feature));
@@ -1008,13 +1012,19 @@ function highZoomLaserMapStyle() {
           }
         }
       }
-      //console.warn(JSON.stringify({ type: "MultiPolygon", coordinates: freelyTraversableArea }));
 
-      var k = freelyTraversableArea.length;
+      //console.warn("areaOfUnknownState")
+      //console.warn(JSON.stringify({ type: "MultiPolygon", coordinates: areaOfUnknownState }));
+
+      // areaOfUnknownState is now entire area except removed blocking areas
+      // now the next step is to fill areas where there is no acces
+      // for example private courtyard within buildings, walled of areas and so on
+
+      var k = areaOfUnknownState.length;
       while (k--) {
         const traversableChunk = {
           type: "Feature",
-          geometry: { type: "Polygon", coordinates: freelyTraversableArea[k] },
+          geometry: { type: "Polygon", coordinates: areaOfUnknownState[k] },
           properties: {},
         };
         var i = featuresGivingAccess.length;
