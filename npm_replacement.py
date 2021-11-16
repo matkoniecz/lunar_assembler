@@ -18,18 +18,24 @@
 
 import os
 
+# necessary due to 
+# https://stackoverflow.com/questions/69991455/get-location-of-the-py-source-file-within-script-itself-also-after-os-chdir
+# https://gist.github.com/matkoniecz/622181cf9230af9cb80b35ae93acc1b5
+global build_script_location
+
 def main():
+    global build_script_location
+    build_script_location = os.path.abspath(os.path.dirname(__file__))
     build_distribution_form_of_library()
     generate_taginfo_files()
+    run_tests()
 
 def generate_taginfo_files():
-    build_script_location = os.path.abspath(os.path.dirname(__file__))
     os.chdir(os.path.join(build_script_location, "examples"))
     os.system("node taginfo_file_generate.js")
 
 
 def build_distribution_form_of_library():
-    build_script_location = os.path.abspath(os.path.dirname(__file__))
     os.chdir(build_script_location)
     dependency_folder_location = os.path.join(build_script_location, "lunar_assembler_dependencies")
 
@@ -81,5 +87,22 @@ def concatenate_matching(root_filepath, paths_for_merging, output, matcher):
                     if "sourceMappingURL" in code_for_merging:
                         raise ValueError("not cleaned sourceMappingURL! " + filename)
                     outfile.write(code_for_merging)
+
+def run_tests():
+    print(__file__)
+    print(os.path.dirname(__file__))
+    print(build_script_location)
+    
+    print(os.path.dirname(os.path.abspath(__file__)))
+
+    from pathlib import Path
+
+    source_path = Path(__file__).resolve()
+    source_dir = source_path.parent
+    print(source_path)
+    print(source_dir)
+    
+    os.chdir(os.path.join(build_script_location, "tests"))
+    os.system("node run_tests.js")
 
 main()

@@ -735,6 +735,115 @@ function linearGenerallyImpassableBarrierValuesArray() {
   return ["fence", "wall", "hedge", "retaining_wall", "hedge_bank", "wire_fence", "city_wall", "guard_rail", "haha"];
 }
 
+function widthsOfParkingLanes() {
+  return {
+    'parallel': 3,
+    'diagonal': 5,
+    'perpendicular': 6.5,
+    'marked': 3, // may be also perpendicular or diagonal but that info is lost...
+    'no_parking': 0,
+    'no_stopping': 0,
+    'fire_lane': 0,
+    'no': 0,
+    // separate - ???
+  };
+}
+
+function isSimplePositiveInteger(str) {
+  // https://stackoverflow.com/questions/10834796/validate-that-a-string-is-a-positive-integer
+  // I believe that this snippet is below threshold of originality
+  var n = Math.floor(Number(str));
+  return n !== Infinity && String(n) === str && n > 0;
+}
+
+function getDrivingLaneCount(feature){
+  if (feature.properties["lanes"] == undefined) {
+    return undefined;
+  }
+  if (!isSimplePositiveInteger(feature.properties["lanes"])) {
+    showError("Unexpected lane format lanes=" + feature.properties["lanes"] + " in " + JSON.stringify(feature) + reportBugMessage());
+    return undefined;
+  }
+  return Number(feature.properties["lanes"]);
+}
+
+function getParkingLaneWidthInLaneEquivalentForGivenSide(side, feature) {
+  var matchingCodeToWidthInMeters = widthsOfParkingLanes();
+  var value = undefined;
+  if(feature.properties["parking:lane:both"] != undefined) {
+    value = feature.properties["parking:lane:both"];          
+  }
+  if(feature.properties["parking:lane:" + side] != undefined) {
+    if(value != undefined) {
+      showError("both parking:lane:both and parking:lane:" + side + " set for " + JSON.stringify(feature) + reportBugMessage());
+    }
+    value = feature.properties["parking:lane:" + side];        
+  }
+  if(value == undefined) {
+    return undefined;
+  }
+  if (value in matchingCodeToWidthInMeters) {
+    return matchingCodeToWidthInMeters[value];
+  } else {
+    showError("unexpected unhandled code " + value + " for " + side + " parking lane in " + JSON.stringify(feature) + reportBugMessage());
+    return undefined;
+  }
+}
+
+function getParkingLaneWidthInLaneEquivalent(feature){
+  /*
+  there is parallel, diagonal and perpendicular parking
+  the width varies between them
+  */
+  var left = getParkingLaneWidthInLaneEquivalentForGivenSide('left', feature);
+  var right = getParkingLaneWidthInLaneEquivalentForGivenSide('right', feature);
+  if(left == undefined || right == undefined) {
+    if (left == undefined && right == undefined ) {
+      return undefined;
+    } else {
+      // assume that in such case user tagged known sides
+      if(left == undefined) {
+        left = 0;
+      }
+      if(right == undefined) {
+        right = 0;
+      }
+    }
+  }
+  return (left + right)/3;
+}
+
+function getTotalKnownLaneCount(feature) {
+  var drivingLanes = getDrivingLaneCount(feature);
+  var parkingLanes = getParkingLaneWidthInLaneEquivalent(feature);
+  if(drivingLanes == undefined && parkingLanes == undefined) {
+    return undefined;
+  }
+  if(drivingLanes != undefined && parkingLanes != undefined) {
+    return drivingLanes + parkingLanes;
+  }
+  if(drivingLanes != undefined) {
+    // assume that it means that no parking lanes are tagged
+    return drivingLanes;
+  }
+  if(parkingLanes != undefined) {
+    // I assume that it will happen on minor city roads
+    return parkingLanes + 1;
+  }
+  showFatalError('This should never happen, getTotalKnownLaneCount failed');
+}
+
+function creditsForLaneWidthInMapStyle(automatically_generated_using_array) {
+  automatically_generated_using_array.push({ key: "lanes", purpose: "estimating road width" });
+  for (const tag_key of ["parking:lane:both", "parking:lane:left", "parking:lane:right"]) {
+    for (const [tag_value, _width_of_parking_lane] of Object.entries(widthsOfParkingLanes())) {
+      automatically_generated_using_array.push({ key: tag_key, value: tag_value, purpose: "estimating road width" });
+    }
+  }
+  automatically_generated_using_array.push({ key: "oneway", value: "yes", purpose: "estimating road width" });
+  automatically_generated_using_array.push({ key: "oneway", value: "-1", purpose: "estimating road width" });
+  return automatically_generated_using_array;
+}
 
 /* ------------------------ */
 

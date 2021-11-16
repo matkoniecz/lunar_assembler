@@ -174,6 +174,7 @@ function highZoomLaserMapStyle() {
         roadGeneration.push({ key: "highway", value: motorizedRoadValuesArray()[i], purpose: "road centerline used for generating road areas" });
         roadGeneration.push({ key: "area:highway", value: motorizedRoadValuesArray()[i], purpose: "merged with areas generated from centerlines" });
       }
+      roadGeneration = creditsForLaneWidthInMapStyle(roadGeneration);
       roadGeneration.push({ key: "highway", value: "cycleway", purpose: "road centerline used for generating road areas" });
       roadGeneration.push({ key: "area:highway", value: "cycleway", purpose: "merged with areas generated from centerlines" });
       roadGeneration.push({ key: "area:highway", value: "taxi_stop", purpose: "merged with areas generated from centerlines" });
@@ -820,13 +821,10 @@ function highZoomLaserMapStyle() {
 
     widthOfRoadGeometryInMeters(feature) {
       if (motorizedRoadValuesArray().includes(feature.properties["highway"])) {
-        if (feature.properties["lanes"] != undefined) {
-          // in case of lanes==1 it is likely that it is wide anyway due to parking lanes
-          // supporting them would allow to drop this exception
-          if (feature.properties["lanes"] != 1) {
+          var lanes = getTotalKnownLaneCount(feature);
+          if (lanes != undefined) {
             return feature.properties["lanes"] * 2.7;
           }
-        }
         if (feature.properties["highway"] == "service" && ["driveway", "parking_aisle"].includes(feature.properties["service"])) {
           return undefined;
         }

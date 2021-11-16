@@ -464,6 +464,140 @@
       "description": "merged with areas generated from centerlines"
     },
     {
+      "key": "lanes",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:both",
+      "value": "parallel",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:both",
+      "value": "diagonal",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:both",
+      "value": "perpendicular",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:both",
+      "value": "marked",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:both",
+      "value": "no_parking",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:both",
+      "value": "no_stopping",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:both",
+      "value": "fire_lane",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:both",
+      "value": "no",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:left",
+      "value": "parallel",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:left",
+      "value": "diagonal",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:left",
+      "value": "perpendicular",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:left",
+      "value": "marked",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:left",
+      "value": "no_parking",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:left",
+      "value": "no_stopping",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:left",
+      "value": "fire_lane",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:left",
+      "value": "no",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:right",
+      "value": "parallel",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:right",
+      "value": "diagonal",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:right",
+      "value": "perpendicular",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:right",
+      "value": "marked",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:right",
+      "value": "no_parking",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:right",
+      "value": "no_stopping",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:right",
+      "value": "fire_lane",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:right",
+      "value": "no",
+      "description": "estimating road width"
+    },
+    {
+      "key": "oneway",
+      "value": "yes",
+      "description": "estimating road width"
+    },
+    {
+      "key": "oneway",
+      "value": "-1",
+      "description": "estimating road width"
+    },
+    {
       "key": "highway",
       "value": "cycleway",
       "description": "road centerline used for generating road areas"
@@ -677,6 +811,140 @@
       "key": "area:highway",
       "value": "motorway",
       "description": "merged with areas generated from centerlines"
+    },
+    {
+      "key": "lanes",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:both",
+      "value": "parallel",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:both",
+      "value": "diagonal",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:both",
+      "value": "perpendicular",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:both",
+      "value": "marked",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:both",
+      "value": "no_parking",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:both",
+      "value": "no_stopping",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:both",
+      "value": "fire_lane",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:both",
+      "value": "no",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:left",
+      "value": "parallel",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:left",
+      "value": "diagonal",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:left",
+      "value": "perpendicular",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:left",
+      "value": "marked",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:left",
+      "value": "no_parking",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:left",
+      "value": "no_stopping",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:left",
+      "value": "fire_lane",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:left",
+      "value": "no",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:right",
+      "value": "parallel",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:right",
+      "value": "diagonal",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:right",
+      "value": "perpendicular",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:right",
+      "value": "marked",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:right",
+      "value": "no_parking",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:right",
+      "value": "no_stopping",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:right",
+      "value": "fire_lane",
+      "description": "estimating road width"
+    },
+    {
+      "key": "parking:lane:right",
+      "value": "no",
+      "description": "estimating road width"
+    },
+    {
+      "key": "oneway",
+      "value": "yes",
+      "description": "estimating road width"
+    },
+    {
+      "key": "oneway",
+      "value": "-1",
+      "description": "estimating road width"
     },
     {
       "key": "highway",
