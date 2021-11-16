@@ -838,7 +838,7 @@ function highZoomLaserMapStyle() {
           // closed footway for example - highway=footway access=no
           return undefined;
         }
-        return 5;
+        return 2.5;
       }
       return undefined;
     },
