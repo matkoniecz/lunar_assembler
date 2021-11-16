@@ -391,14 +391,23 @@ function laserRoadAreaMapStyle() {
         return dataGeojson;
       }
       if (!isMultipolygonAsExpected(roadArea)) {
-        console.error("following geometry was expected to be multipolygon but was not:");
+        console.error("following geometry was expected to be a multipolygon but was not:");
         console.error(roadArea);
       }
       var i = dataGeojson.features.length;
       while (i--) {
         var feature = dataGeojson.features[i];
         if (feature.properties["area:highway"] === "crossing") {
-          roadArea.geometry.coordinates = polygonClipping.difference(roadArea.geometry.coordinates, feature.geometry.coordinates);
+          if(feature.geometry.type == 'point') {
+            const link = "https://www.openstreetmap.org/" + feature.id;
+            showWarning("https://www.openstreetmap.org/" + feature.id + " is a node but has area:highway valid only on areas...");
+          } else {
+            if(isAreaAsExpected(feature) == false) {
+              showFatalError("following geometry was expected to be an area but was not:");
+              showFatalError(feature);                
+            }
+            roadArea.geometry.coordinates = polygonClipping.difference(roadArea.geometry.coordinates, feature.geometry.coordinates);  
+          }
         }
       }
       return dataGeojson;
