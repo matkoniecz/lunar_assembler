@@ -343,11 +343,11 @@ function pointBetweenTwoPoints(start, end, ratioOfStart) {
 */
 
 function generateZebraBarCrossings(dataGeojson, roadAreaWithCrossing) {
-  if(roadAreaWithCrossing == undefined) {
-    showWarning("zebra crossing bars not generated as undefined was passed as crossing geometry - please report bug if crossing is mapped here")
+  if (roadAreaWithCrossing == undefined) {
+    showWarning("zebra crossing bars not generated as undefined was passed as crossing geometry - please report bug if crossing is mapped here");
   }
-  if(roadAreaWithCrossing.type != "Feature") {
-    showFatalError("roadAreaWithCrossing is of wrong type: " + roadAreaWithCrossing.type + " " + reportBugMessage())
+  if (roadAreaWithCrossing.type != "Feature") {
+    showFatalError("roadAreaWithCrossing is of wrong type: " + roadAreaWithCrossing.type + " " + reportBugMessage());
   }
   // check is roadAreaWithCrossing defined
   crossingLines = listUnifiedCrossingLines(dataGeojson);
@@ -357,9 +357,9 @@ function generateZebraBarCrossings(dataGeojson, roadAreaWithCrossing) {
     // startEndOfActualCrossing is necessary as sometimes footway=crossing is applied between sidewalks, including segment outside road area
     // also, this allows to catch unsupported cases (one footway=crossing across independent crossings or split footway=crossing line)
     // and invalid OpenStreetMap data (like footway=crossing shorter than actual crossing or footway=crossing outside crossings)
-    console.log()
-    console.log(feature)
-    console.log(roadAreaWithCrossing)
+    console.log();
+    console.log(feature);
+    console.log(roadAreaWithCrossing);
     var startEndOfActualCrossing = turf.lineIntersect(roadAreaWithCrossing, feature);
     if (startEndOfActualCrossing.features.length < 2 || startEndOfActualCrossing.features.length % 2 == 1) {
       const link = "https://www.openstreetmap.org/" + feature.id;
@@ -378,17 +378,17 @@ function generateZebraBarCrossings(dataGeojson, roadAreaWithCrossing) {
       // skipping, generation impossible
       continue;
     }
-    console.log("startEndOfActualCrossing.features.length")
-    console.log(startEndOfActualCrossing.features.length)
+    console.log("startEndOfActualCrossing.features.length");
+    console.log(startEndOfActualCrossing.features.length);
     var k = startEndOfActualCrossing.features.length - 1;
-    while(k>=0) {
-      console.log(k)
-      generateGroupOfZebraBars(startEndOfActualCrossing.features[k-1].geometry.coordinates, startEndOfActualCrossing.features[k].geometry.coordinates);
+    while (k >= 0) {
+      console.log(k);
+      generateGroupOfZebraBars(startEndOfActualCrossing.features[k - 1].geometry.coordinates, startEndOfActualCrossing.features[k].geometry.coordinates);
       k -= 2;
     }
   }
 
-function generateGroupOfZebraBars(point1, point2) {
+  function generateGroupOfZebraBars(point1, point2) {
     // always three strips, change later if needed
     // so
     // 1st empty space
@@ -535,7 +535,6 @@ function makeBarOfZebraCrossing(roadAreaWithCrossing, start, end, fractionOfCros
   console.log(geometry_of_bar);
   return { type: "Feature", geometry: geometry_of_bar, properties: { zebra_crossing_bar_generated_by_lunar_assembler: "yes" } };
 }
-
 
 
 /* ------------------------ */
@@ -740,14 +739,14 @@ function linearGenerallyImpassableBarrierValuesArray() {
 
 function widthsOfParkingLanes() {
   return {
-    'parallel': 3,
-    'diagonal': 5,
-    'perpendicular': 6.5,
-    'marked': 3, // may be also perpendicular or diagonal but that info is lost...
-    'no_parking': 0,
-    'no_stopping': 0,
-    'fire_lane': 0,
-    'no': 0,
+    parallel: 3,
+    diagonal: 5,
+    perpendicular: 6.5,
+    marked: 3, // may be also perpendicular or diagonal but that info is lost...
+    no_parking: 0,
+    no_stopping: 0,
+    fire_lane: 0,
+    no: 0,
     // separate - ???
   };
 }
@@ -759,7 +758,7 @@ function isSimplePositiveInteger(str) {
   return n !== Infinity && String(n) === str && n > 0;
 }
 
-function getDrivingLaneCount(feature){
+function getDrivingLaneCount(feature) {
   if (feature.properties["lanes"] == undefined) {
     return undefined;
   }
@@ -773,16 +772,16 @@ function getDrivingLaneCount(feature){
 function getParkingLaneWidthInLaneEquivalentForGivenSide(side, feature) {
   var matchingCodeToWidthInMeters = widthsOfParkingLanes();
   var value = undefined;
-  if(feature.properties["parking:lane:both"] != undefined) {
-    value = feature.properties["parking:lane:both"];          
+  if (feature.properties["parking:lane:both"] != undefined) {
+    value = feature.properties["parking:lane:both"];
   }
-  if(feature.properties["parking:lane:" + side] != undefined) {
-    if(value != undefined) {
+  if (feature.properties["parking:lane:" + side] != undefined) {
+    if (value != undefined) {
       showError("both parking:lane:both and parking:lane:" + side + " set for " + JSON.stringify(feature) + reportBugMessage());
     }
-    value = feature.properties["parking:lane:" + side];        
+    value = feature.properties["parking:lane:" + side];
   }
-  if(value == undefined) {
+  if (value == undefined) {
     return undefined;
   }
   if (value in matchingCodeToWidthInMeters) {
@@ -793,47 +792,47 @@ function getParkingLaneWidthInLaneEquivalentForGivenSide(side, feature) {
   }
 }
 
-function getParkingLaneWidthInLaneEquivalent(feature){
+function getParkingLaneWidthInLaneEquivalent(feature) {
   /*
   there is parallel, diagonal and perpendicular parking
   the width varies between them
   */
-  var left = getParkingLaneWidthInLaneEquivalentForGivenSide('left', feature);
-  var right = getParkingLaneWidthInLaneEquivalentForGivenSide('right', feature);
-  if(left == undefined || right == undefined) {
-    if (left == undefined && right == undefined ) {
+  var left = getParkingLaneWidthInLaneEquivalentForGivenSide("left", feature);
+  var right = getParkingLaneWidthInLaneEquivalentForGivenSide("right", feature);
+  if (left == undefined || right == undefined) {
+    if (left == undefined && right == undefined) {
       return undefined;
     } else {
       // assume that in such case user tagged known sides
-      if(left == undefined) {
+      if (left == undefined) {
         left = 0;
       }
-      if(right == undefined) {
+      if (right == undefined) {
         right = 0;
       }
     }
   }
-  return (left + right)/3;
+  return (left + right) / 3;
 }
 
 function getTotalKnownLaneCount(feature) {
   var drivingLanes = getDrivingLaneCount(feature);
   var parkingLanes = getParkingLaneWidthInLaneEquivalent(feature);
-  if(drivingLanes == undefined && parkingLanes == undefined) {
+  if (drivingLanes == undefined && parkingLanes == undefined) {
     return undefined;
   }
-  if(drivingLanes != undefined && parkingLanes != undefined) {
+  if (drivingLanes != undefined && parkingLanes != undefined) {
     return drivingLanes + parkingLanes;
   }
-  if(drivingLanes != undefined) {
+  if (drivingLanes != undefined) {
     // assume that it means that no parking lanes are tagged
     return drivingLanes;
   }
-  if(parkingLanes != undefined) {
+  if (parkingLanes != undefined) {
     // I assume that it will happen on minor city roads
     return parkingLanes + 1;
   }
-  showFatalError('This should never happen, getTotalKnownLaneCount failed');
+  showFatalError("This should never happen, getTotalKnownLaneCount failed");
 }
 
 function creditsForLaneWidthInMapStyle(automatically_generated_using_array) {
@@ -847,6 +846,7 @@ function creditsForLaneWidthInMapStyle(automatically_generated_using_array) {
   automatically_generated_using_array.push({ key: "oneway", value: "-1", purpose: "estimating road width" });
   return automatically_generated_using_array;
 }
+
 
 /* ------------------------ */
 
@@ -980,10 +980,10 @@ function addLegendEntriesForProcessedElements(rule) {
   returned = "";
   returned += "<li>" + stylingSummary(rule) + " " + rule["description"] + " - this is generated using:\n";
   returned += "<ul>";
-  if(("automatically_generated_using" in rule) == false) {
+  if ("automatically_generated_using" in rule == false) {
     showFatalError("map style is broken! In " + JSON.stringify(rule) + " a field automatically_generated_using is missing!");
   }
-  if(rule["automatically_generated_using"] == undefined) {
+  if (rule["automatically_generated_using"] == undefined) {
     showFatalError("map style is broken! In " + JSON.stringify(rule) + " a field automatically_generated_using is set to undefined!");
   }
   var length = rule["automatically_generated_using"].length;
@@ -1351,21 +1351,21 @@ async function downloadOpenStreetMapData(readableBounds) {
 
   // sadly, French overpass server is outdated and not supporting nwr...
   // this section start here
-  query += "("
+  query += "(";
   query += "node" + extra_filters + bbox + ";";
   query += "way" + extra_filters + bbox + ";";
   query += "relation" + extra_filters + bbox + ";";
-  query += ");"
-  // and is to be replaced by 
+  query += ");";
+  // and is to be replaced by
   // query += "nwr" + extra_filters + bbox + ";";
 
   query += "out body;>;out skel qt;";
   console.log("overpass query in the next line:");
   console.log(query);
 
-  var overpassServers = ["https://overpass.openstreetmap.fr/api/interpreter", "https://overpass-api.de/api/interpreter"]
+  var overpassServers = ["https://overpass.openstreetmap.fr/api/interpreter", "https://overpass-api.de/api/interpreter"];
   const selectedServer = overpassServers[Math.floor(Math.random() * overpassServers.length)];
-  console.log("selected server: " + selectedServer)
+  console.log("selected server: " + selectedServer);
   const response = await fetch(selectedServer, {
     method: "POST",
     headers: {
@@ -1469,7 +1469,7 @@ function validateGeometries(dataGeojson) {
 }
 
 function mergeAsRequestedByMapStyle(dataGeojson, mapStyle) {
-  if (("mergeIntoGroup" in mapStyle) == false) {
+  if ("mergeIntoGroup" in mapStyle == false) {
     return dataGeojson;
   }
   var i = dataGeojson.features.length;
@@ -1518,7 +1518,7 @@ function mergeAsRequestedByMapStyle(dataGeojson, mapStyle) {
       }
       coordinatesForMerging.push(forMerging[k].geometry.coordinates);
     }
-    produced.geometry = mergeArrayOfAreaCoordinatesIntoMultipolygon(coordinatesForMerging)
+    produced.geometry = mergeArrayOfAreaCoordinatesIntoMultipolygon(coordinatesForMerging);
     produced.properties["lunar_assembler_merge_group"] = key;
     processeedFeatures.push(produced);
   }
@@ -1529,7 +1529,7 @@ function mergeAsRequestedByMapStyle(dataGeojson, mapStyle) {
 function mergeArrayOfAreaCoordinatesIntoMultipolygon(coordinatesForMerging) {
   // it is union so output will be nonepty
   // https://github.com/mfogel/polygon-clipping#output
-  producedGeometry = {"type": "MultiPolygon", "coordinates": undefined}
+  producedGeometry = { type: "MultiPolygon", coordinates: undefined };
   if (coordinatesForMerging.length == 1) {
     // adding it fixed crashing on empty areas for laser map style and private/public areas
     // https://github.com/matkoniecz/lunar_assembler/issues/68

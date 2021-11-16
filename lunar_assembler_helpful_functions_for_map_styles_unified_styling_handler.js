@@ -126,10 +126,10 @@ function addLegendEntriesForProcessedElements(rule) {
   returned = "";
   returned += "<li>" + stylingSummary(rule) + " " + rule["description"] + " - this is generated using:\n";
   returned += "<ul>";
-  if(("automatically_generated_using" in rule) == false) {
+  if ("automatically_generated_using" in rule == false) {
     showFatalError("map style is broken! In " + JSON.stringify(rule) + " a field automatically_generated_using is missing!");
   }
-  if(rule["automatically_generated_using"] == undefined) {
+  if (rule["automatically_generated_using"] == undefined) {
     showFatalError("map style is broken! In " + JSON.stringify(rule) + " a field automatically_generated_using is set to undefined!");
   }
   var length = rule["automatically_generated_using"].length;

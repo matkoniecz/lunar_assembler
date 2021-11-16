@@ -821,10 +821,10 @@ function highZoomLaserMapStyle() {
 
     widthOfRoadGeometryInMeters(feature) {
       if (motorizedRoadValuesArray().includes(feature.properties["highway"])) {
-          var lanes = getTotalKnownLaneCount(feature);
-          if (lanes != undefined) {
-            return feature.properties["lanes"] * 2.7;
-          }
+        var lanes = getTotalKnownLaneCount(feature);
+        if (lanes != undefined) {
+          return feature.properties["lanes"] * 2.7;
+        }
         if (feature.properties["highway"] == "service" && ["driveway", "parking_aisle"].includes(feature.properties["service"])) {
           return undefined;
         }

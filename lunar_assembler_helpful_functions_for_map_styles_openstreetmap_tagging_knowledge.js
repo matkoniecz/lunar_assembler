@@ -71,14 +71,14 @@ function linearGenerallyImpassableBarrierValuesArray() {
 
 function widthsOfParkingLanes() {
   return {
-    'parallel': 3,
-    'diagonal': 5,
-    'perpendicular': 6.5,
-    'marked': 3, // may be also perpendicular or diagonal but that info is lost...
-    'no_parking': 0,
-    'no_stopping': 0,
-    'fire_lane': 0,
-    'no': 0,
+    parallel: 3,
+    diagonal: 5,
+    perpendicular: 6.5,
+    marked: 3, // may be also perpendicular or diagonal but that info is lost...
+    no_parking: 0,
+    no_stopping: 0,
+    fire_lane: 0,
+    no: 0,
     // separate - ???
   };
 }
@@ -90,7 +90,7 @@ function isSimplePositiveInteger(str) {
   return n !== Infinity && String(n) === str && n > 0;
 }
 
-function getDrivingLaneCount(feature){
+function getDrivingLaneCount(feature) {
   if (feature.properties["lanes"] == undefined) {
     return undefined;
   }
@@ -104,16 +104,16 @@ function getDrivingLaneCount(feature){
 function getParkingLaneWidthInLaneEquivalentForGivenSide(side, feature) {
   var matchingCodeToWidthInMeters = widthsOfParkingLanes();
   var value = undefined;
-  if(feature.properties["parking:lane:both"] != undefined) {
-    value = feature.properties["parking:lane:both"];          
+  if (feature.properties["parking:lane:both"] != undefined) {
+    value = feature.properties["parking:lane:both"];
   }
-  if(feature.properties["parking:lane:" + side] != undefined) {
-    if(value != undefined) {
+  if (feature.properties["parking:lane:" + side] != undefined) {
+    if (value != undefined) {
       showError("both parking:lane:both and parking:lane:" + side + " set for " + JSON.stringify(feature) + reportBugMessage());
     }
-    value = feature.properties["parking:lane:" + side];        
+    value = feature.properties["parking:lane:" + side];
   }
-  if(value == undefined) {
+  if (value == undefined) {
     return undefined;
   }
   if (value in matchingCodeToWidthInMeters) {
@@ -124,47 +124,47 @@ function getParkingLaneWidthInLaneEquivalentForGivenSide(side, feature) {
   }
 }
 
-function getParkingLaneWidthInLaneEquivalent(feature){
+function getParkingLaneWidthInLaneEquivalent(feature) {
   /*
   there is parallel, diagonal and perpendicular parking
   the width varies between them
   */
-  var left = getParkingLaneWidthInLaneEquivalentForGivenSide('left', feature);
-  var right = getParkingLaneWidthInLaneEquivalentForGivenSide('right', feature);
-  if(left == undefined || right == undefined) {
-    if (left == undefined && right == undefined ) {
+  var left = getParkingLaneWidthInLaneEquivalentForGivenSide("left", feature);
+  var right = getParkingLaneWidthInLaneEquivalentForGivenSide("right", feature);
+  if (left == undefined || right == undefined) {
+    if (left == undefined && right == undefined) {
       return undefined;
     } else {
       // assume that in such case user tagged known sides
-      if(left == undefined) {
+      if (left == undefined) {
         left = 0;
       }
-      if(right == undefined) {
+      if (right == undefined) {
         right = 0;
       }
     }
   }
-  return (left + right)/3;
+  return (left + right) / 3;
 }
 
 function getTotalKnownLaneCount(feature) {
   var drivingLanes = getDrivingLaneCount(feature);
   var parkingLanes = getParkingLaneWidthInLaneEquivalent(feature);
-  if(drivingLanes == undefined && parkingLanes == undefined) {
+  if (drivingLanes == undefined && parkingLanes == undefined) {
     return undefined;
   }
-  if(drivingLanes != undefined && parkingLanes != undefined) {
+  if (drivingLanes != undefined && parkingLanes != undefined) {
     return drivingLanes + parkingLanes;
   }
-  if(drivingLanes != undefined) {
+  if (drivingLanes != undefined) {
     // assume that it means that no parking lanes are tagged
     return drivingLanes;
   }
-  if(parkingLanes != undefined) {
+  if (parkingLanes != undefined) {
     // I assume that it will happen on minor city roads
     return parkingLanes + 1;
   }
-  showFatalError('This should never happen, getTotalKnownLaneCount failed');
+  showFatalError("This should never happen, getTotalKnownLaneCount failed");
 }
 
 function creditsForLaneWidthInMapStyle(automatically_generated_using_array) {

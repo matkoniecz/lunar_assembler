@@ -237,21 +237,21 @@ async function downloadOpenStreetMapData(readableBounds) {
 
   // sadly, French overpass server is outdated and not supporting nwr...
   // this section start here
-  query += "("
+  query += "(";
   query += "node" + extra_filters + bbox + ";";
   query += "way" + extra_filters + bbox + ";";
   query += "relation" + extra_filters + bbox + ";";
-  query += ");"
-  // and is to be replaced by 
+  query += ");";
+  // and is to be replaced by
   // query += "nwr" + extra_filters + bbox + ";";
 
   query += "out body;>;out skel qt;";
   console.log("overpass query in the next line:");
   console.log(query);
 
-  var overpassServers = ["https://overpass.openstreetmap.fr/api/interpreter", "https://overpass-api.de/api/interpreter"]
+  var overpassServers = ["https://overpass.openstreetmap.fr/api/interpreter", "https://overpass-api.de/api/interpreter"];
   const selectedServer = overpassServers[Math.floor(Math.random() * overpassServers.length)];
-  console.log("selected server: " + selectedServer)
+  console.log("selected server: " + selectedServer);
   const response = await fetch(selectedServer, {
     method: "POST",
     headers: {
@@ -355,7 +355,7 @@ function validateGeometries(dataGeojson) {
 }
 
 function mergeAsRequestedByMapStyle(dataGeojson, mapStyle) {
-  if (("mergeIntoGroup" in mapStyle) == false) {
+  if ("mergeIntoGroup" in mapStyle == false) {
     return dataGeojson;
   }
   var i = dataGeojson.features.length;
@@ -404,7 +404,7 @@ function mergeAsRequestedByMapStyle(dataGeojson, mapStyle) {
       }
       coordinatesForMerging.push(forMerging[k].geometry.coordinates);
     }
-    produced.geometry = mergeArrayOfAreaCoordinatesIntoMultipolygon(coordinatesForMerging)
+    produced.geometry = mergeArrayOfAreaCoordinatesIntoMultipolygon(coordinatesForMerging);
     produced.properties["lunar_assembler_merge_group"] = key;
     processeedFeatures.push(produced);
   }
@@ -415,7 +415,7 @@ function mergeAsRequestedByMapStyle(dataGeojson, mapStyle) {
 function mergeArrayOfAreaCoordinatesIntoMultipolygon(coordinatesForMerging) {
   // it is union so output will be nonepty
   // https://github.com/mfogel/polygon-clipping#output
-  producedGeometry = {"type": "MultiPolygon", "coordinates": undefined}
+  producedGeometry = { type: "MultiPolygon", coordinates: undefined };
   if (coordinatesForMerging.length == 1) {
     // adding it fixed crashing on empty areas for laser map style and private/public areas
     // https://github.com/matkoniecz/lunar_assembler/issues/68

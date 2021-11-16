@@ -63,10 +63,6 @@ There is a very simple but also working map style that can show water area, fore
 
 ![examples/simple_map_style_-_Sztynort.png](examples/simple_map_style_-_Sztynort.png)
 
-
-
-
-
 #### Advanced map styles
 
 In some cases one needs to somehow deals with layers. For example, what should be displayed if road in tunnel goes under building? Or under forest? What should be shown if there is a lake in a forest?
@@ -78,7 +74,6 @@ Map styles also have access to a powerful functionality allowing complete rewrit
 ### Help!
 
 Note: especially this part of documentation is incomplete and would benefit from better info. Please [open an issue](https://github.com/matkoniecz/lunar_assembler/issues/new) and mention what is confusing and where you are stuck. Right now I am not entirely sure what kind of knowledge people using it will have and what and how should be explained.
-
 
 ## Other published styles
 
