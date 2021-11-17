@@ -55,7 +55,7 @@ writeGeneratedTaginfoSummary(taginfo, filename);
 filename = "generated/laser_road_area_taginfo.json";
 taginfo = infoDocsJSON(
   "https://raw.githubusercontent.com/matkoniecz/lunar_assembler/master/examples/" + filename,
-  "for tactile map made with laser cutter - SVG map of a crossing (area:highway)",
+  "SVG design for laser cutting a map based on area:highway",
   "Map style to produce tactile maps for blind. Generated maps are for use in a laser cutter. Lunar Assembler map style.",
   "https://mapsaregreat.com/osm_to_svg_in_browser/laser_road_area.html",
   generateTaginfoListing(laserRoadAreaMapStyle().unifiedStyling())
@@ -65,7 +65,7 @@ writeGeneratedTaginfoSummary(taginfo, filename);
 filename = "generated/laser_neighbourhood_taginfo.json";
 taginfo = infoDocsJSON(
   "https://raw.githubusercontent.com/matkoniecz/lunar_assembler/master/examples/" + filename,
-  "for tactile map made with laser cutter - SVG map of a neighbourhood",
+  "SVG design for laser cutting a map of neighbourhood",
   "Map style to produce tactile maps for blind. Generated maps are for use in a laser cutter. Lunar Assembler map style.",
   "https://mapsaregreat.com/osm_to_svg_in_browser/laser_neighbourhood.html",
   generateTaginfoListing(highZoomLaserMapStyle().unifiedStyling())
