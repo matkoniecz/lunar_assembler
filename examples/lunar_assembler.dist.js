@@ -1209,7 +1209,9 @@ function reportBugMessageButGeodataMayBeWrong() {
 // progress bar fun
 // TODO:
 // not entirely fake as it is based on expected real time
-// and not intentionally misleading like for example randomized booking.com displays
+// and not intentionally misleading like counters on booking.com 
+// https://news.ycombinator.com/item?id=21306423
+// https://www.bbc.com/news/technology-49740143
 //
 // it would be nice to have it based on area size - there is probably some relation here
 
