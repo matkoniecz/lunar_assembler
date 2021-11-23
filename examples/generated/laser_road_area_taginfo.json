@@ -2,7 +2,7 @@
   "data_format": 1,
   "data_url": "https://raw.githubusercontent.com/matkoniecz/lunar_assembler/master/examples/generated/laser_road_area_taginfo.json",
   "project": {
-    "name": "SVG design for laser cutting a map based on area:highway",
+    "name": "SVG for laser cutting a map based on area:highway",
     "description": "Map style to produce tactile maps for blind. Generated maps are for use in a laser cutter. Lunar Assembler map style.",
     "icon_url": "https://mapsaregreat.com/favicon.svg",
     "project_url": "https://github.com/matkoniecz/lunar_assembler",
