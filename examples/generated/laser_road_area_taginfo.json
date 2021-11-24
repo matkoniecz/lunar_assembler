@@ -376,6 +376,134 @@
       "description": "road area of a cycleway (used in addition to highway=bus_stop)"
     },
     {
+      "key": "barrier",
+      "value": "haha",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "guard_rail",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "city_wall",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "wire_fence",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "hedge_bank",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "retaining_wall",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "hedge",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "wall",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "fence",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "yes",
+      "description": "unknown barrier, assumed to be generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "haha",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "guard_rail",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "city_wall",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "wire_fence",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "hedge_bank",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "retaining_wall",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "hedge",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "wall",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "fence",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "barrier",
+      "value": "yes",
+      "description": "unknown barrier, assumed to be generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "natural",
+      "value": "water",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "waterway",
+      "value": "riverbank",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "building",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "waterway",
+      "value": "riverbank",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "area:highway",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "foot",
+      "value": "no",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
       "key": "railway",
       "value": "monorail",
       "description": "linear representation of a single railway track"
