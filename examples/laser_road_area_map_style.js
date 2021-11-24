@@ -261,6 +261,10 @@ function laserRoadAreaMapStyle() {
         ]
       );
 
+      const barrierAreaColor = "#b76b80";
+      const generatedImpassableAreaColor = "black";
+      returned = addRulesForDisplayOfCalculatedImpassableArea(returned, barrierAreaColor, generatedImpassableAreaColor);
+
       var i = railwayLinearValuesArray().length;
       while (i--) {
         value = railwayLinearValuesArray()[i];
@@ -343,6 +347,8 @@ function laserRoadAreaMapStyle() {
 
     transformGeometryAsInitialStep(dataGeojson, readableBounds) {
       dataGeojson = programaticallyGenerateSymbolicStepParts(dataGeojson);
+      dataGeojson = generateAreasFromBarriers(dataGeojson);
+      dataGeojson = generateRestrictedAcccessArea(dataGeojson, readableBounds);
       return dataGeojson;
     },
 
