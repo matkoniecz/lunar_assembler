@@ -36,7 +36,7 @@ add to unifiedStyling()
       const generatedImpassableAreaColor = "black";
       returned = addRulesForDisplayOfCalculatedImpassableArea(returned, barrierAreaColor, generatedImpassableAreaColor);
 
-obviously, config can be changed!
+obviously, colors in configuration here can be changed!
 */
 
 function restrictiveAccessValues() {
