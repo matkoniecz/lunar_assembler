@@ -50,7 +50,7 @@ function highZoomLaserMapStyle() {
         ...[
           {
             area_color: "#B45A00",
-            description: "buildings",
+            description: "buildings (kept mostly for debugging purposes)",
             matches: [{ key: "building" }],
           },
           {
@@ -77,38 +77,10 @@ function highZoomLaserMapStyle() {
           },
         ]
       );
-
-      var barriersKeyValue = [];
-      var i = linearGenerallyImpassableBarrierValuesArray().length;
-      while (i--) {
-        value = linearGenerallyImpassableBarrierValuesArray()[i];
-        barriersKeyValue.push({ key: "barrier", value: value, purpose: "generally impassable barrier, for detecting where access is blocked" });
-      }
-      barriersKeyValue.push({ key: "barrier", value: "yes", purpose: "unknown barrier, assumed to be generally impassable barrier, for detecting where access is blocked" });
-
-      returned.push({
-        area_color: "#b76b80",
-        description: "generated barrier areas",
-        automatically_generated_using: barriersKeyValue,
-        matches: [{ key: "generated_barrier_area", value: "yes" }],
-      });
-
-      var blockDetection = JSON.parse(JSON.stringify(barriersKeyValue));
-      // TODO: now it is necessary to manually change one thing in two places - change that and return list of inaccessibility tags
-      blockDetection.push({ key: "building", purpose: "generally impassable barrier, for detecting where access is blocked" });
-      blockDetection.push({ key: "natural", value: "water", purpose: "generally impassable barrier, for detecting where access is blocked" });
-      blockDetection.push({ key: "waterway", value: "riverbank", purpose: "generally impassable barrier, for detecting where access is blocked" });
-
-      returned.push({
-        area_color: "black",
-        description: "areas that are inaccessible, generated automatically",
-        automatically_generated_using: blockDetection,
-        matches: [
-          { key: "generated_blocked_chunk", value: "yes" },
-          { key: "native_blocked_chunk", value: "yes" },
-        ],
-      });
-      // generated_traversable_chunk=yes is not rendered
+      
+      const barrierAreaColor = "#b76b80";
+      const generatedImpassableAreaColor = "black";
+      returned = mapStyle.addRulesForDisplayOfCalculatedImpassableArea(returned, barrierAreaColor, generatedImpassableAreaColor);
 
       returned.push({
         area_color: "yellow",
@@ -211,6 +183,48 @@ function highZoomLaserMapStyle() {
       }
 
       return returned;
+    },
+
+    addRulesForDisplayOfCalculatedImpassableArea(returned, barrierAreaColor, generatedImpassableAreaColor) {
+      var barriersKeyValue = [];
+      var i = linearGenerallyImpassableBarrierValuesArray().length;
+      while (i--) {
+        value = linearGenerallyImpassableBarrierValuesArray()[i];
+        barriersKeyValue.push({ key: "barrier", value: value, purpose: "generally impassable barrier, for detecting where access is blocked" });
+      }
+      barriersKeyValue.push({ key: "barrier", value: "yes", purpose: "unknown barrier, assumed to be generally impassable barrier, for detecting where access is blocked" });
+
+      returned.push({
+        area_color: barrierAreaColor,
+        description: "generated barrier areas",
+        automatically_generated_using: barriersKeyValue,
+        matches: [{ key: "generated_barrier_area", value: "yes" }],
+      });
+
+      var blockDetection = JSON.parse(JSON.stringify(barriersKeyValue));
+      
+      var message = "generally impassable barrier, for detecting where access is blocked"
+      for (const blockingTags of mapStyle.listOfTagSetsBlockingPedestrianAccess()) {
+          for (const [key, value] of Object.entries(blockingTags)) {
+            if(value == undefined) {
+              blockDetection.push({ "key": key, purpose: message });
+            } else {
+              blockDetection.push({ "key": key, "value": value, purpose: message });
+            }
+          }
+      }
+
+      returned.push({
+        area_color: generatedImpassableAreaColor,
+        description: "areas that are inaccessible, generated automatically",
+        automatically_generated_using: blockDetection,
+        matches: [
+          { key: "generated_blocked_chunk", value: "yes" },
+          { key: "native_blocked_chunk", value: "yes" },
+        ],
+      });
+      // generated_traversable_chunk=yes is not rendered
+      return returned;      
     },
 
     fillColoring(feature) {
@@ -843,15 +857,55 @@ function highZoomLaserMapStyle() {
       return undefined;
     },
 
+    restrictiveAccessValues() {
+      return ['no', 'private', 'customers'];
+    },
+
     isAccessValueRestrictive(value) {
-      if (value == "no") {
+      if(mapStyle.restrictiveAccessValues().indexOf(value) >= 0) {
         return true;
       }
-      if (value == "private") {
-        return true;
+      return false;
+    },
+
+    listOfTagSetsBlockingPedestrianAccess() {
+      returned = [
+        {'natural': 'water'},
+        {'waterway': 'riverbank'},
+        {'building': undefined},
+        {'waterway': 'riverbank'},
+        {'area:highway': undefined, 'foot': 'no'},
+      ]
+      /*
+      pulling parking rules here may be nice but beginning to be ridiculous
+      for (const restrictive of mapStyle.restrictiveAccessValues()) {
+
       }
-      if (value == "customers") {
-        return true;
+      */
+      return returned;
+    },
+
+    isMatchingEntryInBlockingTags(feature, tagEntry) {
+      for (const [key, value] of Object.entries(tagEntry)) {
+        if(value == undefined) {
+          // just checking presence of this key
+          if(feature.properties[key] == null) {
+            return false;
+          }
+        } else {
+          if(feature.properties[key] != value) {
+            return false;
+          }  
+        }
+      } 
+    return true;
+    },
+
+    isMatchingAnyEntryInBlockingTagList(feature, blockingTags) {
+      for (const blockingTags of blockingTagList) {
+        if(mapStyle.isMatchingEntryInBlockingTags(feature, blockingTags)) {
+          return true;
+        }
       }
       return false;
     },
@@ -860,17 +914,14 @@ function highZoomLaserMapStyle() {
       if (feature.properties["generated_barrier_area"] != null) {
         return true;
       }
-      if (feature.properties["natural"] == "water" || feature.properties["waterway"] == "riverbank") {
-        return true;
-      }
-      if (feature.properties["building"] != null) {
-        return true;
-      }
-      if (feature.properties["area:highway"] && feature.properties["foot"] == "no") {
+      const blockingTags = mapStyle.listOfTagSetsBlockingPedestrianAccess();
+      if(mapStyle.isMatchingAnyEntryInBlockingTagList(feature, blockingTags)) {
         return true;
       }
       if (mapStyle.isAccessValueRestrictive(feature.properties["access"]) && feature.properties["amenity"] != "parking") {
         if (feature.properties["foot"] == null || mapStyle.isAccessValueRestrictive(feature.properties["foot"])) {
+          // TODO right now it is missing from legend and taginfo entries as
+          // this rules compile to something obnoxiously complex
           return true;
         }
       }

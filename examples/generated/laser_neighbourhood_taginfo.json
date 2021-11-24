@@ -13,7 +13,7 @@
   "tags": [
     {
       "key": "building",
-      "description": "buildings"
+      "description": "buildings (kept mostly for debugging purposes)"
     },
     {
       "key": "waterway",
@@ -134,19 +134,33 @@
       "key": "barrier",
       "value": "yes",
       "description": "unknown barrier, assumed to be generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "natural",
+      "value": "water",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "waterway",
+      "value": "riverbank",
+      "description": "generally impassable barrier, for detecting where access is blocked"
     },
     {
       "key": "building",
       "description": "generally impassable barrier, for detecting where access is blocked"
     },
     {
-      "key": "natural",
-      "value": "water",
+      "key": "waterway",
+      "value": "riverbank",
       "description": "generally impassable barrier, for detecting where access is blocked"
     },
     {
-      "key": "waterway",
-      "value": "riverbank",
+      "key": "area:highway",
+      "description": "generally impassable barrier, for detecting where access is blocked"
+    },
+    {
+      "key": "foot",
+      "value": "no",
       "description": "generally impassable barrier, for detecting where access is blocked"
     },
     {
