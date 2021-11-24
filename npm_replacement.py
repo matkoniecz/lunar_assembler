@@ -42,6 +42,7 @@ def build_distribution_form_of_library():
     paths_for_merging = []
     paths_for_merging.append("lunar_assembler_helpful_functions_for_map_styles.js")
     paths_for_merging.append("lunar_assembler_helpful_functions_for_map_styles_generate_symbolic_steps_from_area_highway.js")
+    paths_for_merging.append("lunar_assembler_helpful_functions_for_map_styles_generate_inaccessible_areas.js")
     paths_for_merging.append("lunar_assembler_helpful_functions_for_map_styles_generate_symbolic_zebra_bars.js")
     paths_for_merging.append("lunar_assembler_helpful_functions_for_map_styles_apply_patterns_to_areas.js")
     paths_for_merging.append("lunar_assembler_helpful_functions_for_map_styles_openstreetmap_tagging_knowledge.js")

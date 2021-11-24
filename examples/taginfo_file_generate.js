@@ -6,6 +6,7 @@ var fs = require("fs");
 eval(fs.readFileSync("../lunar_assembler_helpful_functions_for_map_styles_openstreetmap_tagging_knowledge.js") + "");
 eval(fs.readFileSync("../lunar_assembler_helpful_functions_for_map_styles_unified_styling_handler.js") + "");
 eval(fs.readFileSync("../lunar_assembler_helpful_functions_for_map_styles_generate_symbolic_steps_from_area_highway.js") + "");
+eval(fs.readFileSync("../lunar_assembler_helpful_functions_for_map_styles_generate_inaccessible_areas.js") + "");
 eval(fs.readFileSync("general_high_zoom_map_style.js") + "");
 eval(fs.readFileSync("laser_road_area_map_style.js") + "");
 eval(fs.readFileSync("laser_neighbourhood_map_style.js") + "");
