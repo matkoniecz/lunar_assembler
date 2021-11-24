@@ -54,6 +54,45 @@ function intersectGeometryWithHorizontalStripes(feature, stripeSizeInDegrees, di
   return cloned;
 }
 
+function intersectGeometryWithVerticalStripes(feature, stripeSizeInDegrees, distanceBetweenStripesInDegrees) {
+  bbox = turf.bbox(feature);
+  var minLongitude = bbox[0];
+  var minLatitude = bbox[1];
+  var maxLongitude = bbox[2];
+  var maxLatitude = bbox[3];
+  if (!isMultipolygonAsExpected(feature)) {
+    return null;
+  }
+  var collected = [];
+  // gathering horizontal stripes
+  var minLongitudeForStripe = minLongitude;
+  while (minLongitudeForStripe < maxLongitude) {
+    var maxLongitudeForStripe = minLongitudeForStripe + stripeSizeInDegrees;
+    var stripeRing = [
+      [minLongitudeForStripe, minLatitude],
+      [maxLongitudeForStripe, minLatitude],
+      [maxLongitudeForStripe, maxLatitude],
+      [minLongitudeForStripe, maxLatitude],
+      [minLongitudeForStripe, minLatitude],
+    ];
+    var stripe = [stripeRing];
+    var intersectedStripe = polygonClipping.intersection(feature.geometry.coordinates, stripe);
+    if (intersectedStripe != []) {
+      collected.push(intersectedStripe);
+    }
+    minLongitudeForStripe += stripeSizeInDegrees + distanceBetweenStripesInDegrees;
+  }
+  if (collected.length == 1) {
+    console.warn("one element! Is spread working as expected? See #68"); // TODO - trigger and debug it
+  }
+  var generated = polygonClipping.union(...collected);
+
+  var cloned = JSON.parse(JSON.stringify(feature));
+  cloned.geometry.coordinates = generated;
+  return cloned;
+}
+
+
 function intersectGeometryWithPlaneHavingRectangularHoles(feature, holeVerticalInDegrees, holeHorizontalInDegrees, spaceVerticalInDegrees, spaceHorizontalInDegrees) {
   bbox = turf.bbox(feature);
   var minLongitude = bbox[0];
