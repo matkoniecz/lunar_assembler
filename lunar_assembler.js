@@ -62,6 +62,11 @@ function showWarning(message) {
   document.getElementById(logOutputIdConfig).innerHTML += '<p class="logged warning">' + message + "</p>";
 }
 
+function showPerformanceInfo(message) {
+  console.warn(message);
+  document.getElementById(logOutputIdConfig).innerHTML += '<p class="logged performance_profiling">' + message + "</p>";
+}
+
 function reportBugMessage() {
   return " this is a bug, please report to https://github.com/matkoniecz/lunar_assembler/issues";
 }
@@ -331,16 +336,33 @@ function rewind(geojson_that_is_7946_compliant_with_right_hand_winding_order) {
 }
 
 function render(readableBounds, dataGeojson, width, height, mapStyle, mapOutputHolderId) {
+  var measuredTime;
   if ("transformGeometryAsInitialStep" in mapStyle) {
+    measuredTime = performance.now()
     dataGeojson = mapStyle.transformGeometryAsInitialStep(dataGeojson, readableBounds);
+    showPerformanceInfo("transformGeometryAsInitialStep took " + (performance.now() - measuredTime)/1000 + "s")
   }
+
+  measuredTime = performance.now()
   validateGeometries(dataGeojson);
+  showPerformanceInfo("validateGeometries took " + (performance.now() - measuredTime)/1000 + "s")
+
+  measuredTime = performance.now()
   dataGeojson = mergeAsRequestedByMapStyle(dataGeojson, mapStyle);
+  showPerformanceInfo("mergeAsRequestedByMapStyle took " + (performance.now() - measuredTime)/1000 + "s")
+
   if ("transformGeometryAtFinalStep" in mapStyle) {
+    measuredTime = performance.now()
     dataGeojson = mapStyle.transformGeometryAtFinalStep(dataGeojson, readableBounds);
+    showPerformanceInfo("transformGeometryAtFinalStep took " + (performance.now() - measuredTime)/1000 + "s")
   }
+  measuredTime = performance.now()
   dataGeojson = clipGeometries(readableBounds, dataGeojson);
+  showPerformanceInfo("clipGeometries took " + (performance.now() - measuredTime)/1000 + "s")
+
+  measuredTime = performance.now()
   renderUsingD3(readableBounds, dataGeojson, width, height, mapStyle, mapOutputHolderId);
+  showPerformanceInfo("rendering took " + (performance.now() - measuredTime)/1000 + "s")
 }
 
 function validateGeometries(dataGeojson) {
