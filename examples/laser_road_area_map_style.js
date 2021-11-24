@@ -349,6 +349,7 @@ function laserRoadAreaMapStyle() {
     // called after areas were merged, before sorting of areas
     // gets full data and can freely edit it
     transformGeometryAtFinalStep(dataGeojson, readableBounds) {
+      var measuredTime;
       var roadArea = findMergeGroupObject(dataGeojson, "area:highway_carriageway_layer");
       var footwayArea = findMergeGroupObject(dataGeojson, "area:highway_footway");
       if(roadArea == undefined && footwayArea == undefined) {
@@ -379,7 +380,9 @@ function laserRoadAreaMapStyle() {
         generateZebraBarCrossings(dataGeojson, { type: "Feature", geometry: geometry });
       }
 
+      measuredTime = performance.now()
       dataGeojson = mapStyle.applyPatternsToCarriagewaysAndWater(dataGeojson);
+      showPerformanceInfo("applyPatternsToCarriagewaysAndWater (part of transformGeometryAtFinalStep) took " + (performance.now() - measuredTime)/1000 + "s")
       return dataGeojson;
     },
 

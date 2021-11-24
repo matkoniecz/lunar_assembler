@@ -298,6 +298,7 @@ function highZoomLaserMapStyle() {
     // called after areas were merged, before sorting of areas
     // gets full data and can freely edit it
     transformGeometryAtFinalStep(dataGeojson, readableBounds) {
+      var measuredTime;
       dataGeojson = mapStyle.applyManualPatchesBeforeGeometryErasings(dataGeojson);
 
       dataGeojson = mapStyle.restrictPedestrianCrossingToRoadAreas(dataGeojson);
@@ -317,7 +318,10 @@ function highZoomLaserMapStyle() {
 
       // last one - after that there are two carriageways and two waterways areas
       // with one being interection with a pattern
+ 
+      measuredTime = performance.now()
       dataGeojson = mapStyle.applyPatternsToCarriagewaysAndWater(dataGeojson);
+      showPerformanceInfo("applyPatternsToCarriagewaysAndWater (part of transformGeometryAtFinalStep) took " + (performance.now() - measuredTime)/1000 + "s")
 
       return dataGeojson;
     },
