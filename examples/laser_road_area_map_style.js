@@ -329,7 +329,8 @@ function laserRoadAreaMapStyle() {
       if (feature.properties["area:highway"] == "cycleway") {
         return "area:highway_cycleway";
       }
-      if (feature.properties["building"] != null) {
+      // TODO do not hardcode generated_blocked_chunk - but get it via some function or something
+      if (feature.properties["building"] != null || feature.properties['generated_blocked_chunk'] == 'yes') {
         return "buildings";
       }
       if (feature.properties["natural"] === "water" || feature.properties["waterway"] === "riverbank") {
