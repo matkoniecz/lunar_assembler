@@ -109,7 +109,7 @@ function generateRestrictedAcccessArea(geojson, readableBounds) {
     //console.warn(JSON.stringify({ type: "MultiPolygon", coordinates: areaOfUnknownState }));
 
     // areaOfUnknownState is now entire area except removed blocking areas
-    // now the next step is to fill areas where there is no acces
+    // now the next step is to fill areas where there is no access
     // for example private courtyard within buildings, walled of areas and so on
 
     var k = areaOfUnknownState.length;
