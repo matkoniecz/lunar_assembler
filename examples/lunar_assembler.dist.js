@@ -1659,9 +1659,9 @@ function initializeSelectorMap(
 }
 
 function initilizeDownloadButton(downloadTriggerId, mapOutputHolderId) {
-  d3.select("#" + downloadTriggerId).on("click", function () {
+  document.getElementById(downloadTriggerId).onclick = function() {
     download("generated.svg", document.getElementById(idOfGeneratedMap()).outerHTML);
-  });
+  };
 }
 
 async function handleTriggerFromGUI(readableBounds, downloadTriggerId, mapOutputHolderId, mapStyle) {
