@@ -1194,8 +1194,12 @@ function getTotalKnownLaneCount(feature) {
     return drivingLanes + parkingLanes;
   }
   if (drivingLanes != undefined) {
+    if(feature.properties['highway'] == 'service') {
+      //do not assume that it means that no parking lanes are tagged
+      return drivingLanes;
+    }
     // assume that it means that no parking lanes are tagged
-    return drivingLanes;
+    return drivingLanes + 2;
   }
   if (parkingLanes != undefined) {
     // I assume that it will happen on minor city roads
