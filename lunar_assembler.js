@@ -256,7 +256,7 @@ async function downloadOpenStreetMapData(readableBounds) {
   console.log("overpass query in the next line:");
   console.log(query);
 
-  var overpassServers = ["https://overpass.openstreetmap.fr/api/interpreter", "https://overpass-api.de/api/interpreter"];
+  var overpassServers = ["https://overpass-api.de/api/interpreter"];
   const selectedServer = overpassServers[Math.floor(Math.random() * overpassServers.length)];
   console.log("selected server: " + selectedServer);
   const response = await fetch(selectedServer, {
