@@ -59,7 +59,7 @@ You can make own map style and use it at your own site.
 
 You will need to copy [examples/lunar_assembler.dist.css](examples/lunar_assembler.dist.css) and [examples/lunar_assembler.dist.js](examples/lunar_assembler.dist.js) files and include it in your own site.
 
-Fully functional examples are in an [example](example/) folder.
+Fully functional examples are in an [examples](examples/) folder.
 
 There is a very simple but also working map style that can show water area, forests, buildings and marinas. See [this simple example](https://github.com/matkoniecz/lunar_assembler/blob/master/examples/simple.html#L59), this page is hosted and shown [here](https://mapsaregreat.com/osm_to_svg_in_browser/simple).
 
